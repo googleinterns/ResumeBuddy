@@ -1,31 +1,28 @@
 package com.google.sps.servlets;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.gson.Gson;
+import com.google.sps.data.Reviewer;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.Reviewer;
-import com.google.gson.Gson;
 
 /** Servlet that saves reviewer data from the form */
 @WebServlet("/reviewer-data")
 public class ReviewerDataServlet extends HttpServlet {
 
-    private Reviewer reviewer;
-  
+  private Reviewer reviewer;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Send the JSON as the response
     response.setContentType("application/json");
     String json = new Gson().toJson(reviewer);
     response.getWriter().println(json);
-
   }
 
   @Override
@@ -45,13 +42,12 @@ public class ReviewerDataServlet extends HttpServlet {
   }
 
   /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return the request parameter, or the default value if the parameter was not specified by the
+   *     client
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
     return (value == null) ? defaultValue : value;
   }
-
-
 }
+
