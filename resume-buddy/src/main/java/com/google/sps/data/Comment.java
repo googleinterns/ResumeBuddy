@@ -7,6 +7,7 @@ public final class Comment {
 
   private final String reviewer;
   private final String reviewee;
+  // feedback comment type e.g format, content, spelling, etc
   private final String type;
   private final String text;
   private final Date date;
