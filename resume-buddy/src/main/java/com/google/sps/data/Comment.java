@@ -2,6 +2,7 @@ package com.google.sps.data;
 
 import java.util.Date;
 
+/** Class containing comment object that are used on resume-review page */
 public final class Comment {
 
   private final String reviewer;
@@ -18,16 +19,6 @@ public final class Comment {
     this.date = date;
     this.type = type;
     this.id = id;
-  }
-
-  // TODO: Delete this constructor when authentication is implemented
-  public Comment(String text, String type, Date date, String id) {
-    this.text = text;
-    this.type = type;
-    this.date = date;
-    this.id = id;
-    this.reviewer = "";
-    this.reviewee = "";
   }
 
   public String getReviewer() {
