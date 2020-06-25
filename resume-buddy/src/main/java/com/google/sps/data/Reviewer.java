@@ -13,4 +13,3 @@ public final class Reviewer {
     this.email = email;
   }
 }
-
