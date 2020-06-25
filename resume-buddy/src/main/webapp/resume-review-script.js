@@ -21,6 +21,23 @@ function getComments() {
     });
 }
 
+/**
+ * Fetches delete-comments to delete comment using comment id
+ */
+function deleteComments(id) {
+  const queryStr = 'id=' + id;
+  fetch('/delete-comment?' + queryStr, {
+    method: 'POST',
+  });
+
+  if (!id) {
+    document.getElementById('comments-container').innerHTML = '';
+  } else {
+    location.reload();
+  }
+
+}
+
 /** 
  * Creates an <li> element containing date, comment type and text
  */
@@ -30,17 +47,21 @@ function createListElement(date, type, text, id) {
 
   containerDiv.className = 'comment-container';
   const typeText = document.createElement('b');
-  typeText.innerText = type + " ";
+  typeText.innerText = type + ":  ";
   liElement.appendChild(typeText);
 
-  const dateNode = document.createElement('i');
-  dateNode.innerText = date + " ";
-  liElement.appendChild(dateNode);
-
-  const textNode = document.createTextNode(text);
+  const textNode = document.createTextNode(text + " ");
   liElement.appendChild(textNode);
 
-  // TODO: Add delete button next to comment which deletes comment
+  const deleteButton = document.createElement('button');
+  deleteButton.innerHTML = '&#10005;';
+  deleteButton.className = "delete-button";
+  deleteButton.style.cssFloat = "right";
+  deleteButton.onclick = function() {
+    deleteComments(id);
+  }
+
+  liElement.appendChild(deleteButton);
 
   return liElement;
 }

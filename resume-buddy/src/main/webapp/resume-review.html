@@ -6,24 +6,40 @@
     <link rel="stylesheet" href="resume-review-style.css">
     <script src="resume-review-script.js"></script>
   </head>
-  
+
   <body onload='getComments()'>
+
+    <div class="page-title">
+      <h1>Resume Review</h1>
+    </div>
+
+    <div id="adobe-dc-view"></div>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
+            var adobeDCView = new AdobeDC.View({clientId: "b98bbf69d44442479396583253ac267c", divId: "adobe-dc-view"});
+            adobeDCView.previewFile({
+              content:{location: {url: "http://www.africau.edu/images/default/sample.pdf"}},
+              metaData:{fileName: "sample.pdf"}
+            }, {});
+            });
+    </script>
+
     <div id="comments">
       <div id="comments-form">
         <form action="/comment" method="POST">
-          <p>Add a comment:</p>
+          <h3><b>Feedback:</b></h3>
           <select name="type" id="comment-type">
-            <option value="format">Format</option>
-            <option value="content">Content</option>
-            <option value="suggestion">Suggestion</option>
-          </select>
-          <textarea name="text" id="text" placeholder="Your comment.."></textarea><br/>
+              <option value="format">Format</option>
+              <option value="content">Content</option>
+              <option value="suggestion">Suggestion</option>
+            </select>
+          <textarea name="text" id="text" placeholder="Your comment.."></textarea>
+          <br/>
           <input type="submit" onclick='getComments()'/>
-        </form>
+          </form>
       </div>
-      <br>
       <ul id="comments-container"></ul>
-      <br>
     </div>
   </body>
 </html>
