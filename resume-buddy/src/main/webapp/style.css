@@ -1,0 +1,30 @@
+body {
+  font-family: "Roboto", sans-serif;
+  margin: auto;
+  max-width: 1250px;
+}
+ 
+.title {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 100px;
+  align-items: center;
+  text-align: center;
+}
+ 
+.logo {
+  width: 130px;
+  height: 130px;
+  float: right;
+  margin: 10px 50px 10px 0px;
+  transform: rotate(15deg);
+}
+ 
+.container {
+  padding: 0.01em 16px;
+}
+ 
+.center {
+  display: inline-block;
+  width: auto;
+  text-align: center;
+}
