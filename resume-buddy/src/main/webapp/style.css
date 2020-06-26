@@ -13,7 +13,7 @@ body {
   width: 130px;
   height: 130px;
   float: right;
-  margin: 10px 50px 10px;
+  margin: 10px 50px 10px 0px;
   transform: rotate(15deg);
 }
  
