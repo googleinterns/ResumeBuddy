@@ -1,5 +1,7 @@
 body {
   font-family: "Roboto", sans-serif;
+  margin: auto;
+  max-width: 1250px;
 }
  
 .title {
@@ -15,11 +17,6 @@ body {
   float: right;
   margin: 10px 50px 10px 0px;
   transform: rotate(15deg);
-}
- 
-.window { 
-  margin: auto;
-  max-width: 1250px;
 }
  
 .container {
