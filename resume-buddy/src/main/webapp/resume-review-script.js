@@ -56,7 +56,6 @@ function createListElement(date, type, text, id) {
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '&#10005;';
   deleteButton.className = "delete-button";
-  deleteButton.style.cssFloat = "right";
   deleteButton.onclick = function() {
     deleteComments(id);
   }

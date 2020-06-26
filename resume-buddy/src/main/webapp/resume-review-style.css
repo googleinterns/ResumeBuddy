@@ -79,6 +79,6 @@ input[type=submit] {
   background-color: white;
 }
 
-#adobe-dc-view {
-  height: 1000px;
+.delete-button {
+  float: right;
 }
