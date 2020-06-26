@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="UTF-8">
     <title>Resume Review</title>
     <link rel="stylesheet" href="resume-review-style.css">
     <script src="resume-review-script.js"></script>
   </head>
-  
+
   <body onload='getComments()'>
+
+    <div class="page-title">
+      <h1>Resume Review</h1>
+    </div>
+
+    <!-- TODO: Render PDF here -->
+
     <div id="comments">
       <div id="comments-form">
         <form action="/comment" method="POST">
-          <p>Add a comment:</p>
+          <h3><b>Feedback:</b></h3>
           <select name="type" id="comment-type">
             <option value="format">Format</option>
             <option value="content">Content</option>
             <option value="suggestion">Suggestion</option>
           </select>
-          <textarea name="text" id="text" placeholder="Your comment.."></textarea><br/>
+          <textarea name="text" id="text" placeholder="Your comment.."></textarea>
+          <br/>
           <input type="submit" onclick='getComments()'/>
         </form>
       </div>
-      <br>
       <ul id="comments-container"></ul>
-      <br>
     </div>
   </body>
 </html>
