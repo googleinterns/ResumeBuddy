@@ -31,14 +31,12 @@ public class RevieweeDataServlet extends HttpServlet {
     String fname = getParameter(request, "fname", "");
     String lname = getParameter(request, "lname", "");
     String email = getParameter(request, "email", "");
-    String resume = getParameter(request, "image", "");
-    reviewee = new Reviewee(fname, lname, email, resume);
+    reviewee = new Reviewee(fname, lname, email);
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
     revieweeEntity.setProperty("email", email);
-    revieweeEntity.setProperty("resume", resume);
-
+    
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
 
