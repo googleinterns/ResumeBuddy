@@ -6,63 +6,68 @@
     <link rel="stylesheet" href="forms.css">
     <script src="script.js"></script>
   </head>
-  <h2>Sign Up to Receive Resume Review</h2>
-  <form action="/reviewee-data" method="POST">
-    <h3>Personal Info</h3>
-    <label>First name:</label><br>
-    <input type="text" name="fname"><br>
-    <label>Last name:</label><br>
-    <input type="text" name="lname"><br>
-    <label>Email:</label><br>
-    <input type="text" name="email"><br>
-    <h3>Education</h3>
-    <label>School:</label><br>
-    <input type="text"><br><br>
-    <label>School year:</label><br>
-    <select>
-      <option disabled selected>Choose one</option>
-      <option>High school</option>
-      <option>First year</option>
-      <option>Second year</option>
-      <option>Third year</option>
-      <option>Fourth year</option>
-      <option>Post grad</option>
-    </select>
-    <br>
-    <h3>Reviewer Preferences</h3>
-    <label>Field of Work:</label><br>
-    <select>
-      <option disabled selected>Choose one</option>
-      <option>Computer Science</option>
-      <option>Healthcare/Medicine</option>
-      <option>Education</option>
-      <option>Engineering</option>
-      <option>Business</option>
-      <option>Other</option>
-    </select>
-    <br>
-    <label>Other:</label><br>
-    <input type="text"><br><br>
-    <label>Highest level of education:</label><br>
-    <select>
-      <option disabled selected>Choose one</option>
-      <option>Bachelor's degree</option>
-      <option>Master's degree</option>
-      <option>Doctorate</option>
-      <option>Doesn't matter</option>
-    </select>
-    <br><br>
-    <label>Years of work experience:</label><br>
-    <input type="radio" name = "experience">
-    <label>Greater than 5</label><br>
-    <input type="radio" name = "experience">
-    <label>Greater than 10</label><br>
-    <input type="radio" name = "experience">
-    <label>Doesn't matter</label><br>
-    <br>
-    <p>Upload Resume PDF</p>
-    <input type="file"><br>
-    <br>
-    <input type="submit">
-  </form>
+  <body>
+    <div>
+      <h1 id = "title">Sign Up to Receive Resume Review</h1>
+      <form id = "form" action="/reviewee-data" method="POST">
+        <h3 class = "heading">Personal Info</h3>
+        <label>First name:</label><br>
+        <input type="text" name="fname"><br>
+        <label>Last name:</label><br>
+        <input type="text" name="lname"><br>
+        <label>Email:</label><br>
+        <input type="text" name="email"><br>
+        <h3 class = "heading">Education</h3>
+        <label>School:</label><br>
+        <input type="text"><br><br>
+        <label>School year:</label><br>
+        <select>
+          <option disabled selected>Choose one</option>
+          <option>High school</option>
+          <option>First year</option>
+          <option>Second year</option>
+          <option>Third year</option>
+          <option>Fourth year</option>
+          <option>Post grad</option>
+        </select>
+        <br>
+        <h3 class = "heading">Reviewer Preferences</h3>
+        <label>Field of Work:</label><br>
+        <select>
+          <option disabled selected>Choose one</option>
+          <option>Computer Science</option>
+          <option>Healthcare/Medicine</option>
+          <option>Education</option>
+          <option>Engineering</option>
+          <option>Business</option>
+          <option>Other</option>
+        </select>
+        <br>
+        <label>Other:</label><br>
+        <input type="text"><br><br>
+        <label>Highest level of education:</label><br>
+        <select>
+          <option disabled selected>Choose one</option>
+          <option>Bachelor's degree</option>
+          <option>Master's degree</option>
+          <option>Doctorate</option>
+          <option>Doesn't matter</option>
+        </select>
+        <br><br>
+        <label>Years of work experience:</label><br>
+        <input type="radio" name = "experience">
+        <label>Greater than 5</label><br>
+        <input type="radio" name = "experience">
+        <label>Greater than 10</label><br>
+        <input type="radio" name = "experience">
+        <label>Doesn't matter</label><br>
+        <br>
+        <p class = "heading">Upload Resume PDF</p>
+        <input type="file"><br>
+        <br>
+        <input type="submit">
+      </form>
+    </div>
+  </body>
 </html>
+
