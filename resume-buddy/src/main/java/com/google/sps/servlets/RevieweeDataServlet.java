@@ -31,23 +31,25 @@ public class RevieweeDataServlet extends HttpServlet {
     String fname = getParameter(request, "fname", "");
     String lname = getParameter(request, "lname", "");
     String email = getParameter(request, "email", "");
-    reviewee = new Reviewee(fname, lname, email);
+    String resume = getParameter(request, "image", "");
+    reviewee = new Reviewee(fname, lname, email, resume);
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
     revieweeEntity.setProperty("email", email);
+    revieweeEntity.setProperty("resume", resume);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
 
     /* TODO: add a response.sendRedirect() to wherever the user should
      * be navigated to next (either homepage or resume review page)
-     */ 
+     */
   }
 
   /**
    * @return the request parameter, or the default value if the parameter was not specified by the
-   * client
+   *     client
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);

@@ -31,6 +31,7 @@ public class ReviewerDataServlet extends HttpServlet {
     String fname = getParameter(request, "fname", "");
     String lname = getParameter(request, "lname", "");
     String email = getParameter(request, "email", "");
+
     reviewer = new Reviewer(fname, lname, email);
     Entity reviewerEntity = new Entity("Reviewer");
     reviewerEntity.setProperty("first-name", fname);
@@ -42,12 +43,12 @@ public class ReviewerDataServlet extends HttpServlet {
 
     /* TODO: add a response.sendRedirect() to wherever the user should
      * be navigated to next (either homepage or resume review page)
-     */ 
+     */
   }
 
   /**
    * @return the request parameter, or the default value if the parameter was not specified by the
-   * client
+   *     client
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);

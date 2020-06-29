@@ -7,7 +7,7 @@
     <script src="script.js"></script>
   </head>
   <h2>Sign Up to Receive Resume Review</h2>
-  <form action="/reviewee-data" method="POST">
+  <form action="/reviewee-data" method="POST" id="form">
     <h3>Personal Info</h3>
     <label>First name:</label><br>
     <input type="text" name="fname"><br>
@@ -61,7 +61,7 @@
     <label>Doesn't matter</label><br>
     <br>
     <p>Upload Resume PDF</p>
-    <input type="file"><br>
+    <input type="file" name="resume"><br>
     <br>
     <input type="submit">
   </form>
