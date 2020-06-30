@@ -31,11 +31,24 @@ public class RevieweeDataServlet extends HttpServlet {
     String fname = getParameter(request, "fname", "");
     String lname = getParameter(request, "lname", "");
     String email = getParameter(request, "email", "");
-    reviewee = new Reviewee(fname, lname, email);
+    String school = getParameter(request, "school", "");
+    String year = getParameter(request, "school-year", "");
+    String career = getParameter(request, "career", "");
+    if (career.equals("Other")) {
+      career = getParameter(request, "other", "");
+    }
+    String degreePref = getParameter(request, "degree-preference", "");
+    String numYearsPref = getParameter(request, "experience-preference", "");
+    reviewee = new Reviewee(fname, lname, email, school, year, career, degreePref, numYearsPref);
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
     revieweeEntity.setProperty("email", email);
+    revieweeEntity.setProperty("school-year", year);
+    revieweeEntity.setProperty("school", school);
+    revieweeEntity.setProperty("career", career);
+    revieweeEntity.setProperty("preferred-degree", degreePref);
+    revieweeEntity.setProperty("preferred-experience", numYearsPref);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
@@ -44,8 +57,8 @@ public class RevieweeDataServlet extends HttpServlet {
   }
 
   /**
-   * @return the request parameter, or the default value if the parameter
-   * was not specified by the client
+   * @return the request parameter, or the default value if the parameter was not specified by the
+   *     client
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);

@@ -1,6 +1,5 @@
 package com.google.sps.data;
 
-/*TODO: add more information from form input into Reviewer*/
 public final class Reviewer {
 
   private final String firstName;
@@ -12,8 +11,15 @@ public final class Reviewer {
   private final String company;
   private final String numYears;
 
-  public Reviewer(String fname, String lname, String email, String degree,
-                    String school, String career, String company, String numYears) {
+  public Reviewer(
+      String fname,
+      String lname,
+      String email,
+      String degree,
+      String school,
+      String career,
+      String company,
+      String numYears) {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;

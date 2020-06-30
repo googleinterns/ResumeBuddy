@@ -35,7 +35,7 @@ public class ReviewerDataServlet extends HttpServlet {
     String school = getParameter(request, "school", "");
     String career = getParameter(request, "work-field", "");
     if (career.equals("Other")) {
-        career = getParameter(request, "other", "");
+      career = getParameter(request, "other", "");
     }
     String company = getParameter(request, "company", "");
     String numYears = getParameter(request, "years-experience", "");
@@ -48,7 +48,7 @@ public class ReviewerDataServlet extends HttpServlet {
     reviewerEntity.setProperty("school", school);
     reviewerEntity.setProperty("career", career);
     reviewerEntity.setProperty("company", company);
-    reviewerEntity.setProperty("numYears", numYears);
+    reviewerEntity.setProperty("years-experience", numYears);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);
@@ -57,8 +57,8 @@ public class ReviewerDataServlet extends HttpServlet {
   }
 
   /**
-   * @return the request parameter, or the default value if the parameter
-   * was not specified by the client
+   * @return the request parameter, or the default value if the parameter was not specified by the
+   *     client
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
