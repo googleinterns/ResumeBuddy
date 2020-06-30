@@ -41,8 +41,8 @@ public class ReviewerDataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);
 
-    /* TODO: add a response.sendRedirect() to wherever the user should
-     * be navigated to next (either homepage or resume review page)
-     */
+    response.sendRedirect("resume-review.html");
   }
+
+  
 }
