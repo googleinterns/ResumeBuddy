@@ -1,7 +1,10 @@
-* {
+body {
   font-family: "Roboto", sans-serif;
-  margin: 0 auto;
   max-width: 1250px;
+}
+
+.space {
+  margin: 0 auto;
 }
  
 .title {
