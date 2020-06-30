@@ -31,11 +31,24 @@ public class ReviewerDataServlet extends HttpServlet {
     String fname = getParameter(request, "fname", "");
     String lname = getParameter(request, "lname", "");
     String email = getParameter(request, "email", "");
-    reviewer = new Reviewer(fname, lname, email);
+    String degree = getParameter(request, "education-level", "");
+    String school = getParameter(request, "school", "");
+    String career = getParameter(request, "work-field", "");
+    if (career.equals("Other")) {
+        career = getParameter(request, "other", "");
+    }
+    String company = getParameter(request, "company", "");
+    String numYears = getParameter(request, "years-experience", "");
+    reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
     Entity reviewerEntity = new Entity("Reviewer");
     reviewerEntity.setProperty("first-name", fname);
     reviewerEntity.setProperty("last-name", lname);
     reviewerEntity.setProperty("email", email);
+    reviewerEntity.setProperty("degree", degree);
+    reviewerEntity.setProperty("school", school);
+    reviewerEntity.setProperty("career", career);
+    reviewerEntity.setProperty("company", company);
+    reviewerEntity.setProperty("numYears", numYears);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);
