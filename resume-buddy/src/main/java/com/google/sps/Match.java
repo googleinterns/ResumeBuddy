@@ -13,6 +13,8 @@ import java.util.List;
 /** Class that matches reviewers to reviewees */
 public class Match {
 
+  private Match() {}
+
   /** Retrieves list of entities for specific query kind from the Datastore */
   public static List<Entity> getNotMatchedUsers(String queryKind) {
     List<Entity> entityList;

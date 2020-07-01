@@ -19,11 +19,15 @@ public class Pair<K, V> {
 
   @Override
   public boolean equals(Object o) {
-    Pair<K, V> that = (Pair<K, V>) o;
-    if (this.key.equals(that.getKey()) && this.val.equals(that.getVal())) {
-      return true;
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
     }
 
-    return false;
+    if (this == o) {
+      return true;
+    }
+    Pair<K, V> that = (Pair<K, V>) o;
+
+    return this.key.equals(that.getKey()) && this.val.equals(that.getVal());
   }
 }

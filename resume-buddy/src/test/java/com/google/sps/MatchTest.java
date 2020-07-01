@@ -14,7 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;src
+import org.junit.runners.JUnit4;
 
 /** Tests for matching algorithm */
 @RunWith(JUnit4.class)
