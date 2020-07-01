@@ -16,3 +16,5 @@ public class ServletHelpers {
     return (value == null) ? defaultValue : value;
   }
 }
+
+/* TODO add a test file for ServletHelpers */
