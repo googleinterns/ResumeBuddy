@@ -14,26 +14,8 @@
 
 package com.google.sps;
 
-
-/** */
 @RunWith(JUnit4.class)
 public final class ServletHelpersTest {
+  /*TODO add tests for ServletHelpers class*/
 
-  @Before
-  public void setUp() {
-    query = new FindMeetingQuery();
-  }
-
-  @Test
-  public void optionsForNoAttendees() {
-    String fname = ServletHelpers.getParameter(request, "fname", "");
-    String lname = ServletHelpers.getParameter(request, "lname", "");
-    
-    MeetingRequest request = new MeetingRequest(NO_ATTENDEES, DURATION_1_HOUR);
-
-    Collection<TimeRange> actual = query.query(NO_EVENTS, request);
-    Collection<TimeRange> expected = Arrays.asList(TimeRange.WHOLE_DAY);
-
-    Assert.assertEquals(expected, actual);
-  }
 }
