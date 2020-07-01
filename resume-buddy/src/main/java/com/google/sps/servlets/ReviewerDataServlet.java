@@ -58,5 +58,4 @@ public class ReviewerDataServlet extends HttpServlet {
 
     response.sendRedirect("resume-review.html");
   }
-
 }
