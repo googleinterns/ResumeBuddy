@@ -10,30 +10,21 @@ import java.util.List;
 
 /** Class that matches reviewers to reviewees */
 public class Match {
-  List<Entity> reviewees;
-  List<Entity> reviewers;
 
-  public Match() {
-    getNotMatchedUsers();
-    match();
-  }
-
-  /** Retrieves reviewers' and reviewees' data from the Datastore */
-  private void getNotMatchedUsers() {
-    Query revieweeQuery = new Query("Reviewee");
-    Query reviewerQuery = new Query("Reviewer");
+  /** Retrieves list of entities for specific query kind from the Datastore */
+  public static void getNotMatchedUsers(String queryKind) {
+    List<Entity> entityList;
+    Query query = new Query(queryKind);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
-    PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
+    PreparedQuery results = datastore.prepare(query);
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
 
-    reviewees = revieweeResults.asList(fetchOptions);
-    reviewers = reviewerResults.asList(fetchOptions);
+    entityList = results.asList(fetchOptions);
   }
 
   /** FCFS algorithm to match reviewers with reviewees */
-  private void match() {
-    // TODO: Update algorithm based on criteria 
+  public static void match(List<Entity> reviewees, List<Entity> reviewers) {
+    // TODO: Update algorithm based on criteria
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     int numberOfMatched = Math.min(reviewees.size(), reviewers.size());
