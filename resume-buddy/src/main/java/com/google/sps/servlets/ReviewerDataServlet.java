@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
+import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewer;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -28,18 +29,20 @@ public class ReviewerDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String fname = getParameter(request, "fname", "");
-    String lname = getParameter(request, "lname", "");
-    String email = getParameter(request, "email", "");
-    String degree = getParameter(request, "education-level", "");
-    String school = getParameter(request, "school", "");
-    String career = getParameter(request, "work-field", "");
+
+    String fname = ServletHelpers.getParameter(request, "fname", "");
+    String lname = ServletHelpers.getParameter(request, "lname", "");
+    String email = ServletHelpers.getParameter(request, "email", "");
+    String degree = ServletHelpers.getParameter(request, "education-level", "");
+    String school = ServletHelpers.getParameter(request, "school", "");
+    String career = ServletHelpers.getParameter(request, "work-field", "");
     if (career.equals("other")) {
-      career = getParameter(request, "other", "");
+      career = ServletHelpers.getParameter(request, "other", "");
     }
-    String company = getParameter(request, "company", "");
-    String numYears = getParameter(request, "years-experience", "");
+    String company = ServletHelpers.getParameter(request, "company", "");
+    String numYears = ServletHelpers.getParameter(request, "years-experience", "");
     reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
+
     Entity reviewerEntity = new Entity("Reviewer");
     reviewerEntity.setProperty("first-name", fname);
     reviewerEntity.setProperty("last-name", lname);
@@ -56,12 +59,4 @@ public class ReviewerDataServlet extends HttpServlet {
     response.sendRedirect("resume-review.html");
   }
 
-  /**
-   * @return the request parameter, or the default value if the parameter was not specified by the
-   *     client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    return (value == null) ? defaultValue : value;
-  }
 }

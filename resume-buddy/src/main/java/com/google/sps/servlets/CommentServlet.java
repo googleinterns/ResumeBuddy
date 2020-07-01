@@ -11,6 +11,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
+import com.google.sps.ServletHelpers;
 import com.google.sps.data.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,8 +63,8 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String type = getParameter(request, "type", "");
-    String text = getParameter(request, "text", "");
+    String type = ServletHelpers.getParameter(request, "type", "");
+    String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
 
     // TODO: Get real reviewer and reviewee info when auth implemented
@@ -87,15 +88,6 @@ public class CommentServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     response.sendRedirect("/resume-review.html");
-  }
-
-  /** Gets parameter from the list and changes the value by default if empty */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 
   /** Checks if the id collides with other ids in datastore */
