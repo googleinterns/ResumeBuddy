@@ -34,7 +34,7 @@ public class ReviewerDataServlet extends HttpServlet {
     String degree = getParameter(request, "education-level", "");
     String school = getParameter(request, "school", "");
     String career = getParameter(request, "work-field", "");
-    if (career.equals("Other")) {
+    if (career.equals("other")) {
       career = getParameter(request, "other", "");
     }
     String company = getParameter(request, "company", "");

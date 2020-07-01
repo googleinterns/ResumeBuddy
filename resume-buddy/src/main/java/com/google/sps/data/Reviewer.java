@@ -1,13 +1,5 @@
 package com.google.sps.data;
 
-enum Degree {
-  highschool,
-  associate,
-  bachelor,
-  master,
-  doctorate
-}
-
 public final class Reviewer {
 
   private final String firstName;
@@ -31,10 +23,10 @@ public final class Reviewer {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;
-    this.degree = Degree.valueOf(degree).toString();
+    this.degree = EnumUtility.Degree.valueOf(degree.toUpperCase()).toString();
     this.school = school;
-    this.career = career;
+    this.career = EnumUtility.Career.valueOf(career.toUpperCase()).toString();
     this.company = company;
-    this.numYears = numYears;
+    this.numYears = EnumUtility.NumYears.valueOf(numYears.toUpperCase()).toString();
   }
 }

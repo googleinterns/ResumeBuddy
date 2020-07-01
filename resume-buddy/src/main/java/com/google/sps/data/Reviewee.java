@@ -24,9 +24,9 @@ public final class Reviewee {
     this.lastName = lname;
     this.email = email;
     this.school = school;
-    this.year = year;
-    this.career = career;
-    this.degreePref = degreePref;
-    this.numYearsPref = numYearsPref;
+    this.year = EnumUtility.SchoolYear.valueOf(year.toUpperCase()).toString();
+    this.career = EnumUtility.Career.valueOf(career.toUpperCase()).toString();
+    this.degreePref = EnumUtility.Degree.valueOf(degreePref.toUpperCase()).toString();
+    this.numYearsPref = EnumUtility.NumYears.valueOf(numYearsPref.toUpperCase()).toString();
   }
 }
