@@ -29,14 +29,30 @@ public class ReviewerDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
+
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
     String email = ServletHelpers.getParameter(request, "email", "");
-    reviewer = new Reviewer(fname, lname, email);
+    String degree = ServletHelpers.getParameter(request, "education-level", "");
+    String school = ServletHelpers.getParameter(request, "school", "");
+    String career = ServletHelpers.getParameter(request, "work-field", "");
+
+    String company = ServletHelpers.getParameter(request, "company", "");
+    String numYears = ServletHelpers.getParameter(request, "years-experience", "");
+    reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
+
+    if (career.equals("other")) {
+      career = ServletHelpers.getParameter(request, "other", "");
+    }
     Entity reviewerEntity = new Entity("Reviewer");
     reviewerEntity.setProperty("first-name", fname);
     reviewerEntity.setProperty("last-name", lname);
     reviewerEntity.setProperty("email", email);
+    reviewerEntity.setProperty("degree", degree);
+    reviewerEntity.setProperty("school", school);
+    reviewerEntity.setProperty("career", career);
+    reviewerEntity.setProperty("company", company);
+    reviewerEntity.setProperty("years-experience", numYears);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);

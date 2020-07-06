@@ -29,14 +29,33 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
+
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
     String email = ServletHelpers.getParameter(request, "email", "");
-    reviewee = new Reviewee(fname, lname, email);
+    String school = ServletHelpers.getParameter(request, "school", "");
+    String year = ServletHelpers.getParameter(request, "school-year", "");
+    String career = ServletHelpers.getParameter(request, "career", "");
+    String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
+    String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
+
+    reviewee = new Reviewee(fname, lname, email, school, year, career, degreePref, numYearsPref);
+
+    if (year.equals("other")) {
+      year = ServletHelpers.getParameter(request, "other_year", "");
+    }
+    if (career.equals("other")) {
+      career = ServletHelpers.getParameter(request, "other_career", "");
+    }
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
     revieweeEntity.setProperty("email", email);
+    revieweeEntity.setProperty("school-year", year);
+    revieweeEntity.setProperty("school", school);
+    revieweeEntity.setProperty("career", career);
+    revieweeEntity.setProperty("preferred-degree", degreePref);
+    revieweeEntity.setProperty("preferred-experience", numYearsPref);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
