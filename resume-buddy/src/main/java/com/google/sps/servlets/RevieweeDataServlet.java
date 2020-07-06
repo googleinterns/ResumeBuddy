@@ -12,6 +12,7 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.gson.Gson;
+import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -40,13 +41,12 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String fname = getParameter(request, "fname", "");
-    String lname = getParameter(request, "lname", "");
-    String email = getParameter(request, "email", "");
-
+    String fname = ServletHelpers.getParameter(request, "fname", "");
+    String lname = ServletHelpers.getParameter(request, "lname", "");
+    String email = ServletHelpers.getParameter(request, "email", "");
     String resumeURL = getUploadedFileUrl(request, "resume");
-
     reviewee = new Reviewee(fname, lname, email, resumeURL);
+
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
