@@ -67,6 +67,17 @@
         <br>
         <input type="submit">
       </form>
+
+      <form id="my-form"  method="POST" enctype="multipart/form-data">
+        <br/>
+        <p>Upload an image:</p>
+        <input type="file" name="image">
+        <br/><br/>
+        <button onclick="fetchBlobstoreURLAndShowForm()">Submit</button>
+      </form>
+
+
+
     </div>
   </body>
 </html>

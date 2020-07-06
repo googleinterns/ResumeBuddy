@@ -8,7 +8,7 @@
     <script src="resume-review-script.js"></script>
   </head>
 
-  <body onload='getComments() resumeUpload()'>
+  <body onload='getComments()'>
 
     <div class="page-title">
       <h1>Resume Review</h1>
@@ -18,7 +18,7 @@
 
     <div id="comments">
       <div id="comments-form">
-        <form action="/comment" method="POST" id="form" enctype="multipart/form-data">
+        <form action="/comment" method="POST" enctype="multipart/form-data">
           <h3><b>Feedback:</b></h3>
           <select name="type" id="comment-type">
             <option value="format">Format</option>
