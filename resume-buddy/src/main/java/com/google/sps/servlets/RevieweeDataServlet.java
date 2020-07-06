@@ -36,13 +36,17 @@ public class RevieweeDataServlet extends HttpServlet {
     String school = ServletHelpers.getParameter(request, "school", "");
     String year = ServletHelpers.getParameter(request, "school-year", "");
     String career = ServletHelpers.getParameter(request, "career", "");
-    if (career.equals("Other")) {
-      career = ServletHelpers.getParameter(request, "other", "");
-    }
     String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
+
     reviewee = new Reviewee(fname, lname, email, school, year, career, degreePref, numYearsPref);
 
+    if (year.equals("other")) {
+      year = ServletHelpers.getParameter(request, "other_year", "");
+    }
+    if (career.equals("other")) {
+      career = ServletHelpers.getParameter(request, "other_career", "");
+    }
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);

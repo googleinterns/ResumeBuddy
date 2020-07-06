@@ -3,16 +3,16 @@ package com.google.sps.data;
 public class EnumUtility {
 
   enum Degree {
-    HIGHSCHOOL,
+    HIGH_SCHOOL,
     ASSOCIATE,
     BACHELOR,
     MASTER,
     DOCTORATE,
-    NOPREF;
+    NO_PREFERENCE;
   }
 
   enum Career {
-    COMPSCI,
+    COMPUTER_SCIENCE,
     HEALTHCARE,
     EDUCATION,
     ENGINEERING,
@@ -21,19 +21,20 @@ public class EnumUtility {
   }
 
   enum NumYears {
-    LESSTHANFIVE,
-    FIVETOTEN,
-    GREATERTHANTEN,
-    NOPREF;
+    LESS_THAN_5,
+    GREATER_THAN_5,
+    GREATER_THAN_10,
+    NO_PREFERENCE;
   }
 
   enum SchoolYear {
-    HIGHSCHOOL,
-    FIRSTYEAR,
-    SECONDYEAR,
-    THIRDYEAR,
-    FOURTHYEAR,
-    POSTGRAD;
+    HIGH_SCHOOL,
+    YEAR_1,
+    YEAR_2,
+    YEAR_3,
+    YEAR_4,
+    POST_GRAD,
+    OTHER;
   }
 
   private EnumUtility() {}
