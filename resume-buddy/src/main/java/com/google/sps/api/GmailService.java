@@ -25,7 +25,6 @@ public class GmailService {
   private GmailService() {};
 
   public static Gmail getGmailService() throws IOException, GeneralSecurityException {
-
     if (service != null) {
       return service;
     }
