@@ -6,8 +6,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.sps.data.Pair;
-import java.util.ArrayList;
 import java.util.List;
 
 /** Class that matches reviewers to reviewees */
@@ -28,9 +26,8 @@ public class Match {
   }
 
   /** FCFS algorithm to match reviewers with reviewees */
-  public static List<Pair<String, String>> match(List<Entity> reviewees, List<Entity> reviewers) {
+  public static void match(List<Entity> reviewees, List<Entity> reviewers) {
     // TODO: Update algorithm based on criteria
-    List<Pair<String, String>> matches = new ArrayList<>();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     int numberOfMatched = Math.min(reviewees.size(), reviewers.size());
@@ -47,13 +44,9 @@ public class Match {
       matchEntity.setProperty("reviewee", reviewee.getProperty("email"));
       datastore.put(matchEntity);
 
-      matches.add(new Pair(revieweeEmail, reviewerEmail));
-
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
       datastore.delete(reviewee.getKey());
     }
-
-    return matches;
   }
 }

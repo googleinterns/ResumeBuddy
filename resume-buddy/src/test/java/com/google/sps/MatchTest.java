@@ -3,11 +3,12 @@ package com.google.sps;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Pair;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
@@ -56,18 +57,24 @@ public class MatchTest {
     datastore.put(reviewer1);
     datastore.put(reviewer2);
 
-    List<Entity> reviewees = Arrays.asList(reviewee1, reviewee2);
-    List<Entity> reviewers = Arrays.asList(reviewer1, reviewer2);
+    List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
+    List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
 
-    List<Pair<String, String>> actualMatches = Match.match(reviewees, reviewers);
+    Match.match(reviewees, reviewers);
 
     List<Pair<String, String>> expectedMatches = new ArrayList<>();
+    List<Pair<String, String>> actualMatches = new ArrayList<>();
+
     expectedMatches.add(new Pair("Ani", "Shreya"));
     expectedMatches.add(new Pair("Olivia", "Shayla"));
 
-    System.out.println(expectedMatches);
-    Pair<String, String> test = new Pair("Ani", "Shreya");
-    Pair<String, String> test2 = new Pair("Ani", "Shreya");
+    Query query = new Query("Matches");
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      actualMatches.add(
+          new Pair(
+              (String) entity.getProperty("reviewee"), (String) entity.getProperty("reviewer")));
+    }
 
     Assert.assertEquals(expectedMatches, actualMatches);
   }
