@@ -25,7 +25,11 @@ public class Match {
     return entityList;
   }
 
-  /** FCFS algorithm to match reviewers with reviewees */
+  /**
+   * FCFS algorithm to match reviewers with reviewees. When two people are matched, their entities
+   * are deleted ('Reviewee' and 'Reviewer') from datastore and new entity ('Match') for their pair
+   * is created
+   */
   public static void match(List<Entity> reviewees, List<Entity> reviewers) {
     // TODO: Update algorithm based on criteria
 
@@ -36,7 +40,7 @@ public class Match {
       Entity reviewer = reviewers.get(i);
       Entity reviewee = reviewees.get(i);
 
-      Entity matchEntity = new Entity("Matches");
+      Entity matchEntity = new Entity("Match");
 
       String reviewerEmail = (String) reviewer.getProperty("email");
       String revieweeEmail = (String) reviewee.getProperty("email");

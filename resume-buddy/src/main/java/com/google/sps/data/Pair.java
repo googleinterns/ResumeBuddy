@@ -1,5 +1,8 @@
 package com.google.sps.data;
 
+/**
+ * Pair class to store two objects together. Used for testing purposes for reviewee-reviewer pair
+ */
 public class Pair<K, V> {
   private final K key;
   private final V val;

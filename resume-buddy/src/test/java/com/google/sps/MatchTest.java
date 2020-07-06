@@ -68,7 +68,7 @@ public class MatchTest {
     expectedMatches.add(new Pair("Ani", "Shreya"));
     expectedMatches.add(new Pair("Olivia", "Shayla"));
 
-    Query query = new Query("Matches");
+    Query query = new Query("Match");
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
       actualMatches.add(
