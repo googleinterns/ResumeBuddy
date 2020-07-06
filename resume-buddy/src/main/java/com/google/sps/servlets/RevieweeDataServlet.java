@@ -59,15 +59,6 @@ public class RevieweeDataServlet extends HttpServlet {
     response.sendRedirect("resume-review.html");
   }
 
-  /**
-   * @return the request parameter, or the default value if the parameter was not specified by the
-   *     client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    return (value == null) ? defaultValue : value;
-  }
-
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
