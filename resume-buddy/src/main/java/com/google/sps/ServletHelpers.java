@@ -8,7 +8,8 @@ public class ServletHelpers {
   private ServletHelpers() {}
 
   /**
-   * @return the request parameter, or the default value if the parameter was not specified by the
+   * @return the request parameter, or the default value if the parameter was not specified 
+by
    *     client
    */
   public static String getParameter(HttpServletRequest request, String name, String defaultValue) {
