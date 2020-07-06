@@ -12,12 +12,14 @@ import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-/** Class responsible to create an email and send it to recipinet */
+/** Class responsible to create an email and send it to recipient */
 public class Email {
+
+  private Email() {};
 
   public static void sendEmail(String to, String subjectLine, String text) {
     try {
-      Gmail service = GmailAPI.getGmailService();
+      Gmail service = GmailService.getGmailService();
       MimeMessage mimeMessage = createEmail(to, Consts.FROM, subjectLine, text);
       Message message = createMessageWithEmail(mimeMessage);
       message = service.users().messages().send(Consts.FROM, message).execute();

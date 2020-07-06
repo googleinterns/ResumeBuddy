@@ -16,15 +16,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 
-public class GmailAPI {
+public class GmailService {
   private static final String APPLICATION_NAME = "ResumeBuddy";
   private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-  static Gmail service = null;
-  private static File credentialsFilePath = new File("credentials.json");
+  private static Gmail service = null;
+  private static File CREDENTIAL_FILES_PATH = new File("credentials.json");
+
+  private GmailService() {};
 
   public static Gmail getGmailService() throws IOException, GeneralSecurityException {
 
-    InputStream in = new FileInputStream(credentialsFilePath);
+    if (service != null) {
+      return service;
+    }
+
+    InputStream in = new FileInputStream(CREDENTIAL_FILES_PATH);
     GoogleClientSecrets clientSecrets =
         GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -43,7 +49,7 @@ public class GmailAPI {
     final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     service =
         new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, authorize)
-            .setApplicationName(GmailAPI.APPLICATION_NAME)
+            .setApplicationName(APPLICATION_NAME)
             .build();
 
     return service;
