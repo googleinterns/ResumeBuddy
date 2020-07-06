@@ -63,14 +63,13 @@ public class RevieweeDataServlet extends HttpServlet {
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    List<BlobKey> blobKeys = blobs.get("image");
+    List<BlobKey> blobKeys = blobs.get("resume");
 
     // User submitted form without selecting a file, so we can't get a URL. (dev server)
     if (blobKeys == null || blobKeys.isEmpty()) {
       return null;
     }
 
-    // Our form only contains a single file input, so get the first index.
     BlobKey blobKey = blobKeys.get(0);
 
     // User submitted form without selecting a file, so we can't get a URL. (live server)
@@ -80,15 +79,9 @@ public class RevieweeDataServlet extends HttpServlet {
       return null;
     }
 
-    // We could check the validity of the file here, e.g. to make sure it's an image file
-    // https://stackoverflow.com/q/10779564/873165
-
-    // Use ImagesService to get a URL that points to the uploaded file.
     ImagesService imagesService = ImagesServiceFactory.getImagesService();
     ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
 
-    // To support running in Google Cloud Shell with AppEngine's devserver, we must use the relative
-    // path to the image, rather than the path returned by imagesService which contains a host.
     try {
       URL url = new URL(imagesService.getServingUrl(options));
       return url.getPath();
