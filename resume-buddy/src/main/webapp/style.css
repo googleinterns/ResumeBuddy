@@ -1,7 +1,10 @@
 body {
   font-family: "Roboto", sans-serif;
-  margin: auto;
   max-width: 1250px;
+}
+
+.space {
+  margin: 0 auto;
 }
  
 .title {
@@ -12,8 +15,8 @@ body {
 }
  
 .logo {
-  width: 130px;
-  height: 130px;
+  width: 150px;
+  height: 150px;
   float: right;
   margin: 10px 50px 10px 0px;
   transform: rotate(15deg);

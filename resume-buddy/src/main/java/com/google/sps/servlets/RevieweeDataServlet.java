@@ -5,7 +5,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
-import com.google.sps.data.Reviewer;
+import com.google.sps.data.Reviewee;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,16 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that saves reviewer data from the form */
-@WebServlet("/reviewer-data")
-public class ReviewerDataServlet extends HttpServlet {
+@WebServlet("/reviewee-data")
+public class RevieweeDataServlet extends HttpServlet {
 
-  private Reviewer reviewer;
+  private Reviewee reviewee;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Send the JSON as the response
     response.setContentType("application/json");
-    String json = new Gson().toJson(reviewer);
+    String json = new Gson().toJson(reviewee);
     response.getWriter().println(json);
   }
 
@@ -33,29 +33,32 @@ public class ReviewerDataServlet extends HttpServlet {
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
     String email = ServletHelpers.getParameter(request, "email", "");
-    String degree = ServletHelpers.getParameter(request, "education-level", "");
     String school = ServletHelpers.getParameter(request, "school", "");
-    String career = ServletHelpers.getParameter(request, "work-field", "");
+    String year = ServletHelpers.getParameter(request, "school-year", "");
+    String career = ServletHelpers.getParameter(request, "career", "");
+    String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
+    String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
 
-    String company = ServletHelpers.getParameter(request, "company", "");
-    String numYears = ServletHelpers.getParameter(request, "years-experience", "");
-    reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
+    reviewee = new Reviewee(fname, lname, email, school, year, career, degreePref, numYearsPref);
 
-    if (career.equals("other")) {
-      career = ServletHelpers.getParameter(request, "other", "");
+    if (year.equals("other")) {
+      year = ServletHelpers.getParameter(request, "other_year", "");
     }
-    Entity reviewerEntity = new Entity("Reviewer");
-    reviewerEntity.setProperty("first-name", fname);
-    reviewerEntity.setProperty("last-name", lname);
-    reviewerEntity.setProperty("email", email);
-    reviewerEntity.setProperty("degree", degree);
-    reviewerEntity.setProperty("school", school);
-    reviewerEntity.setProperty("career", career);
-    reviewerEntity.setProperty("company", company);
-    reviewerEntity.setProperty("years-experience", numYears);
+    if (career.equals("other")) {
+      career = ServletHelpers.getParameter(request, "other_career", "");
+    }
+    Entity revieweeEntity = new Entity("Reviewee");
+    revieweeEntity.setProperty("first-name", fname);
+    revieweeEntity.setProperty("last-name", lname);
+    revieweeEntity.setProperty("email", email);
+    revieweeEntity.setProperty("school-year", year);
+    revieweeEntity.setProperty("school", school);
+    revieweeEntity.setProperty("career", career);
+    revieweeEntity.setProperty("preferred-degree", degreePref);
+    revieweeEntity.setProperty("preferred-experience", numYearsPref);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(reviewerEntity);
+    datastore.put(revieweeEntity);
 
     response.sendRedirect("resume-review.html");
   }
