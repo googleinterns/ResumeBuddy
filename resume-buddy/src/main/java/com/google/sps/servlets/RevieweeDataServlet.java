@@ -29,10 +29,13 @@ import javax.servlet.http.HttpServletResponse;
 public class RevieweeDataServlet extends HttpServlet {
 
   private Reviewee reviewee;
+  private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Send the JSON as the response
+    BlobKey blobKey = new BlobKey(request.getParameter("blob-key"));
+    blobstoreService.serve(blobKey, response);
     response.setContentType("application/json");
     String json = new Gson().toJson(reviewee);
     response.getWriter().println(json);
@@ -56,8 +59,7 @@ public class RevieweeDataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
 
-    // response.sendRedirect("resume-review.html");
-    response.sendRedirect("reviewee-form.html");
+    response.sendRedirect("/resume-review.html");
   }
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
