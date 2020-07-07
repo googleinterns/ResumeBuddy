@@ -20,7 +20,7 @@ public class GmailService {
   private static final String APPLICATION_NAME = "ResumeBuddy";
   private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
   private static Gmail service = null;
-  private static File CREDENTIAL_FILES_PATH = new File("credentials.json");
+  private static final File CREDENTIAL_FILES_PATH = new File("credentials.json");
 
   private GmailService() {};
 
@@ -44,7 +44,7 @@ public class GmailService {
             .setAccessToken(Consts.ACCESS_TOKEN)
             .setRefreshToken(Consts.REFRESH_TOKEN);
 
-    // Create Gmail service
+    // Creates Gmail service
     final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     service =
         new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, authorize)

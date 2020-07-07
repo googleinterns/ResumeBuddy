@@ -30,7 +30,7 @@ public class Email {
   }
 
   /**
-   * Create a MimeMessage using the parameters provided.
+   * Creates a MimeMessage using the parameters provided.
    *
    * @param to email address of the receiver
    * @param from email address of the sender, the mailbox account
@@ -53,7 +53,7 @@ public class Email {
   }
 
   /**
-   * Create a message from an email.
+   * Creates a message from an email.
    *
    * @param emailContent Email to be set to raw of message
    * @return a message containing a base64url encoded email
