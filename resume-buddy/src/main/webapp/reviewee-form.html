@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="styles/forms.css">
     <script src="scripts/script.js"></script>
   </head>
-  <body>
+  <body onload="blobUpload()">
     <div>
       <h1 id = "title">Sign Up to Receive Resume Review</h1>
-      <form id = "form" action="/reviewee-data" method="POST">
+      <form id ="form" action="/blobstore-upload-url" method="POST" enctype="multipart/form-data">
         <h3 class = "heading">Personal Info</h3>
         <label>First name:</label><br>
         <input type="text" name="fname"><br>
@@ -67,11 +67,10 @@
         </select>
         <br>
         <p class = "heading">Upload Resume PDF</p>
-        <input type="file"><br>
+        <input type="file" name="resume"><br>
         <br>
         <input type="submit">
       </form>
     </div>
   </body>
 </html>
-
