@@ -48,7 +48,9 @@ public class RevieweeDataServlet extends HttpServlet {
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
     String resumeURL = getUploadedFileUrl(request, response, "resume");
 
-    reviewee = new Reviewee(fname, lname, email, school, year, career, degreePref, numYearsPref, resumeURL);
+    reviewee =
+        new Reviewee(
+            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeURL);
 
     if (year.equals("other")) {
       year = ServletHelpers.getParameter(request, "other_year", "");
@@ -88,7 +90,8 @@ public class RevieweeDataServlet extends HttpServlet {
       blobstoreService.delete(blobKey);
       return null;
     }
-
+    // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
+    // the resume URL.
     return "/serve?blob-key" + blobKeys.get(0).getKeyString();
   }
 }
