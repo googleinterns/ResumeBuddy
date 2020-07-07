@@ -29,8 +29,9 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Send the JSON as the response
-    BlobKey blobKey = new BlobKey(request.getParameter("blob-key"));
-    blobstoreService.serve(blobKey, response);
+
+    // BlobKey blobKey = new BlobKey(request.getParameter("blob-key"));
+    // blobstoreService.serve(blobKey, response);
     response.setContentType("application/json");
     String json = new Gson().toJson(reviewee);
     response.getWriter().println(json);
