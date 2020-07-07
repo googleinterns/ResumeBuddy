@@ -29,9 +29,6 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Send the JSON as the response
-
-    // BlobKey blobKey = new BlobKey(request.getParameter("blob-key"));
-    // blobstoreService.serve(blobKey, response);
     response.setContentType("application/json");
     String json = new Gson().toJson(reviewee);
     response.getWriter().println(json);
@@ -60,14 +57,14 @@ public class RevieweeDataServlet extends HttpServlet {
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
   private String getUploadedFileUrl(
-      HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
+    HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("resume");
 
     BlobKey blobKey = blobKeys.get(0);
 
-    // User submitted form without selecting a file, so we can't get a URL. (live server)
+    // User submitted form without selecting a file, so we can't get a URL. 
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
