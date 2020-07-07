@@ -3,8 +3,8 @@ function blobUpload() {
 		.then((response) => {
 			return response.text();
 		})
-		.then((imageUploadUrl) => {
+		.then((resumeUploadUrl) => {
 			const resume = document.getElementById('form');
-			resume.action = imageUploadUrl;
+			resume.action = resumeUploadUrl;
 		});
 }

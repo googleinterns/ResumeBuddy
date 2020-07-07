@@ -57,14 +57,14 @@ public class RevieweeDataServlet extends HttpServlet {
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
   private String getUploadedFileUrl(
-    HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
+      HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("resume");
 
     BlobKey blobKey = blobKeys.get(0);
 
-    // User submitted form without selecting a file, so we can't get a URL. 
+    // User submitted form without selecting a file, so we can't get a URL.
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
