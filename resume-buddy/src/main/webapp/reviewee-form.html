@@ -19,49 +19,53 @@
         <input type="text" name="email"><br>
         <h3 class = "heading">Education</h3>
         <label>School:</label><br>
-        <input type="text"><br><br>
+        <!-- TODO make this into dropdown with all school names instead of text box-->
+        <input type="text" name="school"><br><br>
         <label>School year:</label><br>
-        <select>
+        <select name="school-year">
           <option disabled selected>Choose one</option>
-          <option>High school</option>
-          <option>First year</option>
-          <option>Second year</option>
-          <option>Third year</option>
-          <option>Fourth year</option>
-          <option>Post grad</option>
-        </select>
-        <br>
-        <h3 class = "heading">Reviewer Preferences</h3>
-        <label>Field of Work:</label><br>
-        <select>
-          <option disabled selected>Choose one</option>
-          <option>Computer Science</option>
-          <option>Healthcare/Medicine</option>
-          <option>Education</option>
-          <option>Engineering</option>
-          <option>Business</option>
-          <option>Other</option>
+          <option value="high_school">High school</option>
+          <option value="year_1">First year</option>
+          <option value="year_2">Second year</option>
+          <option value="year_3">Third year</option>
+          <option value="year_4">Fourth year</option>
+          <option value="post_grad">Post grad</option>
+          <option value="other">Other</option>
         </select>
         <br>
         <label>Other:</label><br>
-        <input type="text"><br><br>
-        <label>Highest level of education:</label><br>
-        <select>
+        <input type="text" name="other_year"><br><br>
+        <h3 class = "heading">Reviewer Preferences</h3>
+        <label>Field of Work:</label><br>
+        <select name="career">
           <option disabled selected>Choose one</option>
-          <option>Bachelor's degree</option>
-          <option>Master's degree</option>
-          <option>Doctorate</option>
-          <option>Doesn't matter</option>
+          <option value="computer_science">Computer Science</option>
+          <option value="healthcare">Healthcare/Medicine</option>
+          <option value="education">Education</option>
+          <option value="engineering">Engineering</option>
+          <option value="business">Business</option>
+          <option value="other">Other</option>
+        </select>
+        <br>
+        <label>Other:</label><br>
+        <input type="text" name="other_career"><br><br>
+        <label>Highest level of education:</label><br>
+        <select name="degree-preference">
+          <option disabled selected>Choose one</option>
+          <option value="bachelor">Bachelor's degree</option>
+          <option value="master">Master's degree</option>
+          <option value="doctorate">Doctorate</option>
+          <option value="no_preference">No preference</option>
         </select>
         <br><br>
         <label>Years of work experience:</label><br>
-        <input type="radio" name = "experience">
-        <label>Greater than 5</label><br>
-        <input type="radio" name = "experience">
-        <label>Greater than 10</label><br>
-        <input type="radio" name = "experience">
-        <label>Doesn't matter</label><br>
-        <br> 
+        <select name="experience-preference">
+          <option disabled selected>Choose one</option>
+          <option value="greater_than_5">greater than 5</option>
+          <option value="greater_than_10">greater than 10</option>
+          <option value="no_preference">No preference</option>
+        </select>
+        <br>
         <p class = "heading">Upload Resume PDF</p>
         <input type="file" name="resume"><br>
         <br>
