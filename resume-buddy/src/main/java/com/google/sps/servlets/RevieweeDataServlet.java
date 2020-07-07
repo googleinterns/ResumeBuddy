@@ -8,15 +8,10 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
@@ -47,7 +42,7 @@ public class RevieweeDataServlet extends HttpServlet {
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
     String email = ServletHelpers.getParameter(request, "email", "");
-    String resumeURL = getUploadedFileUrl(request, "resume");
+    String resumeURL = getUploadedFileUrl(request, response, "resume");
     reviewee = new Reviewee(fname, lname, email, resumeURL);
 
     Entity revieweeEntity = new Entity("Reviewee");
@@ -63,15 +58,11 @@ public class RevieweeDataServlet extends HttpServlet {
   }
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
-  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+  private String getUploadedFileUrl(
+      HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("resume");
-
-    // User submitted form without selecting a file, so we can't get a URL. (dev server)
-    if (blobKeys == null || blobKeys.isEmpty()) {
-      return null;
-    }
 
     BlobKey blobKey = blobKeys.get(0);
 
@@ -82,14 +73,6 @@ public class RevieweeDataServlet extends HttpServlet {
       return null;
     }
 
-    ImagesService imagesService = ImagesServiceFactory.getImagesService();
-    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-
-    try {
-      URL url = new URL(imagesService.getServingUrl(options));
-      return url.getPath();
-    } catch (MalformedURLException e) {
-      return imagesService.getServingUrl(options);
-    }
+    return "/serve?blob-key" + blobKeys.get(0).getKeyString();
   }
 }
