@@ -37,8 +37,9 @@ public class LoginServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     boolean isValidUser;
+    String email = "";
     if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail();
+      email = userService.getCurrentUser().getEmail();
       isValidUser = validEmail("Reviewer", email) || validEmail("Reviewee", email);
     } else {
       isValidUser = false;
@@ -51,7 +52,9 @@ public class LoginServlet extends HttpServlet {
 
     jsonLogin = "{\"isValidUser\": " + String.valueOf(isValidUser) + ", ";
     jsonLogin += "\"login_url\": \"" + loginUrl + "\", ";
-    jsonLogin += "\"logout_url\": \"" + logoutUrl + "\"}";
+    jsonLogin += "\"logout_url\": \"" + logoutUrl + "\", ";
+    jsonLogin += "\"email\": \"" + email + "\"}";
+
     // send the json as the response
     response.setContentType("application/json;");
     response.getWriter().println(jsonLogin);
