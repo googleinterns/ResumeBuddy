@@ -35,7 +35,6 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     UserService userService = UserServiceFactory.getUserService();
     boolean status;
     if (userService.isUserLoggedIn()) {
