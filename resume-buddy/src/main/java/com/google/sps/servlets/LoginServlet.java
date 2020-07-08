@@ -36,12 +36,12 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    boolean status;
+    boolean isValidUser;
     if (userService.isUserLoggedIn()) {
       String email = userService.getCurrentUser().getEmail();
-      status = validEmail("Reviewer", email) || validEmail("Reviewee", email);
+      isValidUser = validEmail("Reviewer", email) || validEmail("Reviewee", email);
     } else {
-      status = false;
+      isValidUser = false;
     }
     String jsonLogin;
     String urlToRedirectToAfterUserLogsIn = "/index.html";
@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
     String urlToRedirectToAfterUserLogsOut = "/index.html";
     String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-    jsonLogin = "{\"status\": " + String.valueOf(status) + ", ";
+    jsonLogin = "{\"isValidUser\": " + String.valueOf(isValidUser) + ", ";
     jsonLogin += "\"login_url\": \"" + loginUrl + "\", ";
     jsonLogin += "\"logout_url\": \"" + logoutUrl + "\"}";
     // send the json as the response
@@ -57,6 +57,7 @@ public class LoginServlet extends HttpServlet {
     response.getWriter().println(jsonLogin);
   }
 
+  /* checks if email_key exists in the database of queryType */
   public boolean validEmail(String queryType, String email_key) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(queryType);

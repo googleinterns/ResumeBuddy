@@ -13,7 +13,7 @@ function login() {
     fetch('/login').then(response => response.json()).then((login) => {
         const loginLinkElement = document.getElementById('login-container');
         const myAccountElement = document.getElementById('my-account');
-        if (login.status) {
+        if (login.isValidUser) {
             // Show the 'my account' option
             // Show a log out option
             myAccountElement.style.display = "block";
