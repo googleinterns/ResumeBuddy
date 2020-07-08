@@ -10,6 +10,8 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Comment;
@@ -31,8 +33,12 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
     Query query = new Query("Review-comments").addSort("date", SortDirection.DESCENDING);
+    Filter emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
@@ -67,9 +73,13 @@ public class CommentServlet extends HttpServlet {
     String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
 
+    UserService userService = UserServiceFactory.getUserService();
+
     // TODO: Get real reviewer and reviewee info when auth implemented
+    /*Currently signed in user is assumed to be Reviewee
+    TODO: add option for user to sign in as either a reviewer or reviewee*/
+    String reviewee = userService.getCurrentUser().getEmail();
     String reviewer = "";
-    String reviewee = "";
 
     UUID id = UUID.randomUUID();
     while (collides(id)) {

@@ -72,7 +72,7 @@ public class RevieweeDataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
 
-    response.sendRedirect("/resume-review.html");
+    response.sendRedirect("/index.html");
   }
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
