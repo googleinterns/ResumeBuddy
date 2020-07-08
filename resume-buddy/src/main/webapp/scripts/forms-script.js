@@ -1,7 +1,12 @@
+/** Populates school and career select options in HTML DOM  */
+function populateOptions() {
+  populateUnis();
+  populateCareers();
+}
+
+/** Gets university names from json file and puts as options for school */
 function populateUnis() {
-
   const schoolSelect = document.getElementById("school");
-
   fetch("universities.json")
     .then(response => response.json())
     .then(unis => {
@@ -16,10 +21,9 @@ function populateUnis() {
     });
 }
 
+/** Gets career field names from json file and puts as options for career */
 function populateCareers() {
-
   const careerSelect = document.getElementById("career");
-
   fetch("careers.json")
     .then(response => response.json())
     .then(careers => {
@@ -30,9 +34,4 @@ function populateCareers() {
         careerSelect.appendChild(option);
       })
     });
-}
-
-function populateOptions() {
-  populateUnis();
-  populateCareers();
 }
