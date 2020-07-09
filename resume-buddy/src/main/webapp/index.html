@@ -13,16 +13,17 @@
   </head>
   <body class="space" onload="login();">
     <nav class="w3-sidebar w3-bar-block w3-white" style="width:250px">
-      <div class="container w3-display-container w3-padding-16">
+      <div class="container w3-display-container w3-padding-16" id="head">
         <h2><b>ResumeBuddy</b></h2>
+        <h6 id="greeting-container"></h6>
+        <h6 onlick="login()" id="login-container">Log In</h6>
+        <h6 id="my-account"></h6>
       </div>
       <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="#" class="w3-bar-item w3-button">About Us</a>
         <a href="reviewer-form.html" class="w3-bar-item w3-button">Review</a>
         <a href="reviewee-form.html" class="w3-bar-item w3-button">Get a Review</a>
         <a href="#" class="w3-bar-item w3-button">Meet the Team</a>
-        <a href="#" class="w3-bar-item w3-button" id = "login-container" onclick="login()">Log In</a>
-        <a href="resume-review.html" class="w3-bar-item w3-button" id="my-account">My Account</a>
       </div>
     </nav>
     <div class="w3-main" style="margin-left:250px">

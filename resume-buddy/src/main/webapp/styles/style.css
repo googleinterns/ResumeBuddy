@@ -31,3 +31,7 @@ body {
   width: auto;
   text-align: center;
 }
+
+#head {
+  text-align: right;
+}
