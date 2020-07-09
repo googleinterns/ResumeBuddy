@@ -67,6 +67,7 @@ public class Match extends HttpServlet {
     // For every reviewee-reviewer pair, count their match point
     for (Entity reviewee : reviewees) {
       for (Entity reviewer : reviewers) {
+        // TODO: Try different pointing systems to see which works the best
         int matchPoint = 0;
 
         String revieweeCareer = (String) reviewee.getProperty("career");
@@ -106,7 +107,6 @@ public class Match extends HttpServlet {
 
     // Go through rankedMatch and match from the most similar to least
     for (Pair<Integer, Pair<Entity, Entity>> rankedMatch : rankedMatches) {
-
       int point = rankedMatch.getKey();
       Pair<Entity, Entity> match = rankedMatch.getVal();
       Entity reviewee = match.getKey();
