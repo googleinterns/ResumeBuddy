@@ -142,7 +142,7 @@ public class Match extends HttpServlet {
       matchedReviewees.add(revieweeEmail);
       matchedReviewers.add(reviewerEmail);
 
-      // Put new Entity "Match" in db with matched peoples emails and review status
+      // Put new Entity 'Match' in db with matched peoples' emails and review status
       Entity matchEntity = new Entity("Match");
       matchEntity.setProperty("reviewee", revieweeEmail);
       matchEntity.setProperty("reviewer", reviewerEmail);
