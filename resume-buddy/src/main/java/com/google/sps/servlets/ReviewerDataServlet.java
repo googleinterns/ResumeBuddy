@@ -57,6 +57,6 @@ public class ReviewerDataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);
 
-    response.sendRedirect("index.html");
+    response.sendRedirect("/index.html");
   }
 }
