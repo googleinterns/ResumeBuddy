@@ -25,7 +25,7 @@ public final class Reviewer {
     this.email = email;
     this.degree = Degree.valueOf(degree.toUpperCase());
     this.school = school;
-    this.career = career.toUpperCase();
+    this.career = career.toLowerCase();
     this.company = company;
     this.numYears = NumYears.valueOf(numYears.toUpperCase());
   }
