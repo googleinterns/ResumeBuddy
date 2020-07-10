@@ -126,6 +126,12 @@ public class RevieweeDataServlet extends HttpServlet {
 
     // return url;
 
+    // BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    // BlobKey blobKey = blobstoreService.createGsBlobKey("/gs/" + fileName.getBucketName() + "/" +
+    // fileName.getObjectName());
+    // blobstoreService.serve(blobKey, resp);
+
+
     // END OF EXPERIMENT ZONE ----------------------------
 
     // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
