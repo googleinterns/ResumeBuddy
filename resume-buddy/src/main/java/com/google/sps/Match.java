@@ -8,37 +8,20 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
-import java.io.IOException;
 import java.util.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /** Class that matches reviewers to reviewees */
-@WebServlet("/match")
-public class Match extends HttpServlet {
+public class Match {
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.sendRedirect("/");
-  }
-
-  /** Called every 12 hours which activates matching algorithm */
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    try {
-      List<Entity> reviewees = getNotMatchedUsers("Reviewee");
-      List<Entity> reviewers = getNotMatchedUsers("Reviewer");
-      match(reviewees, reviewers);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+  private static final int CAREER_POINTS = 3;
+  private static final int SCHOOL_POINTS = 2;
+  private static final int EXPERIENCE_POINTS = 1;
+  private static final int DEGREE_POINTS = 1;
+  private static final int MAX_DAYS_TO_WAIT_UNTIL_MATCH = 3;
 
   /** Retrieves list of entities for specific query kind from the Datastore */
   public static List<Entity> getNotMatchedUsers(String queryKind) {
@@ -73,27 +56,27 @@ public class Match extends HttpServlet {
         String revieweeCareer = (String) reviewee.getProperty("career");
         String reviewerCareer = (String) reviewer.getProperty("career");
         if (revieweeCareer.equals(reviewerCareer)) {
-          matchPoint += 3;
+          matchPoint += CAREER_POINTS;
         }
 
         String revieweeSchool = (String) reviewee.getProperty("school");
         String reviewerSchool = (String) reviewer.getProperty("school");
         if (revieweeSchool.equals(reviewerSchool)) {
-          matchPoint += 2;
+          matchPoint += SCHOOL_POINTS;
         }
 
         String revieweePrefExperience = (String) reviewee.getProperty("preferred-experience");
         String reviewerExperience = (String) reviewee.getProperty("years-experience");
         if (revieweePrefExperience.equals(reviewerExperience)
             || revieweePrefExperience.equals("NO_PREFERENCE")) {
-          matchPoint += 1;
+          matchPoint += EXPERIENCE_POINTS;
         }
 
         String revieweePrefDegree = (String) reviewee.getProperty("preferred-degree");
         String reviewerDegree = (String) reviewee.getProperty("degree");
         if (revieweePrefDegree.equals(reviewerDegree)
             || revieweePrefDegree.equals("NO_PREFERENCE")) {
-          matchPoint += 1;
+          matchPoint += DEGREE_POINTS;
         }
 
         rankedMatches.add(new Pair(matchPoint, new Pair(reviewee, reviewer)));
@@ -134,7 +117,8 @@ public class Match extends HttpServlet {
             TimeUnit.DAYS.convert(timeSinceSubmitReviewer, TimeUnit.MILLISECONDS);
 
         // If it has not been 3 days for either of them, then don't match
-        if (timeSinceSubmitReviewee < 3 && timeSinceSubmitReviewer < 3) {
+        if (timeSinceSubmitReviewee < MAX_DAYS_TO_WAIT_UNTIL_MATCH
+            && timeSinceSubmitReviewer < MAX_DAYS_TO_WAIT_UNTIL_MATCH) {
           continue;
         }
       }
@@ -157,7 +141,7 @@ public class Match extends HttpServlet {
     }
   }
 
-  /** Comparator that compares based on the point value and sorts list from bigest to smallest */
+  /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {
     @Override
     public int compare(
