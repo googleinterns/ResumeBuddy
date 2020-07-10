@@ -96,8 +96,11 @@ public class RevieweeDataServlet extends HttpServlet {
       return null;
     }
 
+    // START OF EXPERIMENT ZONE ----------------------------
+
     // URL url = new URL(blobKey.getKeyString());
     // String resumeURL;
+    // String url = "";
 
     /*
     try {
@@ -109,6 +112,22 @@ public class RevieweeDataServlet extends HttpServlet {
       resumeURL = "erm";
     }
     */
+
+    /*
+    try {
+      final Part filePart = request.getPart("resume");
+      final String fileName = filePart.getName();
+      url = fileName;
+    } catch (MalformedURLException e) {
+      System.err.println("Could not get relative path to file");
+      url = "what";
+    }
+    */
+
+    // return url;
+
+    // END OF EXPERIMENT ZONE ----------------------------
+
     // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
     // the resume URL.
     return "/serve?blob-key" + blobKeys.get(0).getKeyString();
