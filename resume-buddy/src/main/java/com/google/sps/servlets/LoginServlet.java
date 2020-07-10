@@ -24,6 +24,7 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.sps.ServletHelpers;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+  private String userType;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
@@ -40,7 +43,7 @@ public class LoginServlet extends HttpServlet {
     String email = "";
     if (userService.isUserLoggedIn()) {
       email = userService.getCurrentUser().getEmail();
-      isValidUser = validEmail("Reviewer", email) || validEmail("Reviewee", email);
+      isValidUser = validEmail(userType, email);
     } else {
       isValidUser = false;
     }
@@ -58,6 +61,12 @@ public class LoginServlet extends HttpServlet {
     // send the json as the response
     response.setContentType("application/json;");
     response.getWriter().println(jsonLogin);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    userType = ServletHelpers.getParameter(request, "user-type", "");
+    response.sendRedirect("/index.html");
   }
 
   /* checks if email_key exists in the database of queryType */

@@ -24,8 +24,7 @@ function login() {
         }
         else {
             // Show the log in option
-            loginLinkElement.innerHTML = "<a href=\"" + 
-            login.login_url + "\">Log In</a>";
+            loginLinkElement.style.display ="block";
             myAccountElement.style.display = "none";
             greetingElement.style.display = "none";
         }
