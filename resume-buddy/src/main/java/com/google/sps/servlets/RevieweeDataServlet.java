@@ -14,6 +14,7 @@ import com.google.sps.data.Reviewee;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that saves reviewer data from the form */
 @WebServlet("/reviewee-data")
+@MultipartConfig
 public class RevieweeDataServlet extends HttpServlet {
 
   private Reviewee reviewee;
@@ -29,6 +31,9 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Send the JSON as the response
+
+    BlobKey blobKey = new BlobKey(request.getParameter("resume"));
+    blobstoreService.serve(blobKey, response);
     response.setContentType("application/json");
     String json = new Gson().toJson(reviewee);
     response.getWriter().println(json);
@@ -90,6 +95,20 @@ public class RevieweeDataServlet extends HttpServlet {
       blobstoreService.delete(blobKey);
       return null;
     }
+
+    // URL url = new URL(blobKey.getKeyString());
+    // String resumeURL;
+
+    /*
+    try {
+      URL url =
+          new URL("https://8080-5c0a9d29-2914-4b1e-875b-bc088618544a.us-central1.cloudshell.dev/");
+      resumeURL = url.getPath();
+    } catch (MalformedURLException e) {
+      System.err.println("Could not get relative path to file");
+      resumeURL = "erm";
+    }
+    */
     // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
     // the resume URL.
     return "/serve?blob-key" + blobKeys.get(0).getKeyString();
