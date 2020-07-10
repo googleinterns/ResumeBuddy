@@ -9,7 +9,6 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -17,6 +16,7 @@ import com.google.sps.ServletHelpers;
 import com.google.sps.data.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class CommentServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    Query query = new Query("Review-comments").addSort("date", SortDirection.DESCENDING);
+    Query query = new Query("Review-comments");
     Filter emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
 
@@ -61,6 +61,7 @@ public class CommentServlet extends HttpServlet {
       comments.add(new Comment(reviewer, reviewee, text, type, date, id));
     }
 
+    Collections.sort(comments, Comment.ORDER_BY_DATE);
     Gson gson = new Gson();
 
     response.setContentType("application/json;");
