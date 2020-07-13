@@ -8,10 +8,13 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /** Class that matches reviewers to reviewees */
@@ -52,6 +55,13 @@ public class Match {
       for (Entity reviewer : reviewers) {
         // TODO: Try different pointing systems to see which works the best
         int matchPoint = 0;
+
+        String revieweeEmail = (String) reviewee.getProperty("email");
+        String reviewerEmail = (String) reviewer.getProperty("email");
+        // Reviewee and reviewer are same person
+        if (revieweeEmail.equals(reviewerEmail)) {
+          continue;
+        }
 
         String revieweeCareer = (String) reviewee.getProperty("career");
         String reviewerCareer = (String) reviewer.getProperty("career");

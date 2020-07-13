@@ -57,7 +57,7 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("career", career);
     revieweeEntity.setProperty("preferred-degree", degreePref);
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
-    revieweeEntity.setProperty("submitdate", new Date());
+    revieweeEntity.setProperty("submit-date", new Date());
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
