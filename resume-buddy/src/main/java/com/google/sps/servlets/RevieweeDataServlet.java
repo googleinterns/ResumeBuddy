@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
@@ -67,6 +68,7 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("career", career);
     revieweeEntity.setProperty("preferred-degree", degreePref);
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
+    revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeURL", resumeURL);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
