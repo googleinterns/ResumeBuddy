@@ -21,9 +21,14 @@ import javax.mail.internet.MimeMultipart;
 
 /** Class responsible to create an email and send it to recipient */
 public class Email {
-
+  // TODO: Add tests for functions in this class
+  
   private Email() {};
 
+  /**
+   * Creates email with the given information and file if present, and calls function to send the
+   * email
+   */
   public static void sendEmail(String to, String subjectLine, String text, File file)
       throws IOException {
     try {
@@ -95,7 +100,7 @@ public class Email {
    * @return MimeMessage to be used to send email.
    * @throws MessagingException
    */
-  public static MimeMessage createEmailWithAttachment(
+  private static MimeMessage createEmailWithAttachment(
       String to, String from, String subject, String bodyText, File file)
       throws MessagingException, IOException {
     Properties props = new Properties();
@@ -136,7 +141,7 @@ public class Email {
    * @throws MessagingException
    * @throws IOException
    */
-  public static Message sendMessage(Gmail service, String userId, MimeMessage emailContent)
+  private static Message sendMessage(Gmail service, String userId, MimeMessage emailContent)
       throws MessagingException, IOException {
     Message message = createMessageWithEmail(emailContent);
     message = service.users().messages().send(userId, message).execute();
