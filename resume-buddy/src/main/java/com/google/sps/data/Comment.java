@@ -1,5 +1,6 @@
 package com.google.sps.data;
 
+import java.util.Comparator;
 import java.util.Date;
 
 /** Class containing comment object that are used on resume-review page */
@@ -45,4 +46,13 @@ public final class Comment {
   public String getId() {
     return id;
   }
+
+  /** A comparator for sorting comments by their date. */
+  public static final Comparator<Comment> ORDER_BY_DATE =
+    new Comparator<Comment>() {
+      @Override
+      public int compare(Comment a, Comment b) {
+        return (b.getDate()).compareTo(a.getDate());
+      }
+    };
 }

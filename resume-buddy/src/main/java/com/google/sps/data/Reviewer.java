@@ -7,7 +7,7 @@ public final class Reviewer {
   private final String email;
   private final String school;
   private final String company;
-  private final Career career;
+  private final String career;
   private final Degree degree;
   private final NumYears numYears;
 
@@ -25,7 +25,7 @@ public final class Reviewer {
     this.email = email;
     this.degree = Degree.valueOf(degree.toUpperCase());
     this.school = school;
-    this.career = Career.valueOf(career.toUpperCase());
+    this.career = career.toLowerCase();
     this.company = company;
     this.numYears = NumYears.valueOf(numYears.toUpperCase());
   }

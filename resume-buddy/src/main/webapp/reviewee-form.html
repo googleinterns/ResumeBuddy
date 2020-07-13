@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="UTF-8">
     <title>ResumeBuddy</title>
     <link rel="stylesheet" href="styles/forms.css">
     <script src="scripts/script.js"></script>
   </head>
-  <body onload="blobUpload()">
+
+  <body onload="start()">
     <div>
-      <h1 id = "title">Sign Up to Receive Resume Review</h1>
-      <form id ="form" action="/blobstore-upload-url" method="POST" enctype="multipart/form-data">
-        <h3 class = "heading">Personal Info</h3>
+      <h1 id="title">Sign Up to Receive Resume Review</h1>
+      <form id="form" action="/reviewee-data" method="POST">
+        <h3 class="heading">Personal Info</h3>
         <label>First name:</label><br>
         <input type="text" name="fname"><br>
         <label>Last name:</label><br>
         <input type="text" name="lname"><br>
         <label>Email:</label><br>
         <input type="text" name="email"><br>
-        <h3 class = "heading">Education</h3>
+        <h3 class="heading">Education</h3>
         <label>School:</label><br>
-        <!-- TODO make this into dropdown with all school names instead of text box-->
-        <input type="text" name="school"><br><br>
+        <select name="school" id="school">
+          <option value="N/A" selected>Choose one</option>
+        </select>
+        <label>Other:</label><br>
+        <input type="text" name="school" placeholder="Other school or N/A"><br><br>
         <label>School year:</label><br>
         <select name="school-year">
           <option disabled selected>Choose one</option>
@@ -35,16 +40,10 @@
         <br>
         <label>Other:</label><br>
         <input type="text" name="other_year"><br><br>
-        <h3 class = "heading">Reviewer Preferences</h3>
+        <h3 class="heading">Reviewer Preferences</h3>
         <label>Field of Work:</label><br>
-        <select name="career">
+        <select name="career" id="career">
           <option disabled selected>Choose one</option>
-          <option value="computer_science">Computer Science</option>
-          <option value="healthcare">Healthcare/Medicine</option>
-          <option value="education">Education</option>
-          <option value="engineering">Engineering</option>
-          <option value="business">Business</option>
-          <option value="other">Other</option>
         </select>
         <br>
         <label>Other:</label><br>
@@ -66,7 +65,7 @@
           <option value="no_preference">No preference</option>
         </select>
         <br>
-        <p class = "heading">Upload Resume PDF</p>
+        <p class="heading">Upload Resume PDF</p>
         <input type="file" name="resume"><br>
         <br>
         <input type="submit">
