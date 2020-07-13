@@ -96,44 +96,6 @@ public class RevieweeDataServlet extends HttpServlet {
       return null;
     }
 
-    // START OF EXPERIMENT ZONE ----------------------------
-
-    // URL url = new URL(blobKey.getKeyString());
-    // String resumeURL;
-    // String url = "";
-
-    /*
-    try {
-      URL url =
-          new URL("https://8080-5c0a9d29-2914-4b1e-875b-bc088618544a.us-central1.cloudshell.dev/");
-      resumeURL = url.getPath();
-    } catch (MalformedURLException e) {
-      System.err.println("Could not get relative path to file");
-      resumeURL = "erm";
-    }
-    */
-
-    /*
-    try {
-      final Part filePart = request.getPart("resume");
-      final String fileName = filePart.getName();
-      url = fileName;
-    } catch (MalformedURLException e) {
-      System.err.println("Could not get relative path to file");
-      url = "what";
-    }
-    */
-
-    // return url;
-
-    // BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    // BlobKey blobKey = blobstoreService.createGsBlobKey("/gs/" + fileName.getBucketName() + "/" +
-    // fileName.getObjectName());
-    // blobstoreService.serve(blobKey, resp);
-
-
-    // END OF EXPERIMENT ZONE ----------------------------
-
     // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
     // the resume URL.
     return "/serve?blob-key" + blobKeys.get(0).getKeyString();
