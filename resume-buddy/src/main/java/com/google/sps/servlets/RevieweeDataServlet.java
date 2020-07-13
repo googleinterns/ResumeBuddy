@@ -91,6 +91,11 @@ public class RevieweeDataServlet extends HttpServlet {
       return null;
     }
 
+    //blob byte test to see if data was being saved through the blobkey
+    //byte[] pdf = blobstoreService.fetchData(blobKey, 0, 100);
+    //String blobbytes = new String(pdf);
+    //return blobbytes;
+
     return blobKey.getKeyString();
   }
 }

@@ -9,10 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * When the fetch() function requests the /blobstore-upload, the content of the response is
- * the URL that allows a user to upload a pdf to Blobstore.
+ * When the fetch() function requests the /blobstore-upload, the content of the response is the URL
+ * that allows a user to upload a pdf to Blobstore.
  */
-
 @WebServlet("/blobstore-upload")
 public class BlobstoreUploadServlet extends HttpServlet {
 
