@@ -36,8 +36,7 @@ public class ReviewerDataServlet extends HttpServlet {
     String email = ServletHelpers.getParameter(request, "email", "");
     String degree = ServletHelpers.getParameter(request, "education-level", "");
     String school = ServletHelpers.getParameter(request, "school", "");
-    String career = ServletHelpers.getParameter(request, "work-field", "");
-
+    String career = ServletHelpers.getParameter(request, "career", "");
     String company = ServletHelpers.getParameter(request, "company", "");
     String numYears = ServletHelpers.getParameter(request, "years-experience", "");
     reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
@@ -59,6 +58,6 @@ public class ReviewerDataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);
 
-    response.sendRedirect("resume-review.html");
+    response.sendRedirect("/index.html");
   }
 }

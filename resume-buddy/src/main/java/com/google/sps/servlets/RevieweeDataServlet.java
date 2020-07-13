@@ -1,5 +1,10 @@
 package com.google.sps.servlets;
 
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -8,6 +13,8 @@ import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 public class RevieweeDataServlet extends HttpServlet {
 
   private Reviewee reviewee;
+  private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -39,8 +47,11 @@ public class RevieweeDataServlet extends HttpServlet {
     String career = ServletHelpers.getParameter(request, "career", "");
     String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
+    String resumeURL = getUploadedFileUrl(request, response, "resume");
 
-    reviewee = new Reviewee(fname, lname, email, school, year, career, degreePref, numYearsPref);
+    reviewee =
+        new Reviewee(
+            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeURL);
 
     if (year.equals("other")) {
       year = ServletHelpers.getParameter(request, "other_year", "");
@@ -58,10 +69,31 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("preferred-degree", degreePref);
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
     revieweeEntity.setProperty("submit-date", new Date());
+    revieweeEntity.setProperty("resumeURL", resumeURL);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
 
-    response.sendRedirect("resume-review.html");
+    response.sendRedirect("/index.html");
+  }
+
+  /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
+  private String getUploadedFileUrl(
+      HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("resume");
+
+    BlobKey blobKey = blobKeys.get(0);
+
+    // User submitted form without selecting a file, so we can't get a URL.
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+    // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
+    // the resume URL.
+    return "/serve?blob-key" + blobKeys.get(0).getKeyString();
   }
 }

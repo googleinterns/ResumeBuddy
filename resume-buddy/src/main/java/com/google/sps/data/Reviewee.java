@@ -10,6 +10,7 @@ public final class Reviewee {
   private final String career;
   private final Degree degreePref;
   private final NumYears numYearsPref;
+  private final String resumeURL;
 
   public Reviewee(
       String fname,
@@ -19,14 +20,16 @@ public final class Reviewee {
       String year,
       String career,
       String degreePref,
-      String numYearsPref) {
+      String numYearsPref,
+      String resumeURL) {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;
     this.school = school;
     this.year = SchoolYear.valueOf(year.toUpperCase());
-    this.career = career;
+    this.career = career.toLowerCase();
     this.degreePref = Degree.valueOf(degreePref.toUpperCase());
     this.numYearsPref = NumYears.valueOf(numYearsPref.toUpperCase());
+    this.resumeURL = resumeURL;
   }
 }
