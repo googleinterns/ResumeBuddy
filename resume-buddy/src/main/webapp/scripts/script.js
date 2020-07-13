@@ -10,26 +10,29 @@ function blobUpload() {
 }
 
 function login() {
+    var flag = true;
     fetch('/login').then(response => response.json()).then((login) => {
-        const loginLinkElement = document.getElementById('login-container');
+        const loginElement = document.getElementById('login-container');
         const myAccountElement = document.getElementById('my-account');
         const greetingElement = document.getElementById('greeting-container');
+        const loginLinkElement = document.getElementById('login-link-container');
         if (login.isValidUser) {
-            // Show the 'my account' option
-            // Show a log out option
             greetingElement.innerHTML = "Welcome " + login.email + "!";
             myAccountElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
             "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
+            loginElement.style.display = "none";
             loginLinkElement.style.display = "none";
         }
         else {
-            // Show the log in option
-            loginLinkElement.style.display ="block";
+            loginElement.style.display ="block";
+            loginLinkElement.style.display = "block";
+            loginLinkElement.innerHTML = "After clicking Go, log in <a href=\"" + login.login_url + "\">here</a>.";
             myAccountElement.style.display = "none";
             greetingElement.style.display = "none";
         }
     });
 }
+
 
 /** Class function when page loads */
 function start() {
@@ -69,3 +72,4 @@ function populateCareers() {
       })
     });
 }
+

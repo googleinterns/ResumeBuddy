@@ -17,22 +17,17 @@
         <h2><b>ResumeBuddy</b></h2>
         <h6 id="greeting-container"></h6>
         <div id="login-container">
-            <!--
-          <h6 onlick="login()">Log In</h6>
-          <ul name="user-type">
-            <li value="reviewer">As Reviewer</li>
-            <li value="reviewee">As Reviewee</li>
-          </ul> -->
-          <p>Log In:</p>
-          <form action="/login" method="POST">
+          <p>I am a:</p>
+         <form action="/login" method="POST"> 
             <input type="radio" id="reviewer" name="user-type" value="Reviewer">
-            <label for="reviewer">As Reviewer</label><br>
+            <label for="reviewer">Reviewer</label><br>
             <input type="radio" id="reviewee" name="user-type" value="Reviewee">
-            <label for="reviewee">As Reviewee</label><br><br>
-            <input type="submit" value="Go">
-          </form> 
+            <label for="reviewee">Reviewee</label><br><br>
+            <input id="go-button" type="submit" value="Go">
+         </form> 
         </div>
-        <h6 id="my-account"></h6>
+        <p id="login-link-container"></p>
+        <p id="my-account"></p>
       </div>
       <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="#" class="w3-bar-item w3-button">About Us</a>

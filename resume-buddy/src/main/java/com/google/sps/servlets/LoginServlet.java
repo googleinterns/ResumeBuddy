@@ -34,10 +34,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-  private String userType;
+  public static String userType;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     UserService userService = UserServiceFactory.getUserService();
     boolean isValidUser;
     String email = "";
@@ -66,6 +67,7 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     userType = ServletHelpers.getParameter(request, "user-type", "");
+    System.out.println("user type (in POST): " + userType);
     response.sendRedirect("/index.html");
   }
 

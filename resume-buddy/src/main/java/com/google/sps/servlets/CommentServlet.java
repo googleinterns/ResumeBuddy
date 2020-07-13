@@ -30,35 +30,24 @@ public class CommentServlet extends HttpServlet {
 
   private List<Comment> comments;
   static final int DEFAULT_COMMENTS_NUMBER = 5;
+  private String userType = (LoginServlet.userType).toLowerCase();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    Query query = new Query("Review-comments");
-    Filter emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
-    query.setFilter(emailFilter);
+    // add the reviewee comments
+    System.out.println("user type in CommentServlet: " + userType);
+    addComments(userType, email);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    comments = new ArrayList<>();
-    String reviewer, reviewee, type, text, id;
-    Date date;
-    for (Entity entity : results.asIterable()) {
-      try {
-        reviewer = (String) entity.getProperty("reviewer");
-        reviewee = (String) entity.getProperty("reviewee");
-        type = (String) entity.getProperty("type");
-        text = (String) entity.getProperty("text");
-        date = (Date) entity.getProperty("date");
-        id = (String) entity.getProperty("uuid");
-      } catch (ClassCastException e) {
-        System.err.println("Could not cast entry property");
-        break;
+    if (hasMatch(userType, email)) {
+      String other = getMatch(userType, email);
+      if (userType.equals("reviewee")) {
+        addComments("reviewer", other);
+      } else {
+        addComments("reviewee", other);
       }
-
-      comments.add(new Comment(reviewer, reviewee, text, type, date, id));
     }
 
     Collections.sort(comments, Comment.ORDER_BY_DATE);
@@ -75,12 +64,20 @@ public class CommentServlet extends HttpServlet {
     Date date = new Date();
 
     UserService userService = UserServiceFactory.getUserService();
-
-    // TODO: Get real reviewer and reviewee info when auth implemented
-    /*Currently signed in user is assumed to be Reviewee
-    TODO: add option for user to sign in as either a reviewer or reviewee*/
-    String reviewee = userService.getCurrentUser().getEmail();
+    String email = userService.getCurrentUser().getEmail();
+    String reviewee = "";
     String reviewer = "";
+    if (userType.equals("reviewee")) {
+      reviewee = email;
+      if (hasMatch(userType, email)) {
+        reviewer = getMatch(userType, email);
+      }
+    } else {
+      reviewer = userService.getCurrentUser().getEmail();
+      if (hasMatch(userType, email)) {
+        reviewee = getMatch(userType, email);
+      }
+    }
 
     UUID id = UUID.randomUUID();
     while (collides(id)) {
@@ -111,5 +108,57 @@ public class CommentServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
+  }
+
+  /* checks if current user has a match */
+  public boolean hasMatch(String queryType, String email) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Match");
+    Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    PreparedQuery results = datastore.prepare(query);
+    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
+  }
+
+  public String getMatch(String queryType, String email) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Match");
+    Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      if (queryType.equals("reviewee")) {
+        return (String) entity.getProperty("reviewer");
+      } else {
+        return (String) entity.getProperty("reviewee");
+      }
+    }
+    return "";
+  }
+
+  /* add comments from given email and queryType(reviewer or reviewee) */
+  public void addComments(String queryType, String email) {
+    // get reviewee comments
+    Query query = new Query("Review-comments");
+    Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    String reviewer, reviewee, type, text, id;
+    Date date;
+    for (Entity entity : results.asIterable()) {
+      try {
+        reviewer = (String) entity.getProperty("reviewer");
+        reviewee = (String) entity.getProperty("reviewee");
+        type = (String) entity.getProperty("type");
+        text = (String) entity.getProperty("text");
+        date = (Date) entity.getProperty("date");
+        id = (String) entity.getProperty("uuid");
+      } catch (ClassCastException e) {
+        System.err.println("Could not cast entry property");
+        break;
+      }
+      comments.add(new Comment(reviewer, reviewee, text, type, date, id));
+    }
   }
 }
