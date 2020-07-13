@@ -10,7 +10,6 @@ function blobUpload() {
 }
 
 function login() {
-    var flag = true;
     fetch('/login').then(response => response.json()).then((login) => {
         const loginElement = document.getElementById('login-container');
         const myAccountElement = document.getElementById('my-account');
@@ -32,7 +31,6 @@ function login() {
         }
     });
 }
-
 
 /** Class function when page loads */
 function start() {

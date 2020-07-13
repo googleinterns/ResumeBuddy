@@ -37,8 +37,6 @@ public class CommentServlet extends HttpServlet {
     comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    // add the reviewee comments
-    System.out.println("user type in CommentServlet: " + userType);
     addComments(userType, email);
 
     if (hasMatch(userType, email)) {
@@ -110,7 +108,7 @@ public class CommentServlet extends HttpServlet {
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
-  /* checks if current user has a match */
+  /* checks if given user has a match */
   public boolean hasMatch(String queryType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
@@ -120,6 +118,7 @@ public class CommentServlet extends HttpServlet {
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
+  /* gets the given user's match */
   public String getMatch(String queryType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
@@ -138,7 +137,6 @@ public class CommentServlet extends HttpServlet {
 
   /* add comments from given email and queryType(reviewer or reviewee) */
   public void addComments(String queryType, String email) {
-    // get reviewee comments
     Query query = new Query("Review-comments");
     Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
