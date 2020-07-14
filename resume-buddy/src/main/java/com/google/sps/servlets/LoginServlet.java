@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-  public static String userType;
+  private static String userType;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -67,7 +67,6 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     userType = ServletHelpers.getParameter(request, "user-type", "");
-    System.out.println("user type (in POST): " + userType);
     response.sendRedirect("/index.html");
   }
 
@@ -79,5 +78,9 @@ public class LoginServlet extends HttpServlet {
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
+  }
+
+  public static String getUserType() {
+    return userType;
   }
 }

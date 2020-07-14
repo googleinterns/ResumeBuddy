@@ -11,11 +11,13 @@ function blobUpload() {
 
 function login() {
     fetch('/login').then(response => response.json()).then((login) => {
-        const loginElement = document.getElementById('login-container');
+        const loginLinkElement = document.getElementById('login-link-container');
+        const loginElement = document.getElementById('user-type-container');
         const myAccountElement = document.getElementById('my-account');
         const greetingElement = document.getElementById('greeting-container');
-        const loginLinkElement = document.getElementById('login-link-container');
         if (login.isValidUser) {
+            // Show the 'my account' option
+            // Show a log out option
             greetingElement.innerHTML = "Welcome " + login.email + "!";
             myAccountElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
             "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
@@ -23,6 +25,7 @@ function login() {
             loginLinkElement.style.display = "none";
         }
         else {
+            // Show the log in option
             loginElement.style.display ="block";
             loginLinkElement.style.display = "block";
             loginLinkElement.innerHTML = "After clicking Go, log in <a href=\"" + login.login_url + "\">here</a>.";

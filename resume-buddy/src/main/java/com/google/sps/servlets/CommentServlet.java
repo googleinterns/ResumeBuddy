@@ -29,11 +29,10 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentServlet extends HttpServlet {
 
   private List<Comment> comments;
-  static final int DEFAULT_COMMENTS_NUMBER = 5;
-  private String userType = (LoginServlet.userType).toLowerCase();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String userType = (LoginServlet.getUserType()).toLowerCase();
     comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
@@ -57,6 +56,7 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String userType = (LoginServlet.getUserType()).toLowerCase();
     String type = ServletHelpers.getParameter(request, "type", "");
     String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
@@ -75,7 +75,7 @@ public class CommentServlet extends HttpServlet {
       if (hasMatch(userType, email)) {
         reviewee = getMatch(userType, email);
       }
-    }
+    } 
 
     UUID id = UUID.randomUUID();
     while (collides(id)) {
@@ -108,25 +108,25 @@ public class CommentServlet extends HttpServlet {
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
-  /* checks if given user has a match */
-  public boolean hasMatch(String queryType, String email) {
+  /* Checks if the given user of the given userType has a match of the opposite userType. */
+  public boolean hasMatch(String userType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
-    Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
+    Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
-  /* gets the given user's match */
-  public String getMatch(String queryType, String email) {
+  /* If it exists, gets the match of a given user (the user is of type userType). */
+  public String getMatch(String userType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
-    Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
+    Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      if (queryType.equals("reviewee")) {
+      if (userType.equals("reviewee")) {
         return (String) entity.getProperty("reviewer");
       } else {
         return (String) entity.getProperty("reviewee");
