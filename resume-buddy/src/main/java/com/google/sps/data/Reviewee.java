@@ -10,7 +10,7 @@ public final class Reviewee {
   private final String career;
   private final Degree degreePref;
   private final NumYears numYearsPref;
-  private final String resumeBlobkey;
+  private final String resumeBlobKey;
 
   public Reviewee(
       String fname,
@@ -21,7 +21,7 @@ public final class Reviewee {
       String career,
       String degreePref,
       String numYearsPref,
-      String resumeBlobkey) {
+      String resumeBlobKey) {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;
@@ -30,6 +30,6 @@ public final class Reviewee {
     this.career = career.toLowerCase();
     this.degreePref = Degree.valueOf(degreePref.toUpperCase());
     this.numYearsPref = NumYears.valueOf(numYearsPref.toUpperCase());
-    this.resumeBlobkey = resumeBlobkey;
+    this.resumeBlobKey = resumeBlobKey;
   }
 }

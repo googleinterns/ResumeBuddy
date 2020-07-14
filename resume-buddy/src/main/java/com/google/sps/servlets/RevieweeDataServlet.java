@@ -47,11 +47,11 @@ public class RevieweeDataServlet extends HttpServlet {
     String career = ServletHelpers.getParameter(request, "career", "");
     String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
-    String resumeBlobkey = getBlobstoreKey(request, response, "resume");
+    String resumeBlobKey = getBlobstoreKey(request, response, "resume");
 
     reviewee =
         new Reviewee(
-            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobkey);
+            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
 
     if (year.equals("other")) {
       year = ServletHelpers.getParameter(request, "other_year", "");
@@ -69,7 +69,7 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("preferred-degree", degreePref);
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
     revieweeEntity.setProperty("submit-date", new Date());
-    revieweeEntity.setProperty("resumeBlobkey", resumeBlobkey);
+    revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
 
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
