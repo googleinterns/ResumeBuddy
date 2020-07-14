@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/** Servelt that updates reviewing status */
 @WebServlet("/review-done")
 public class ReviewServlet extends HttpServlet {
 
@@ -34,14 +35,11 @@ public class ReviewServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    String revieweeEmail = null;
 
+    // Currently, we assume that reviewer only has one reviewee
     for (Entity entity : results.asIterable()) {
       entity.setProperty("status", ReviewStatus.DONE.toString());
-      revieweeEmail = (String) entity.getProperty("reviewee");
     }
-
-    System.out.println("people --- " + revieweeEmail + " " + reviewerEmail);
 
     response.sendRedirect("/index.html");
   }
