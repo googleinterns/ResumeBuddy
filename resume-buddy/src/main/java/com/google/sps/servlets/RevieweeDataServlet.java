@@ -47,11 +47,11 @@ public class RevieweeDataServlet extends HttpServlet {
     String career = ServletHelpers.getParameter(request, "career", "");
     String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
-    String resumeURL = getUploadedFileUrl(request, response, "resume");
+    String resumeBlobKey = getBlobstoreKey(request, response, "resume");
 
     reviewee =
         new Reviewee(
-            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeURL);
+            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
 
     if (year.equals("other")) {
       year = ServletHelpers.getParameter(request, "other_year", "");
@@ -69,7 +69,8 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("preferred-degree", degreePref);
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
     revieweeEntity.setProperty("submit-date", new Date());
-    revieweeEntity.setProperty("resumeURL", resumeURL);
+    revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
+
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
@@ -77,8 +78,8 @@ public class RevieweeDataServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
-  private String getUploadedFileUrl(
+  /** Returns a Blobkey that points to the blobstore of the uploaded pdf resume */
+  private String getBlobstoreKey(
       HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
@@ -92,8 +93,7 @@ public class RevieweeDataServlet extends HttpServlet {
       blobstoreService.delete(blobKey);
       return null;
     }
-    // Since the MIME of the uploaded pdf gets deleted, 'serve?blob-key' becomes the new header for
-    // the resume URL.
-    return "/serve?blob-key" + blobKeys.get(0).getKeyString();
+
+    return blobKey.getKeyString();
   }
 }
