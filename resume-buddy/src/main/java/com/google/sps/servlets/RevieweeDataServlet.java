@@ -43,17 +43,8 @@ public class RevieweeDataServlet extends HttpServlet {
     String lname = ServletHelpers.getParameter(request, "lname", "");
     String email = ServletHelpers.getParameter(request, "email", "");
     String school = ServletHelpers.getParameter(request, "school", "");
-    if (school.equals("Other")) {
-      school = ServletHelpers.getParameter(request, "other-school", "");
-    }
     String year = ServletHelpers.getParameter(request, "school-year", "");
-    if (year.equals("Other")) {
-      year = ServletHelpers.getParameter(request, "other-year", "");
-    }
     String career = ServletHelpers.getParameter(request, "career", "");
-    if (career.equals("Other")) {
-      career = ServletHelpers.getParameter(request, "other-career", "");
-    }
     String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
     String resumeBlobKey = getBlobstoreKey(request, response, "resume");
@@ -61,6 +52,16 @@ public class RevieweeDataServlet extends HttpServlet {
     reviewee =
         new Reviewee(
             fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
+
+    if (school.equals("Other")) {
+      school = ServletHelpers.getParameter(request, "other-school", "");
+    }
+    if (year.equals("Other")) {
+      year = ServletHelpers.getParameter(request, "other-year", "");
+    }
+    if (career.equals("Other")) {
+      career = ServletHelpers.getParameter(request, "other-career", "");
+    }
 
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);

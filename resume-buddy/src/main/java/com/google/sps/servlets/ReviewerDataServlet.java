@@ -36,17 +36,17 @@ public class ReviewerDataServlet extends HttpServlet {
     String email = ServletHelpers.getParameter(request, "email", "");
     String degree = ServletHelpers.getParameter(request, "education-level", "");
     String school = ServletHelpers.getParameter(request, "school", "");
-    if (school.equals("Other")) {
-      school = ServletHelpers.getParameter(request, "other-school", "");
-    }
     String career = ServletHelpers.getParameter(request, "career", "");
-    if (career.equals("Other")) {
-      career = ServletHelpers.getParameter(request, "other-career", "");
-    }
     String company = ServletHelpers.getParameter(request, "company", "");
     String numYears = ServletHelpers.getParameter(request, "years-experience", "");
     reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
 
+    if (school.equals("Other")) {
+      school = ServletHelpers.getParameter(request, "other-school", "");
+    }
+    if (career.equals("Other")) {
+      career = ServletHelpers.getParameter(request, "other-career", "");
+    }
     Entity reviewerEntity = new Entity("Reviewer");
     reviewerEntity.setProperty("first-name", fname);
     reviewerEntity.setProperty("last-name", lname);
