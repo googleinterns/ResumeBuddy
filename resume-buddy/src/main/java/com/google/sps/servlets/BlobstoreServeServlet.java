@@ -1,4 +1,3 @@
-import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -30,12 +29,11 @@ public class BlobstoreServeServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    String retreivedResumeBlobKey = (String) results.asSingleEntity().getProperty("resumeBlobKey");
-    blobstoreService.serve(retreivedResumeBlobKey, response);
+    String retreivedResumeBlobKey =
+        results.asSingleEntity().getProperty("resumeBlobKey").toString();
+    // blobstoreService.serve(retreivedResumeBlobKey, response);
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-  }
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {}
 }
