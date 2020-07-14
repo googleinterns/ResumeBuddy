@@ -15,9 +15,13 @@
     </div>
 
     <!-- TODO: Render PDF here -->
-    <form action="/blobstore-serve" method="GET" enctype="multipart/form-data">
-    <input type="submit">
-    </form>
+    <div id="adobe-dc-view"></div>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script type="text/javascript">
+      document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
+          getRevieweeResume();
+            });
+    </script>
 
     <div id="comments">
       <div id="comments-form">

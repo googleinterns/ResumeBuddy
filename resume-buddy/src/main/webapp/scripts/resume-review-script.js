@@ -64,3 +64,18 @@ function createListElement(date, type, text, id) {
 
   return liElement;
 }
+
+/**
+ * 
+ */
+async function getRevieweeResume() {
+  fetch('/blobstore-serve').
+    then(response => response.arrayBuffer())
+    .then((pdfArrayBuffer) => {
+            var adobeDCView = new AdobeDC.View({clientId: "b98bbf69d44442479396583253ac267c", divId: "adobe-dc-view"});
+            adobeDCView.previewFile({
+              content:{promise: pdfArrayBuffer },
+              metaData:{fileName: "reviewee.pdf"}
+            }, {});
+    });
+}
