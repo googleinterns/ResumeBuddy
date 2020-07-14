@@ -64,3 +64,9 @@ function createListElement(date, type, text, id) {
 
   return liElement;
 }
+
+function reviewIsDone() {
+  fetch('/review-done', {
+    method: 'POST',
+  });
+}

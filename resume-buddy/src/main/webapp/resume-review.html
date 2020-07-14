@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>Resume Review</title>
-    <link rel="stylesheet" href="styles/resume-review-style.css">
-    <script src="scripts/resume-review-script.js"></script>
-  </head>
+<head>
+	<meta charset="UTF-8">
+	<title>Resume Review</title>
+	<link rel="stylesheet" href="styles/resume-review-style.css">
+	<script src="scripts/resume-review-script.js"></script>
+</head>
 
-  <body onload='getComments()'>
+<body onload='getComments()'>
 
-    <div class="page-title">
-      <h1>Resume Review</h1>
-    </div>
+	<div class="page-title">
+		<h1>Resume Review</h1>
+	</div>
 
-    <!-- TODO: Render PDF here -->
+	<p hidden id=reviewee>animach@google.com</p>
+	<p hidden id=reviewer>someone@g.com</p>
 
-    <div id="comments">
-      <div id="comments-form">
-        <form action="/comment" method="POST">
-          <h3><b>Feedback:</b></h3>
-          <select name="type" id="comment-type">
+	<!-- TODO: Render PDF here -->
+
+	<div id="comments">
+		<div id="comments-form">
+			<form action="/comment" method="POST">
+				<h3><b>Feedback:</b></h3>
+				<select name="type" id="comment-type">
             <option value="format">Format</option>
             <option value="content">Content</option>
             <option value="suggestion">Suggestion</option>
           </select>
-          <textarea name="text" id="text" placeholder="Your comment.."></textarea>
-          <br/>
-          <input type="submit" onclick='getComments()'/>
+				<textarea name="text" id="text" placeholder="Your comment.."></textarea>
+				<br/>
+				<input type="submit" onclick='getComments()'/>
         </form>
-      </div>
-      <ul id="comments-container"></ul>
-    </div>
-  </body>
+		</div>
+		<ul id="comments-container"></ul>
+	</div>
+	<button onclick="reviewIsDone()" id="done-button">I'm done reviewing</button>
+</body>
+
 </html>
