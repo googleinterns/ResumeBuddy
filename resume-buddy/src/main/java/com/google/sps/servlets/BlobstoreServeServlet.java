@@ -23,6 +23,7 @@ public class BlobstoreServeServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Gets the logged in user's email and sets the result to the user's entity
+    // TODO: (sesexton) If the reviewer is logged in, it get their reviewee's resume
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
     Query query = new Query("Reviewee");
@@ -32,11 +33,9 @@ public class BlobstoreServeServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     // Use the results to grab the users resumeBlobKey, and serve the blob with that key
+    // TODO: (sesexton) If multiple accounts , grab the first submission of pdf
     String userBlobKeyString = results.asSingleEntity().getProperty("resumeBlobKey").toString();
     BlobKey userBlobKey = new BlobKey(userBlobKeyString);
     blobstoreService.serve(userBlobKey, response);
   }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {}
 }
