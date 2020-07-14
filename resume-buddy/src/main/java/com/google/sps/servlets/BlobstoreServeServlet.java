@@ -1,3 +1,4 @@
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -21,6 +22,7 @@ public class BlobstoreServeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Gets the logged in user's email and sets the result to the user's entity
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
     Query query = new Query("Reviewee");
@@ -29,9 +31,10 @@ public class BlobstoreServeServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    String retreivedResumeBlobKey =
-        results.asSingleEntity().getProperty("resumeBlobKey").toString();
-    // blobstoreService.serve(retreivedResumeBlobKey, response);
+    // Use the results to grab the users resumeBlobKey, and serve the blob with that key
+    String userBlobKeyString = results.asSingleEntity().getProperty("resumeBlobKey").toString();
+    BlobKey userBlobKey = new BlobKey(userBlobKeyString);
+    blobstoreService.serve(userBlobKey, response);
   }
 
   @Override
