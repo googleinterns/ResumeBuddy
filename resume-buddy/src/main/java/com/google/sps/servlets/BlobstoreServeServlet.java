@@ -22,13 +22,6 @@ public class BlobstoreServeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    BlobKey blobKey = new BlobKey(request.getParameter("blob-key"));
-    blobstoreService.serve(blobKey, response);
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
     Query query = new Query("Reviewee");
@@ -37,6 +30,12 @@ public class BlobstoreServeServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    String retreivedResumeBlobKey = (String) results.asSingleEntity().getProperty("resumeURL");
+    String retreivedResumeBlobKey = (String) results.asSingleEntity().getProperty("resumeBlobKey");
+    blobstoreService.serve(retreivedResumeBlobKey, response);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
   }
 }
