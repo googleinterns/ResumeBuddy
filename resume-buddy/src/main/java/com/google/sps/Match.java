@@ -141,6 +141,8 @@ public class Match {
       matchEntity.setProperty("reviewee", revieweeEmail);
       matchEntity.setProperty("reviewer", reviewerEmail);
       matchEntity.setProperty("status", ReviewStatus.IN_PROCESS.toString());
+      String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
+      matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
       datastore.put(matchEntity);
 
       // TODO: Send emails to matched people
