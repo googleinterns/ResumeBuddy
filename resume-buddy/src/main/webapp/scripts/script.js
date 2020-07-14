@@ -4,7 +4,7 @@ function blobUpload() {
             return response.text();
     })
     .then((resumeUploadUrl) => { 
-        const resume = document.getElementById('form'); 
+        const resume = document.getElementById('reviewee-form'); 
         resume.action = resumeUploadUrl; 
     });
 }
