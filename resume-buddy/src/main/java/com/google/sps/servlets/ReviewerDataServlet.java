@@ -41,8 +41,11 @@ public class ReviewerDataServlet extends HttpServlet {
     String numYears = ServletHelpers.getParameter(request, "years-experience", "");
     reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
 
-    if (career.equals("other")) {
-      career = ServletHelpers.getParameter(request, "other", "");
+    if (school.equals("Other")) {
+      school = ServletHelpers.getParameter(request, "other-school", "");
+    }
+    if (career.equals("Other")) {
+      career = ServletHelpers.getParameter(request, "other-career", "");
     }
     Entity reviewerEntity = new Entity("Reviewer");
     reviewerEntity.setProperty("first-name", fname);

@@ -53,12 +53,16 @@ public class RevieweeDataServlet extends HttpServlet {
         new Reviewee(
             fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
 
-    if (year.equals("other")) {
-      year = ServletHelpers.getParameter(request, "other_year", "");
+    if (school.equals("Other")) {
+      school = ServletHelpers.getParameter(request, "other-school", "");
     }
-    if (career.equals("other")) {
-      career = ServletHelpers.getParameter(request, "other_career", "");
+    if (year.equals("Other")) {
+      year = ServletHelpers.getParameter(request, "other-year", "");
     }
+    if (career.equals("Other")) {
+      career = ServletHelpers.getParameter(request, "other-career", "");
+    }
+
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
@@ -70,7 +74,6 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
     revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
-
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);

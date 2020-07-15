@@ -11,18 +11,18 @@
   <body onload="start()">
     <div>
       <h1 id="title">Resume Reviewer Sign Up Form</h1>
-      <form id="form" action="/reviewer-data" method="POST">
+      <form id="reviewer-form" action="/reviewer-data" method="POST">
         <h3 class="heading">Personal Info</h3>
         <label>First name:</label><br>
-        <input type="text" name="fname"><br>
+        <input type="text" name="fname" required><br>
         <label>Last name:</label><br>
-        <input type="text" name="lname"><br>
+        <input type="text" name="lname" required><br>
         <label>Email:</label><br>
-        <input type="text" name="email"><br>
+        <input type="text" name="email" required><br>
         <h3 class="heading">Education</h3>
         <label>Highest level of education:</label><br>
-        <select name="education-level">
-          <option disabled selected>Choose one</option>
+        <select name="education-level" required>
+          <option value="">Choose one</option>
           <option value="high_school">High school or equivalent</option>
           <option value="associate">Associate degree</option>
           <option value="bachelor">Bachelor's degree</option>
@@ -31,24 +31,24 @@
         </select>
         <br><br>
         <label>School:</label><br>
-        <select name="school" id="school">
-          <option value="N/A" selected>Choose one</option>
+        <select name="school" id="school" required>
+          <option value="">Choose one</option>
         </select>
         <label>Other:</label><br>
-        <input type="text" name="school"><br>
+        <input type="text" name="other-school"><br>
         <h3 class="heading">Career</h3>
         <label>Field of Work:</label><br>
-        <select name="career" id="career">
-          <option disabled selected>Choose one</option>
+        <select name="career" id="career" required>
+          <option value="">Choose one</option>
         </select>
         <br>
         <label>Other:</label><br>
-        <input type="text" name="other_career"><br><br>
+        <input type="text" name="other-career"><br><br>
         <label>Company:</label><br>
-        <input type="text" name="company"><br><br>
+        <input type="text" name="company" required><br><br>
         <label>Years of work experience:</label><br>
-        <select name="years-experience">
-          <option disabled selected>Choose one</option>
+        <select name="years-experience" required>
+          <option value="">Choose one</option>
           <option value="less_than_5">less than 5</option>
           <option value="greater_than_5">5 - 10</option>
           <option value="greater_than_10">greater than 10</option>
@@ -56,7 +56,7 @@
         <br><br>
         <br>
         <input type="submit" value="Submit">
-        </form>
+      </form>
     </div>
   </body>
 </html>
