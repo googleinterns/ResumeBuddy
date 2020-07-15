@@ -32,7 +32,7 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String userType = (LoginServlet.getUserType()).toLowerCase();
+    String userType = (LoginServlet.getUserType()).toString().toLowerCase();
     comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
@@ -56,7 +56,7 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String userType = (LoginServlet.getUserType()).toLowerCase();
+    String userType = (LoginServlet.getUserType()).toString().toLowerCase();
     String type = ServletHelpers.getParameter(request, "type", "");
     String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
@@ -75,7 +75,7 @@ public class CommentServlet extends HttpServlet {
       if (hasMatch(userType, email)) {
         reviewee = getMatch(userType, email);
       }
-    } 
+    }
 
     UUID id = UUID.randomUUID();
     while (collides(id)) {
@@ -135,10 +135,10 @@ public class CommentServlet extends HttpServlet {
     return "";
   }
 
-  /* add comments from given email and queryType(reviewer or reviewee) */
-  public void addComments(String queryType, String email) {
+  /* add comments from given email and userType(reviewer or reviewee) */
+  public void addComments(String userType, String email) {
     Query query = new Query("Review-comments");
-    Filter emailFilter = new FilterPredicate(queryType, FilterOperator.EQUAL, email);
+    Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);

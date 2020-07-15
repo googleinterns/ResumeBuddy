@@ -25,6 +25,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.ServletHelpers;
+import com.google.sps.data.UserType;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-  private static String userType;
+  private static UserType userType;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -66,21 +67,27 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    userType = ServletHelpers.getParameter(request, "user-type", "");
+    String userTypeString = ServletHelpers.getParameter(request, "user-type", "");
+    this.userType = userTypeString.equals("Reviewer") ? UserType.REVIEWER : UserType.REVIEWEE;
     response.sendRedirect("/index.html");
   }
 
-  /* checks if email_key exists in the database of queryType */
-  public boolean validEmail(String queryType, String email_key) {
+  /* checks if email_key exists in the database of userType */
+  public boolean validEmail(UserType userType, String email_key) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query(queryType);
+    Query query;
+    if (userType.toString().equals("REVIEWEE")) {
+      query = new Query("Reviewee");
+    } else {
+      query = new Query("Reviewer");
+    }
     Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email_key);
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
-  public static String getUserType() {
+  public static UserType getUserType() {
     return userType;
   }
 }
