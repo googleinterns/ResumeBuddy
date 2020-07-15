@@ -235,4 +235,30 @@ public class MatchTest {
 
     return actualMatches;
   }
+
+  /** Test sending emails when they are matched */
+  @Test
+  public void testSendingEmailWhenMatched() throws ParseException {
+    // Uncomment when needed to test. Otherwise, will send too much emails.
+    //sendingEmailsWhenMatched();
+  }
+
+  private void sendingEmailsWhenMatched() {
+    REVIEWEE_A.setProperty("email", "animachaidze@gmail.com");
+    REVIEWER_E.setProperty("email", "animach@google.com");
+
+    datastore.put(REVIEWEE_A);
+    datastore.put(REVIEWER_E);
+
+    List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
+    List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
+
+    Match.match(reviewees, reviewers);
+
+    List<Pair<String, String>> expectedMatches = new ArrayList<>();
+    List<Pair<String, String>> actualMatches = getActualMatches();
+    expectedMatches.add(new Pair("animachaidze@gmail.com", "animach@google.com"));
+
+    Assert.assertEquals(expectedMatches, actualMatches);
+  }
 }

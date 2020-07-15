@@ -6,8 +6,10 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.sps.api.Email;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -145,7 +147,22 @@ public class Match {
       matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
       datastore.put(matchEntity);
 
-      // TODO: Send emails to matched people
+      // Sending emails to reviewee and reviewer
+
+      try {
+        Email.sendEmail(
+            revieweeEmail,
+            "ResumeBuddy - Matched with Reviewer",
+            "You have been matched with resume reviewer. Please log in to your account to see details about your reviewer",
+            null);
+        Email.sendEmail(
+            reviewerEmail,
+            "ResumeBuddy - Matched with Reviewee",
+            "You have been matched with a reviewee. Please log in to your account to see details about your reviewee and their resume",
+            null);
+      } catch (IOException io) {
+
+      }
 
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
