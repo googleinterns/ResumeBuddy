@@ -25,7 +25,7 @@ public class BlobstoreServeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Gets the logged in user's email and sets the result to the user's entity
+    // Gets the logged in user's email, finds their blobKey and serves it
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
