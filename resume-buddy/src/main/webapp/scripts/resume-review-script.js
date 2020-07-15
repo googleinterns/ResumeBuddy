@@ -1,3 +1,8 @@
+/** Run functions when page is loaded */
+function onLoad() {
+  getComments();
+}
+
 /**
  * Fetches comments from the servers and adds them to the DOM.
  */
@@ -63,4 +68,13 @@ function createListElement(date, type, text, id) {
   liElement.appendChild(deleteButton);
 
   return liElement;
+}
+
+/**
+  * Sends POST request to /review-done which updates status
+  */
+function reviewIsDone() {
+  fetch('/review-done', {
+    method: 'POST',
+  });
 }

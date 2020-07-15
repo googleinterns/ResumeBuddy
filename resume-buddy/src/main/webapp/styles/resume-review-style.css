@@ -44,6 +44,18 @@ input[type=submit] {
   cursor: pointer;
 }
 
+#done-button {
+  width: 30%;
+  float: right;
+  background-color: #fd6363;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: 1px solid #fd6363;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 #comment-type {
   border-radius: 4px;
   width: 50%;
