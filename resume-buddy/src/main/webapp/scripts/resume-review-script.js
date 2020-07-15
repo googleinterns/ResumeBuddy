@@ -3,7 +3,7 @@
  */
 function getComments() {
   fetch('/comment').
-  then(response => response.json())
+    then(response => response.json())
     .then((comments) => {
       const commentListElement = document
         .getElementById('comments-container');
