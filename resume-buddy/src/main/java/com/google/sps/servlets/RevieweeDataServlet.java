@@ -8,9 +8,18 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
+import com.google.sps.data.User;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -29,9 +38,34 @@ public class RevieweeDataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+    String revieweeEmail = userService.getCurrentUser().getEmail();
+
+    Query query = new Query("User");
+    Filter reviewerFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, revieweeEmail);
+    query.setFilter(reviewerFilter);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    User user = null;
+    if (results.countEntities(FetchOptions.Builder.withLimit(1)) == 0) {
+      user = null;
+    } else {
+
+      Entity userEntity = results.asSingleEntity();
+      String fname = (String) userEntity.getProperty("first-name");
+      String lname = (String) userEntity.getProperty("last-name");
+      String email = (String) userEntity.getProperty("email");
+      String school = (String) userEntity.getProperty("school");
+      String career = (String) userEntity.getProperty("career");
+      String schoolYear = (String) userEntity.getProperty("school-year");
+
+      user = new User(fname, lname, email, school, career, schoolYear);
+    }
+
     // Send the JSON as the response
     response.setContentType("application/json");
-    String json = new Gson().toJson(reviewee);
+    String json = new Gson().toJson(user);
     response.getWriter().println(json);
   }
 
@@ -75,8 +109,17 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
 
+    Entity userEntity = new Entity("User");
+    userEntity.setProperty("first-name", fname);
+    userEntity.setProperty("last-name", lname);
+    userEntity.setProperty("email", email);
+    userEntity.setProperty("school-year", year);
+    userEntity.setProperty("school", school);
+    userEntity.setProperty("career", career);
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
+    datastore.put(userEntity);
 
     response.sendRedirect("/index.html");
   }

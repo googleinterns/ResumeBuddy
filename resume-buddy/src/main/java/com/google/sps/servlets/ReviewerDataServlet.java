@@ -50,7 +50,7 @@ public class ReviewerDataServlet extends HttpServlet {
       String email = (String) userEntity.getProperty("email");
       String school = (String) userEntity.getProperty("school");
       String career = (String) userEntity.getProperty("career");
-      String degree = (String) userEntity.getProperty("degree");
+      String degree = (String) userEntity.getProperty("education-level");
 
       user = new User(fname, lname, email, school, career, degree);
     }
@@ -85,7 +85,7 @@ public class ReviewerDataServlet extends HttpServlet {
     reviewerEntity.setProperty("first-name", fname);
     reviewerEntity.setProperty("last-name", lname);
     reviewerEntity.setProperty("email", email);
-    reviewerEntity.setProperty("degree", degree);
+    reviewerEntity.setProperty("education-level", degree);
     reviewerEntity.setProperty("school", school);
     reviewerEntity.setProperty("career", career);
     reviewerEntity.setProperty("company", company);
