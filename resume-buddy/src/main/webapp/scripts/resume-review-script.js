@@ -2,39 +2,39 @@
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-    fetch('/comment').
-        then(response => response.json())
-        .then((comments) => {
-            const commentListElement = document
-                .getElementById('comments-container');
+  fetch('/comment').
+  then(response => response.json())
+    .then((comments) => {
+      const commentListElement = document
+        .getElementById('comments-container');
 
-            commentListElement.innerHTML = '';
-            comments.forEach((comment) => {
-                let date = new Date(comment.date);
-                commentListElement.appendChild(
-                    createListElement(
-                        date.getMonth() + '/' + date.getDate() + '/' +
-                        date.getFullYear(), comment.type, comment.text,
-                        comment.id));
-            })
+      commentListElement.innerHTML = '';
+      comments.forEach((comment) => {
+        let date = new Date(comment.date);
+        commentListElement.appendChild(
+          createListElement(
+            date.getMonth() + '/' + date.getDate() + '/' +
+            date.getFullYear(), comment.type, comment.text,
+            comment.id));
+      })
 
-        });
+    });
 }
 
 /**
  * Fetches delete-comments to delete comment using comment id
  */
 function deleteComments(id) {
-    const queryStr = 'id=' + id;
-    fetch('/delete-comment?' + queryStr, {
-        method: 'POST',
-    });
+  const queryStr = 'id=' + id;
+  fetch('/delete-comment?' + queryStr, {
+    method: 'POST',
+  });
 
-    if (!id) {
-        document.getElementById('comments-container').innerHTML = '';
-    } else {
-        location.reload();
-    }
+  if (!id) {
+    document.getElementById('comments-container').innerHTML = '';
+  } else {
+    location.reload();
+  }
 
 }
 
@@ -42,39 +42,46 @@ function deleteComments(id) {
  * Creates an <li> element containing date, comment type and text
  */
 function createListElement(date, type, text, id) {
-    const liElement = document.createElement('li');
-    const containerDiv = document.createElement('div');
+  const liElement = document.createElement('li');
+  const containerDiv = document.createElement('div');
 
-    containerDiv.className = 'comment-container';
-    const typeText = document.createElement('b');
-    typeText.innerText = type + ":  ";
-    liElement.appendChild(typeText);
+  containerDiv.className = 'comment-container';
+  const typeText = document.createElement('b');
+  typeText.innerText = type + ":  ";
+  liElement.appendChild(typeText);
 
-    const textNode = document.createTextNode(text + " ");
-    liElement.appendChild(textNode);
+  const textNode = document.createTextNode(text + " ");
+  liElement.appendChild(textNode);
 
-    const deleteButton = document.createElement('button');
-    deleteButton.innerHTML = '&#10005;';
-    deleteButton.className = "delete-button";
-    deleteButton.onclick = function() {
-        deleteComments(id);
-    }
+  const deleteButton = document.createElement('button');
+  deleteButton.innerHTML = '&#10005;';
+  deleteButton.className = "delete-button";
+  deleteButton.onclick = function() {
+    deleteComments(id);
+  }
 
-    liElement.appendChild(deleteButton);
+  liElement.appendChild(deleteButton);
 
-    return liElement;
+  return liElement;
 }
 
 /**
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
 async function getRevieweeResume() {
-    fetch('/blobstore-serve')
-        .then((response) => {
-            var adobeDCView = new AdobeDC.View({ clientId: "b98bbf69d44442479396583253ac267c", divId: "adobe-dc-view" });
-            adobeDCView.previewFile({
-                content: { promise: response.arrayBuffer() },
-                metaData: { fileName: "reviewee.pdf" }
-            }, {});
-        });
+  fetch('/blobstore-serve')
+    .then((response) => {
+      var adobeDCView = new AdobeDC.View({
+        clientId: "b98bbf69d44442479396583253ac267c",
+        divId: "adobe-dc-view"
+      });
+      adobeDCView.previewFile({
+        content: {
+          promise: response.arrayBuffer()
+        },
+        metaData: {
+          fileName: "reviewee.pdf"
+        }
+      }, {});
+    });
 }
