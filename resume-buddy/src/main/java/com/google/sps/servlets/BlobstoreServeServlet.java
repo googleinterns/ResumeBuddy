@@ -25,7 +25,7 @@ public class BlobstoreServeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Gets the logged in user's email, finds their blobKey and serves it
+    // Gets the logged in user's email, finds the PDF blob and serves it
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
@@ -35,7 +35,8 @@ public class BlobstoreServeServlet extends HttpServlet {
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     List<Entity> entityList = results.asList(fetchOptions);
-    // TODO: (sesexton) Create a function that will grab the most recent instead of the first entity returned
+    // TODO: (sesexton) Create a function that will grab the most recent instead of the first entity
+    // returned
     String userBlobKeyString = entityList.get(0).getProperty("resumeBlobKey").toString();
     BlobKey userBlobKey = new BlobKey(userBlobKeyString);
     blobstoreService.serve(userBlobKey, response);

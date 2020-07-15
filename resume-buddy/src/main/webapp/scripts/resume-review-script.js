@@ -81,7 +81,7 @@ async function getRevieweeResume() {
         },
         metaData: {
           fileName: "reviewee.pdf"
-        }
-      }, {});
+        }, 
+      }, {embedMode : "IN_LINE"});
     });
 }
