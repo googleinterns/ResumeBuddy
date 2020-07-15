@@ -71,6 +71,26 @@ function createListElement(date, type, text, id) {
 }
 
 /**
+ * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
+ */
+async function getRevieweeResume() {
+  fetch('/blobstore-serve')
+    .then((response) => {
+      var adobeDCView = new AdobeDC.View({
+        clientId: "b98bbf69d44442479396583253ac267c",
+        divId: "adobe-dc-view"
+      });
+      adobeDCView.previewFile({
+        content: {
+          promise: response.arrayBuffer()
+        },
+        metaData: {
+          fileName: "revieweeResume.pdf"
+        }
+      }, {embedMode : "IN-LINE"});
+    });
+
+ /*
   * Sends POST request to /review-done which updates status
   */
 function reviewIsDone() {
