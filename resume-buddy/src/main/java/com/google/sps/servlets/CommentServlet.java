@@ -28,24 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comment")
 public class CommentServlet extends HttpServlet {
 
-  private List<Comment> comments;
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String userType = (LoginServlet.getUserType()).toString().toLowerCase();
-    comments = new ArrayList<>();
+    List<Comment> comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    addComments(userType, email);
-
-    if (hasMatch(userType, email)) {
-      String other = getMatch(userType, email);
-      if (userType.equals("reviewee")) {
-        addComments("reviewer", other);
-      } else {
-        addComments("reviewee", other);
-      }
-    }
+    addComments(userType, email, comments);
 
     Collections.sort(comments, Comment.ORDER_BY_DATE);
     Gson gson = new Gson();
@@ -136,7 +125,7 @@ public class CommentServlet extends HttpServlet {
   }
 
   /* add comments from given email and userType(reviewer or reviewee) */
-  public void addComments(String userType, String email) {
+  public static void addComments(String userType, String email, List<Comment> comments) {
     Query query = new Query("Review-comments");
     Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
