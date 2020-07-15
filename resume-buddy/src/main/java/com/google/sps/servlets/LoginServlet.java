@@ -35,7 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-  /* TODO: find a way for the user type to be part of the HttpServletRequest */
+  /* TODO: Find a way for the user type to be passed to the CommentsServlet from JavaScript
+   * (instead of being stored here as a static variable) */
   private static UserType userType;
 
   @Override

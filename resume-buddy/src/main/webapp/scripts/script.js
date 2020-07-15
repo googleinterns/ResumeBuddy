@@ -56,7 +56,7 @@ function populateUnis() {
   fetch("universities.json")
   .then(response => response.json())
   .then(unis => {
-      unis.forEach((uni) => {
+    unis.forEach((uni) => {
       let option = document.createElement("option");
       console.log(uni.institution);
       option.text = uni.institution;
