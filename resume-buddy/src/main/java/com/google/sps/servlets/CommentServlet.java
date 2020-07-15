@@ -109,7 +109,7 @@ public class CommentServlet extends HttpServlet {
   }
 
   /* Checks if the given user of the given userType has a match of the opposite userType. */
-  public boolean hasMatch(String userType, String email) {
+  public static boolean hasMatch(String userType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
     Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
@@ -119,7 +119,7 @@ public class CommentServlet extends HttpServlet {
   }
 
   /* If it exists, gets the match of a given user (the user is of type userType). */
-  public String getMatch(String userType, String email) {
+  public static String getMatch(String userType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
     Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
