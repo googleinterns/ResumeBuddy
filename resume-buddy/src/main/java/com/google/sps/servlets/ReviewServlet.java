@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.api.Email;
 
 /** Servelt that updates reviewing status */
 @WebServlet("/review-done")
@@ -36,7 +37,11 @@ public class ReviewServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     // Currently, we assume that reviewer only has one reviewee
-    results.asSingleEntity().setProperty("status", ReviewStatus.DONE.toString());
+    Entity entity = results.asSingleEntity();
+    entity.setProperty("status", ReviewStatus.DONE.toString());
+    String revieweeEmail = (String) entity.getProperty("reviewee");
+
+    Email.sendEmail(revieweeEmail, "ResumeBuddy - Resume Reviewed", "Your resume have been reviewed. Please log in to our website to see feedback", null);
 
     response.sendRedirect("/index.html");
   }
