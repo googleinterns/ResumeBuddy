@@ -80,7 +80,7 @@ async function getRevieweeResume() {
           promise: response.arrayBuffer()
         },
         metaData: {
-          fileName: "reviewee.pdf"
+          fileName: "revieweeResume.pdf"
         }
       }, {});
     });
