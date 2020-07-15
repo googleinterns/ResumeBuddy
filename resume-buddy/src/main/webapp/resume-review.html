@@ -8,7 +8,7 @@
     <script src="scripts/resume-review-script.js"></script>
   </head>
 
-  <body onload='getComments()'>
+  <body onload='onLoad()'>
 
     <div class="page-title">
       <h1>Resume Review</h1>
@@ -38,5 +38,6 @@
       </div>
       <ul id="comments-container"></ul>
     </div>
+    <button onclick="reviewIsDone()" id="done-button">I'm done reviewing</button>
   </body>
 </html>

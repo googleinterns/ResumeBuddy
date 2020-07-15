@@ -31,8 +31,13 @@ div {
   width: 700px;
 }
 
-#form {
+#reviewee-form,
+#reviewer-form {
   padding: 20px;
+}
+
+label {
+  font-family: "Roboto", sans-serif;
 }
 
 .heading {
