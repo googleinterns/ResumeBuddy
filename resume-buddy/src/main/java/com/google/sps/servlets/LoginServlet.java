@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+  /* TODO: find a way for the user type to be part of the HttpServletRequest */
   private static UserType userType;
 
   @Override
@@ -76,7 +77,7 @@ public class LoginServlet extends HttpServlet {
   public boolean validEmail(UserType userType, String email_key) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query;
-    if (userType.toString().equals("REVIEWEE")) {
+    if (userType == UserType.REVIEWEE) {
       query = new Query("Reviewee");
     } else {
       query = new Query("Reviewer");

@@ -14,6 +14,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Comment;
+import com.google.sps.data.UserType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String userType = (LoginServlet.getUserType()).toString().toLowerCase();
+    UserType userType = LoginServlet.getUserType();
     List<Comment> comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
@@ -45,7 +46,7 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String userType = (LoginServlet.getUserType()).toString().toLowerCase();
+    UserType userType = LoginServlet.getUserType();
     String type = ServletHelpers.getParameter(request, "type", "");
     String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
@@ -54,7 +55,7 @@ public class CommentServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
     String reviewee = "";
     String reviewer = "";
-    if (userType.equals("reviewee")) {
+    if (userType == UserType.REVIEWEE) {
       reviewee = email;
       if (hasMatch(userType, email)) {
         reviewer = getMatch(userType, email);
@@ -98,24 +99,34 @@ public class CommentServlet extends HttpServlet {
   }
 
   /* Checks if the given user of the given userType has a match of the opposite userType. */
-  public static boolean hasMatch(String userType, String email) {
+  public static boolean hasMatch(UserType userType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
-    Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
+    Filter emailFilter;
+    if (userType == UserType.REVIEWEE) {
+      emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
+    } else {
+      emailFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
+    }
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
   /* If it exists, gets the match of a given user (the user is of type userType). */
-  public static String getMatch(String userType, String email) {
+  public static String getMatch(UserType userType, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Match");
-    Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
+    Filter emailFilter;
+    if (userType == UserType.REVIEWEE) {
+      emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
+    } else {
+      emailFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
+    }
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      if (userType.equals("reviewee")) {
+      if (userType == UserType.REVIEWEE) {
         return (String) entity.getProperty("reviewer");
       } else {
         return (String) entity.getProperty("reviewee");
@@ -125,9 +136,14 @@ public class CommentServlet extends HttpServlet {
   }
 
   /* add comments from given email and userType(reviewer or reviewee) */
-  public static void addComments(String userType, String email, List<Comment> comments) {
+  public static void addComments(UserType userType, String email, List<Comment> comments) {
     Query query = new Query("Review-comments");
-    Filter emailFilter = new FilterPredicate(userType, FilterOperator.EQUAL, email);
+    Filter emailFilter;
+    if (userType == UserType.REVIEWEE) {
+      emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
+    } else {
+      emailFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
+    }
     query.setFilter(emailFilter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
