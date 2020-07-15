@@ -89,6 +89,7 @@ async function getRevieweeResume() {
         }
       }, {embedMode : "IN-LINE"});
     });
+}
 
  /*
   * Sends POST request to /review-done which updates status
