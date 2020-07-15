@@ -71,7 +71,7 @@ function createListElement(date, type, text, id) {
 }
 
 /**
-  * Sends POST request to /review-done which updates 
+  * Sends POST request to /review-done which updates status
   */
 function reviewIsDone() {
   fetch('/review-done', {
