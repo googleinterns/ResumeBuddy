@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that gets user data and fills out forms */
 @WebServlet("/user-data")
-public class UserServlet extends HttpServlet {
+public class UserDataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -29,14 +29,12 @@ public class UserServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       String email = userService.getCurrentUser().getEmail();
 
-      email = "animach@google.com";
       Query query = new Query("User");
       Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
       query.setFilter(userFilter);
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
-      User user = null;
 
       Entity userEntity = results.asSingleEntity();
       String fname = (String) userEntity.getProperty("first-name");
@@ -52,8 +50,7 @@ public class UserServlet extends HttpServlet {
         degree = "other";
       }
 
-      user = new User(fname, lname, email, school, career, degree, schoolYear);
-      System.out.println("aigoooo " + user);
+      User user = new User(fname, lname, email, school, career, degree, schoolYear);
 
       Gson gson = new Gson();
       // Send the JSON as the response
