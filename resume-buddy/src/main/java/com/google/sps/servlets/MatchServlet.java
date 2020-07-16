@@ -16,12 +16,6 @@ public class MatchServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.sendRedirect("/");
-  }
-
-  /** Called every 12 hours which activates matching algorithm */
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
       List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
       List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
@@ -29,5 +23,11 @@ public class MatchServlet extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+    response.sendRedirect("/index.html");
   }
+
+  /** Called every 12 hours which activates matching algorithm */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {}
 }

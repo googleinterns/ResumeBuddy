@@ -240,7 +240,7 @@ public class MatchTest {
   @Test
   public void testSendingEmailWhenMatched() throws ParseException {
     // Uncomment when needed to test. Otherwise, will send too much emails.
-    //sendingEmailsWhenMatched();
+    // sendingEmailsWhenMatched();
   }
 
   private void sendingEmailsWhenMatched() {

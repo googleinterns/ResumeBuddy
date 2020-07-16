@@ -161,9 +161,7 @@ public class Match {
             "You have been matched with a reviewee. Please log in to your account to see details about your reviewee and their resume",
             null);
       } catch (IOException io) {
-
       }
-
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
       datastore.delete(reviewee.getKey());
