@@ -15,9 +15,19 @@
     <nav class="w3-sidebar w3-bar-block w3-white" style="width:250px">
       <div class="container w3-display-container w3-padding-16" id="head">
         <h2><b>ResumeBuddy</b></h2>
-        <h6 id="greeting-container"></h6>
-        <h6 onlick="login()" id="login-container">Log In</h6>
-        <h6 id="my-account"></h6>
+        <p id="greeting-container"></p>
+        <div id="user-type-container">
+          <p>I am a:</p>
+         <form action="/login" method="POST"> 
+            <input type="radio" id="reviewer" name="user-type" value="Reviewer">
+            <label for="reviewer">Reviewer</label><br>
+            <input type="radio" id="reviewee" name="user-type" value="Reviewee">
+            <label for="reviewee">Reviewee</label><br><br>
+            <input id="go-button" type="submit" value="Go">
+         </form> 
+        </div>
+        <p id="login-link-container"></p>
+        <p id="my-account"></p>
       </div>
       <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight:bold">
         <a href="#" class="w3-bar-item w3-button">About Us</a>
