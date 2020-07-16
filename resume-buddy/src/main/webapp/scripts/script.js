@@ -54,17 +54,17 @@ function start() {
 function populateUnis() {
   const schoolSelect = document.getElementById("school");
   fetch("universities.json")
-  .then(response => response.json())
-  .then(unis => {
-    unis.forEach((uni) => {
-      let option = document.createElement("option");
-      console.log(uni.institution);
-      option.text = uni.institution;
-      console.log(option.text);
-      option.value = uni.institution;
-      schoolSelect.appendChild(option);
-    })
-  });
+    .then(response => response.json())
+    .then(unis => {
+      unis.forEach((uni) => {
+        let option = document.createElement("option");
+        console.log(uni.institution);
+        option.text = uni.institution;
+        console.log(option.text);
+        option.value = uni.institution;
+        schoolSelect.appendChild(option);
+      })
+    });
 }
 
 /** Gets career field names from json file and populates options for career */
