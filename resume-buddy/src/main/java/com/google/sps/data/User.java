@@ -12,17 +12,19 @@ public final class User {
   private final SchoolYear schoolYear;
 
   public User(
-      String fname, String lname, String email, String school, String career, String degree) {
+      String fname,
+      String lname,
+      String email,
+      String school,
+      String career,
+      String degree,
+      String year) {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;
     this.degree = Degree.valueOf(degree.toUpperCase());
     this.school = school;
     this.career = career.toLowerCase();
-    this.schoolYear = SchoolYear.OTHER;
-  }
-
-  public String getFirstName() {
-    return firstName;
+    this.schoolYear = SchoolYear.valueOf(year.toUpperCase());
   }
 }

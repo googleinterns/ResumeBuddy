@@ -32,9 +32,16 @@ function login() {
   });
 }
 
-/** Class function when page loads */
-function start() {
+/** Class function when reviewee form page loads */
+function startRevieweeForm() {
   blobUpload();
+  populateUnis();
+  populateCareers();
+  populateFormWithKnownData();
+}
+
+/** Class function when reviewer form page loads */
+function startReviewerForm() {
   populateUnis();
   populateCareers();
   populateFormWithKnownData();
@@ -70,11 +77,15 @@ function populateCareers() {
     });
 }
 
+/** Gets known data from the User db and populates form */
 function populateFormWithKnownData() {
-  fetch('/reviewer-data')
+  fetch('/user-data')
     .then(response => response.json())
-    .then(reviewer => {
-      document.getElementById("fname").value = reviewer.firstName;
+    .then(user => {
+      document.getElementById("fname").value = user.firstName;
+      document.getElementById("lname").value = user.lastName;
+      document.getElementById("email").value = user.email;
 
+      // TODO: fill out other known fields too
     });
 }

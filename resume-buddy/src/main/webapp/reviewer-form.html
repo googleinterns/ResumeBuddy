@@ -8,7 +8,7 @@
     <script src="scripts/script.js"></script>
   </head>
 
-  <body onload="start()">
+  <body onload="startReviewerForm()">
     <div>
       <h1 id="title">Resume Reviewer Sign Up Form</h1>
       <form id="reviewer-form" action="/reviewer-data" method="POST">
@@ -16,12 +16,12 @@
         <label>First name:</label><br>
         <input type="text" name="fname" id="fname" required><br>
         <label>Last name:</label><br>
-        <input type="text" name="lname" required><br>
+        <input type="text" name="lname" id="lname"required><br>
         <label>Email:</label><br>
-        <input type="text" name="email" required><br>
+        <input type="text" name="email" id="email" required><br>
         <h3 class="heading">Education</h3>
         <label>Highest level of education:</label><br>
-        <select name="education-level" required>
+        <select name="education-level" id="education-level" required>
           <option value="">Choose one</option>
           <option value="high_school">High school or equivalent</option>
           <option value="associate">Associate degree</option>
