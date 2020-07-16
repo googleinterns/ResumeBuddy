@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -9,24 +10,26 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.sps.api.Email;
 import com.google.sps.data.ReviewStatus;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.api.Email;
 
 /** Servelt that updates reviewing status */
 @WebServlet("/review-done")
 public class ReviewServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {}
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
+            UserService userService = UserServiceFactory.getUserService();
     String reviewerEmail = userService.getCurrentUser().getEmail();
 
     Query query = new Query("Match");
@@ -41,7 +44,11 @@ public class ReviewServlet extends HttpServlet {
     entity.setProperty("status", ReviewStatus.DONE.toString());
     String revieweeEmail = (String) entity.getProperty("reviewee");
 
-    Email.sendEmail(revieweeEmail, "ResumeBuddy - Resume Reviewed", "Your resume have been reviewed. Please log in to our website to see feedback", null);
+    Email.sendEmail(
+        revieweeEmail,
+        "ResumeBuddy - Resume Reviewed",
+        "Your resume have been reviewed. Please log in to our website to see feedback",
+        null);
 
     response.sendRedirect("/index.html");
   }
