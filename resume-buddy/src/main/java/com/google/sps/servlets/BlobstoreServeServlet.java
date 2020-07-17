@@ -39,6 +39,7 @@ public class BlobstoreServeServlet extends HttpServlet {
         userBlobKeyString = pair.getProperty("resumeBlobKey").toString();
       }
     }
+    //TODO: (sesexton) Included more logic if the user is both a reviewee and a reviewer
 
     BlobKey userBlobKey = new BlobKey(userBlobKeyString);
     blobstoreService.serve(userBlobKey, response);
