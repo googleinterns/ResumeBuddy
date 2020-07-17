@@ -3,18 +3,10 @@ function blobUpload() {
     .then((response) => {
       return response.text();
     })
-    .then((resumeUploadUrl) => { 
-      const resume = document.getElementById('reviewee-form'); 
-      resume.action = resumeUploadUrl; 
+    .then((resumeUploadUrl) => {
+      const resume = document.getElementById('reviewee-form');
+      resume.action = resumeUploadUrl;
     });
-  fetch('/blobstore-upload-url')
-  .then((response) => {
-  return response.text();
-  })
-  .then((resumeUploadUrl) => { 
-  const resume = document.getElementById('form'); 
-  resume.action = resumeUploadUrl; 
-  });
 }
 
 function login() {
@@ -43,11 +35,12 @@ function login() {
   });
 }
 
-/** Class function when page loads */
-function start() {
+/** Class function when form page loads */
+function startForm() {
   blobUpload();
   populateUnis();
   populateCareers();
+  populateFormWithKnownData();
 }
 
 /** Gets university names from json file and populates options for school */
@@ -58,9 +51,7 @@ function populateUnis() {
     .then(unis => {
       unis.forEach((uni) => {
         let option = document.createElement("option");
-        console.log(uni.institution);
         option.text = uni.institution;
-        console.log(option.text);
         option.value = uni.institution;
         schoolSelect.appendChild(option);
       })
@@ -82,3 +73,15 @@ function populateCareers() {
     });
 }
 
+/** Gets known data from the User db and populates form */
+function populateFormWithKnownData() {
+  fetch('/user-data')
+    .then(response => response.json())
+    .then(user => {
+      document.getElementById("fname").value = user.firstName;
+      document.getElementById("lname").value = user.lastName;
+      document.getElementById("email").value = user.email;
+
+      // TODO: fill out other known fields too
+    });
+}

@@ -8,17 +8,17 @@
     <script src="scripts/script.js"></script>
   </head>
 
-  <body onload="start()">
+  <body onload="startForm()">
     <div>
       <h1 id="title">Sign Up to Receive Resume Review</h1>
       <form id="reviewee-form" action="/reviewee-data" method="POST" enctype="multipart/form-data">
         <h3 class="heading">Personal Info</h3>
         <label>First name:</label><br>
-        <input type="text" name="fname" required><br>
+        <input type="text" name="fname" id="fname" required><br>
         <label>Last name:</label><br>
-        <input type="text" name="lname" required><br>
+        <input type="text" name="lname" id="lname" required><br>
         <label>Email:</label><br>
-        <input type="text" name="email" required><br>
+        <input type="text" name="email" id="email" required><br>
         <h3 class="heading">Education</h3>
         <label>School:</label><br>
         <select name="school" id="school" required>
