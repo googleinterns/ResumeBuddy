@@ -41,7 +41,7 @@ public class UserDataServlet extends HttpServlet {
       String lname = (String) userEntity.getProperty("last-name");
       String school = (String) userEntity.getProperty("school");
       String career = (String) userEntity.getProperty("career");
-      String degree = (String) userEntity.getProperty("education-level");
+      String degree = (String) userEntity.getProperty("degree");
       if (degree.equals("")) {
         degree = "other";
       }

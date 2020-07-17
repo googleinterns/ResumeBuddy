@@ -8,6 +8,11 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
@@ -75,15 +80,22 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
 
-    Entity userEntity = new Entity("User");
+    // Gets user entity from User db and updates fields
+    Query query = new Query("User");
+    Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(userFilter);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+
     userEntity.setProperty("first-name", fname);
     userEntity.setProperty("last-name", lname);
-    userEntity.setProperty("email", email);
     userEntity.setProperty("school-year", year);
     userEntity.setProperty("school", school);
     userEntity.setProperty("career", career);
+    userEntity.setProperty("isReviewee", true);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(revieweeEntity);
     datastore.put(userEntity);
 

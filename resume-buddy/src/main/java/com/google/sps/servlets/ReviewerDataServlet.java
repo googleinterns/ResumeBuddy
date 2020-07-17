@@ -3,6 +3,11 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewer;
@@ -34,7 +39,7 @@ public class ReviewerDataServlet extends HttpServlet {
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
     String email = ServletHelpers.getParameter(request, "email", "");
-    String degree = ServletHelpers.getParameter(request, "education-level", "");
+    String degree = ServletHelpers.getParameter(request, "degree", "");
     String school = ServletHelpers.getParameter(request, "school", "");
     String career = ServletHelpers.getParameter(request, "career", "");
     String company = ServletHelpers.getParameter(request, "company", "");
@@ -51,22 +56,29 @@ public class ReviewerDataServlet extends HttpServlet {
     reviewerEntity.setProperty("first-name", fname);
     reviewerEntity.setProperty("last-name", lname);
     reviewerEntity.setProperty("email", email);
-    reviewerEntity.setProperty("education-level", degree);
+    reviewerEntity.setProperty("degree", degree);
     reviewerEntity.setProperty("school", school);
     reviewerEntity.setProperty("career", career);
     reviewerEntity.setProperty("company", company);
     reviewerEntity.setProperty("years-experience", numYears);
     reviewerEntity.setProperty("submit-date", new Date());
 
-    Entity userEntity = new Entity("User");
+    // Gets user entity from User db and updates fields
+    Query query = new Query("User");
+    Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(userFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+
     userEntity.setProperty("first-name", fname);
     userEntity.setProperty("last-name", lname);
     userEntity.setProperty("email", email);
     userEntity.setProperty("degree", degree);
     userEntity.setProperty("school", school);
     userEntity.setProperty("career", career);
+    userEntity.setProperty("isReviewer", true);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(reviewerEntity);
     datastore.put(userEntity);
 
