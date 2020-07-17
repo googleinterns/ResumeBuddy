@@ -77,7 +77,7 @@ async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
       var adobeDCView = new AdobeDC.View({
-        clientId: "b98bbf69d44442479396583253ac267c",
+        clientId: "",
         divId: "adobe-dc-view"
       });
       adobeDCView.previewFile({

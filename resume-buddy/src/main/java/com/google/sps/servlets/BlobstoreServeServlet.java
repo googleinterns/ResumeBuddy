@@ -7,9 +7,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
@@ -30,14 +27,19 @@ public class BlobstoreServeServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
     String email = userService.getCurrentUser().getEmail();
-    Query query = new Query("Reviewee");
-    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
-    query.setFilter(emailFilter);
+    Query query = new Query("Match");
+
     PreparedQuery results = datastore.prepare(query);
     List<Entity> entityList = results.asList(fetchOptions);
-    // TODO: (sesexton) Create a function that will grab the most recent instead of the first entity
-    // returned
-    String userBlobKeyString = entityList.get(0).getProperty("resumeBlobKey").toString();
+    String userBlobKeyString = "";
+
+    for (Entity pair : entityList) {
+      if ((pair.getProperty("reviewee").toString().equals(email))
+          || (pair.getProperty("reviewer").toString().equals(email))) {
+        userBlobKeyString = pair.getProperty("resumeBlobKey").toString();
+      }
+    }
+
     BlobKey userBlobKey = new BlobKey(userBlobKeyString);
     blobstoreService.serve(userBlobKey, response);
   }
