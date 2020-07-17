@@ -35,30 +35,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-  /* TODO: Find a way for the user type to be passed to the CommentsServlet from JavaScript
-   * (instead of being stored here as a static variable) */
-  private static UserType userType;
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
-    boolean isValidUser;
-    String email = "";
-    if (userService.isUserLoggedIn()) {
-      email = userService.getCurrentUser().getEmail();
-      isValidUser = validEmail(userType, email);
-    } else {
-      isValidUser = false;
-    }
+
     String jsonLogin;
     String urlToRedirectToAfterUserLogsIn = "/index.html";
     String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
     String urlToRedirectToAfterUserLogsOut = "/index.html";
     String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-    jsonLogin = "{\"isValidUser\": " + String.valueOf(isValidUser) + ", ";
-    jsonLogin += "\"login_url\": \"" + loginUrl + "\", ";
+    jsonLogin += "{\"login_url\": \"" + loginUrl + "\", ";
     jsonLogin += "\"logout_url\": \"" + logoutUrl + "\", ";
     jsonLogin += "\"email\": \"" + email + "\"}";
 
@@ -67,29 +55,4 @@ public class LoginServlet extends HttpServlet {
     response.getWriter().println(jsonLogin);
   }
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String userTypeString = ServletHelpers.getParameter(request, "user-type", "");
-    this.userType = userTypeString.equals("Reviewer") ? UserType.REVIEWER : UserType.REVIEWEE;
-    response.sendRedirect("/index.html");
-  }
-
-  /* checks if email_key exists in the database of userType */
-  public boolean validEmail(UserType userType, String email_key) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query;
-    if (userType == UserType.REVIEWEE) {
-      query = new Query("Reviewee");
-    } else {
-      query = new Query("Reviewer");
-    }
-    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email_key);
-    query.setFilter(emailFilter);
-    PreparedQuery results = datastore.prepare(query);
-    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
-  }
-
-  public static UserType getUserType() {
-    return userType;
-  }
 }

@@ -7,6 +7,10 @@ function onLoad() {
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
+  // default hide comments section
+  const commentsElement = document.getElementById('comments');
+  commentsElement.style.display = "none";  
+  // IF the user has a match, display comments functionality :
   fetch('/comment').
     then(response => response.json())
     .then((comments) => {
@@ -77,7 +81,7 @@ async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
       var adobeDCView = new AdobeDC.View({
-        clientId: "b98bbf69d44442479396583253ac267c",
+        clientId: "",
         divId: "adobe-dc-view"
       });
       adobeDCView.previewFile({

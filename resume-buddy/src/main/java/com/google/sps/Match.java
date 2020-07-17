@@ -143,6 +143,11 @@ public class Match {
       matchEntity.setProperty("status", ReviewStatus.IN_PROCESS.toString());
       String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
       matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
+      UUID id = UUID.randomUUID();
+      while (collides(id)) {
+        id = UUID.randomUUID();
+      }
+      matchEntity.setProperty("uuid", id);
       datastore.put(matchEntity);
 
       // TODO: Send emails to matched people
@@ -152,6 +157,19 @@ public class Match {
       datastore.delete(reviewee.getKey());
     }
   }
+
+  /** Checks if the id collides with other Match ids in datastore */
+  private boolean collides(UUID id) {
+    Query query = new Query("Match");
+
+    Filter uuidPropertyFilter = new FilterPredicate("uuid", FilterOperator.EQUAL, id.toString());
+    query.setFilter(uuidPropertyFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
+  }
+
 
   /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {

@@ -38,7 +38,8 @@ public class ReviewerDataServlet extends HttpServlet {
 
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
-    String email = ServletHelpers.getParameter(request, "email", "");
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
     String degree = ServletHelpers.getParameter(request, "degree", "");
     String school = ServletHelpers.getParameter(request, "school", "");
     String career = ServletHelpers.getParameter(request, "career", "");

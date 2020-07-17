@@ -31,11 +31,13 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserType userType = LoginServlet.getUserType();
     List<Comment> comments = new ArrayList<>();
+    // don't use getEmail here, use localStorage?
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    addComments(userType, email, comments);
+    
+    // UUID id = getMatchID(email);
+    // addComments(id, comments);
 
     Collections.sort(comments, Comment.ORDER_BY_DATE);
     Gson gson = new Gson();
@@ -46,26 +48,17 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // UserType gets mixed up when there is more than one user at a time
     UserType userType = LoginServlet.getUserType();
+
     String type = ServletHelpers.getParameter(request, "type", "");
     String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
-
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
+
     String reviewee = "";
     String reviewer = "";
-    if (userType == UserType.REVIEWEE) {
-      reviewee = email;
-      if (hasMatch(userType, email)) {
-        reviewer = getMatch(userType, email);
-      }
-    } else {
-      reviewer = userService.getCurrentUser().getEmail();
-      if (hasMatch(userType, email)) {
-        reviewee = getMatch(userType, email);
-      }
-    }
 
     UUID id = UUID.randomUUID();
     while (collides(id)) {
@@ -79,6 +72,7 @@ public class CommentServlet extends HttpServlet {
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("date", date);
     commentEntity.setProperty("uuid", id.toString());
+    //commentEntity.setProperty("matchID", getMatchID());
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -98,53 +92,25 @@ public class CommentServlet extends HttpServlet {
     return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 
-  /* Checks if the given user of the given userType has a match of the opposite userType. */
-  public static boolean hasMatch(UserType userType, String email) {
+  /* TODO: uncomment this once you pull User DB code
+  public static UUID getMatchID(String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Match");
+    Query query = new Query("User");
     Filter emailFilter;
-    if (userType == UserType.REVIEWEE) {
-      emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
-    } else {
-      emailFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
-    }
-    query.setFilter(emailFilter);
-    PreparedQuery results = datastore.prepare(query);
-    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
-  }
-
-  /* If it exists, gets the match of a given user (the user is of type userType). */
-  public static String getMatch(UserType userType, String email) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("Match");
-    Filter emailFilter;
-    if (userType == UserType.REVIEWEE) {
-      emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
-    } else {
-      emailFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
-    }
+    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      if (userType == UserType.REVIEWEE) {
-        return (String) entity.getProperty("reviewer");
-      } else {
-        return (String) entity.getProperty("reviewee");
-      }
+      return (String) entity.getProperty("match-id");
     }
-    return "";
   }
 
-  /* add comments from given email and userType(reviewer or reviewee) */
-  public static void addComments(UserType userType, String email, List<Comment> comments) {
+  // add all comments that have the given match id 
+  public static void addComments(UUID id, List<Comment> comments) {
     Query query = new Query("Review-comments");
-    Filter emailFilter;
-    if (userType == UserType.REVIEWEE) {
-      emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
-    } else {
-      emailFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
-    }
-    query.setFilter(emailFilter);
+    Filter idFilter;
+    idFilter = new FilterPredicate("matchID", FilterOperator.EQUAL, id);
+    query.setFilter(idFilter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     String reviewer, reviewee, type, text, id;
@@ -164,4 +130,5 @@ public class CommentServlet extends HttpServlet {
       comments.add(new Comment(reviewer, reviewee, text, type, date, id));
     }
   }
+  */
 }
