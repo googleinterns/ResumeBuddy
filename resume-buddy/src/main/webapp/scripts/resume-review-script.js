@@ -7,10 +7,9 @@ function onLoad() {
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-  // default hide comments section
-  const commentsElement = document.getElementById('comments');
-  commentsElement.style.display = "none";  
-  // IF the user has a match, display comments functionality :
+  /* TODO: default hide comments section
+  /* Only if the user has a match, display comments functionality
+   */
   fetch('/comment').
     then(response => response.json())
     .then((comments) => {

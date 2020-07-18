@@ -37,7 +37,6 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // is this the right place to put this code?
     UserService userService = UserServiceFactory.getUserService();
     boolean status = userService.isUserLoggedIn();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

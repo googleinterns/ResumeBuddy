@@ -12,7 +12,6 @@ function blobUpload() {
 function login() {
   fetch('/login').then(response => response.json()).then((login) => {
     const loginLinkElement = document.getElementById('login-link-container');
-    // const myAccountElement = document.getElementById('my-account');
     const greetingElement = document.getElementById('greeting-container');
     loginLinkElement.style.display="block";
     if (login.status) {
@@ -22,7 +21,6 @@ function login() {
     }
     else {
       loginLinkElement.innerHTML = "Log in <a href=\"" + login.login_url + "\">here</a>";
-      // myAccountElement.style.display = "none";
       greetingElement.style.display = "none";
     }
   });

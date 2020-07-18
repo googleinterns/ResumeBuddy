@@ -155,28 +155,9 @@ public class Match {
       datastore.put(matchEntity);
 
       // update reviewer and reviewee User db to also contain the match ID
-      Query query = new Query("User");
-      Filter emailFilter;
-      emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, revieweeEmail);
-      query.setFilter(emailFilter);
-      PreparedQuery results = datastore.prepare(query);
-      for (Entity entity : results.asIterable()) {
-        if (entity.getProperty("matchID").equals("")) {
-          entity.setProperty("matchID", id.toString());
-          break;
-        }
-      }
-
-      Query query2 = new Query("User");
-      emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, reviewerEmail);
-      query2.setFilter(emailFilter);
-      results = datastore.prepare(query2);
-      for (Entity entity : results.asIterable()) {
-        if (entity.getProperty("matchID").equals("")) {
-          entity.setProperty("matchID", id.toString());
-          break;
-        }
-      }
+      updateUserMatchID(revieweeEmail);
+      updateUserMatchID(reviewerEmail);
+      
       // TODO: Send emails to matched people
 
       // Delete reviewers and reviewees from Datastore once matched
@@ -185,6 +166,18 @@ public class Match {
     }
   }
 
+  public void updateUserMatchID(String email) {
+    Query query = new Query("User");
+    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      if (entity.getProperty("matchID").equals("")) {
+        entity.setProperty("matchID", id.toString());
+        break;
+      }
+    }
+  }
   /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {
     @Override

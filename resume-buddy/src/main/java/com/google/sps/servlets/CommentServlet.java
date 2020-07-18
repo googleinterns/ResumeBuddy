@@ -30,7 +30,6 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<Comment> comments = new ArrayList<>();
-    // don't use getEmail here, use localStorage?
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
 
@@ -86,7 +85,7 @@ public class CommentServlet extends HttpServlet {
     return (String) userEntity.getProperty("matchID");
   }
 
-  // add all comments that have the given match id
+  /* add all comments that have the given match id */
   public static void addComments(String matchID, List<Comment> comments) {
     Query query = new Query("Review-comments");
     Filter idFilter;
