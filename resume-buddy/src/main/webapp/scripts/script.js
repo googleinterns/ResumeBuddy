@@ -12,24 +12,17 @@ function blobUpload() {
 function login() {
   fetch('/login').then(response => response.json()).then((login) => {
     const loginLinkElement = document.getElementById('login-link-container');
-    //const loginElement = document.getElementById('user-type-container');
-    const myAccountElement = document.getElementById('my-account');
+    // const myAccountElement = document.getElementById('my-account');
     const greetingElement = document.getElementById('greeting-container');
-    if (login.isValidUser) {
-      // Show the 'my account' option
-      // Show a log out option
+    loginLinkElement.style.display="block";
+    if (login.status) {
       greetingElement.innerHTML = "Welcome " + login.email + "!";
-      myAccountElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
+      loginLinkElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
       "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
-      //loginElement.style.display = "none";
-      loginLinkElement.style.display = "none";
     }
     else {
-      // Show the log in option
-      // loginElement.style.display ="block";
-      loginLinkElement.style.display = "block";
-      loginLinkElement.innerHTML = "Log in <a href=\"" + login.login_url + "\">here</a>.";
-      myAccountElement.style.display = "none";
+      loginLinkElement.innerHTML = "Log in <a href=\"" + login.login_url + "\">here</a>";
+      // myAccountElement.style.display = "none";
       greetingElement.style.display = "none";
     }
   });

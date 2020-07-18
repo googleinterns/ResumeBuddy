@@ -6,6 +6,9 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /** Class that matches reviewers to reviewees */
@@ -144,12 +148,35 @@ public class Match {
       String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
       matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
       UUID id = UUID.randomUUID();
-      while (collides(id)) {
+      while (ServletHelpers.collides(id, "Match")) {
         id = UUID.randomUUID();
       }
-      matchEntity.setProperty("uuid", id);
+      matchEntity.setProperty("uuid", id.toString());
       datastore.put(matchEntity);
 
+      // update reviewer and reviewee User db to also contain the match ID
+      Query query = new Query("User");
+      Filter emailFilter;
+      emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, revieweeEmail);
+      query.setFilter(emailFilter);
+      PreparedQuery results = datastore.prepare(query);
+      for (Entity entity : results.asIterable()) {
+        if (entity.getProperty("matchID").equals("")) {
+          entity.setProperty("matchID", id.toString());
+          break;
+        }
+      }
+
+      Query query2 = new Query("User");
+      emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, reviewerEmail);
+      query2.setFilter(emailFilter);
+      results = datastore.prepare(query2);
+      for (Entity entity : results.asIterable()) {
+        if (entity.getProperty("matchID").equals("")) {
+          entity.setProperty("matchID", id.toString());
+          break;
+        }
+      }
       // TODO: Send emails to matched people
 
       // Delete reviewers and reviewees from Datastore once matched
@@ -157,19 +184,6 @@ public class Match {
       datastore.delete(reviewee.getKey());
     }
   }
-
-  /** Checks if the id collides with other Match ids in datastore */
-  private boolean collides(UUID id) {
-    Query query = new Query("Match");
-
-    Filter uuidPropertyFilter = new FilterPredicate("uuid", FilterOperator.EQUAL, id.toString());
-    query.setFilter(uuidPropertyFilter);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
-  }
-
 
   /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {

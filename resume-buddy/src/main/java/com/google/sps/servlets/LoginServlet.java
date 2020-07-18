@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -24,8 +25,6 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.sps.ServletHelpers;
-import com.google.sps.data.UserType;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,15 +37,32 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    // is this the right place to put this code?
     UserService userService = UserServiceFactory.getUserService();
-
+    boolean status = userService.isUserLoggedIn();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    String email = "";
+    if (status) {
+      email = userService.getCurrentUser().getEmail();
+      if (newUser(email)) {
+        System.out.println("new user");
+        Entity userEntity = new Entity("User");
+        userEntity.setProperty("email", email);
+        userEntity.setProperty("matchID", "");
+        datastore.put(userEntity);
+      }
+    }
     String jsonLogin;
     String urlToRedirectToAfterUserLogsIn = "/index.html";
     String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
     String urlToRedirectToAfterUserLogsOut = "/index.html";
     String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-
-    jsonLogin += "{\"login_url\": \"" + loginUrl + "\", ";
+    if (userService.isUserLoggedIn()) {
+      jsonLogin = "{\"status\": true, ";
+    } else {
+      jsonLogin = "{\"status\": false, ";
+    }
+    jsonLogin += "\"login_url\": \"" + loginUrl + "\", ";
     jsonLogin += "\"logout_url\": \"" + logoutUrl + "\", ";
     jsonLogin += "\"email\": \"" + email + "\"}";
 
@@ -55,4 +71,14 @@ public class LoginServlet extends HttpServlet {
     response.getWriter().println(jsonLogin);
   }
 
+  /* return true if this user does not exist in the User db yet*/
+  public static boolean newUser(String email) {
+    Query query = new Query("User");
+    Filter emailFilter;
+    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    return results.countEntities(FetchOptions.Builder.withDefaults()) == 0;
+  }
 }

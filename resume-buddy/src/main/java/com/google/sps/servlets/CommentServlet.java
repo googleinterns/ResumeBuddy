@@ -3,7 +3,6 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -14,7 +13,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Comment;
-import com.google.sps.data.UserType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,9 +33,9 @@ public class CommentServlet extends HttpServlet {
     // don't use getEmail here, use localStorage?
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    
-    // UUID id = getMatchID(email);
-    // addComments(id, comments);
+
+    String id = getMatchID(email);
+    addComments(id, comments);
 
     Collections.sort(comments, Comment.ORDER_BY_DATE);
     Gson gson = new Gson();
@@ -48,9 +46,6 @@ public class CommentServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // UserType gets mixed up when there is more than one user at a time
-    UserType userType = LoginServlet.getUserType();
-
     String type = ServletHelpers.getParameter(request, "type", "");
     String text = ServletHelpers.getParameter(request, "text", "");
     Date date = new Date();
@@ -61,7 +56,7 @@ public class CommentServlet extends HttpServlet {
     String reviewer = "";
 
     UUID id = UUID.randomUUID();
-    while (collides(id)) {
+    while (ServletHelpers.collides(id, "Review-comments")) {
       id = UUID.randomUUID();
     }
 
@@ -72,7 +67,7 @@ public class CommentServlet extends HttpServlet {
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("date", date);
     commentEntity.setProperty("uuid", id.toString());
-    //commentEntity.setProperty("matchID", getMatchID());
+    commentEntity.setProperty("matchID", getMatchID(email));
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -80,36 +75,22 @@ public class CommentServlet extends HttpServlet {
     response.sendRedirect("/resume-review.html");
   }
 
-  /** Checks if the id collides with other ids in datastore */
-  private boolean collides(UUID id) {
-    Query query = new Query("Review-comments");
-
-    Filter uuidPropertyFilter = new FilterPredicate("uuid", FilterOperator.EQUAL, id.toString());
-    query.setFilter(uuidPropertyFilter);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
-  }
-
-  /* TODO: uncomment this once you pull User DB code
-  public static UUID getMatchID(String email) {
+  public static String getMatchID(String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User");
     Filter emailFilter;
     emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
-    for (Entity entity : results.asIterable()) {
-      return (String) entity.getProperty("match-id");
-    }
+    Entity userEntity = results.asSingleEntity();
+    return (String) userEntity.getProperty("matchID");
   }
 
-  // add all comments that have the given match id 
-  public static void addComments(UUID id, List<Comment> comments) {
+  // add all comments that have the given match id
+  public static void addComments(String matchID, List<Comment> comments) {
     Query query = new Query("Review-comments");
     Filter idFilter;
-    idFilter = new FilterPredicate("matchID", FilterOperator.EQUAL, id);
+    idFilter = new FilterPredicate("matchID", FilterOperator.EQUAL, matchID);
     query.setFilter(idFilter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
@@ -130,5 +111,4 @@ public class CommentServlet extends HttpServlet {
       comments.add(new Comment(reviewer, reviewee, text, type, date, id));
     }
   }
-  */
 }
