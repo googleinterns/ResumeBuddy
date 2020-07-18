@@ -155,9 +155,9 @@ public class Match {
       datastore.put(matchEntity);
 
       // update reviewer and reviewee User db to also contain the match ID
-      updateUserMatchID(revieweeEmail);
-      updateUserMatchID(reviewerEmail);
-      
+      updateUserMatchID(id, revieweeEmail);
+      updateUserMatchID(id, reviewerEmail);
+
       // TODO: Send emails to matched people
 
       // Delete reviewers and reviewees from Datastore once matched
@@ -166,11 +166,12 @@ public class Match {
     }
   }
 
-  public void updateUserMatchID(String email) {
+  public static void updateUserMatchID(UUID id, String email) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User");
-    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
-    results = datastore.prepare(query);
+    PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
       if (entity.getProperty("matchID").equals("")) {
         entity.setProperty("matchID", id.toString());
