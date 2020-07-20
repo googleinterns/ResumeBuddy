@@ -22,13 +22,13 @@ public class BlobstoreServeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Gets the logged in user's email, finds the PDF blob and serves it
+    // Gets the logged in user's email, finds the PDF blob from the Match datastore and serves it
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
     String email = userService.getCurrentUser().getEmail();
-    Query query = new Query("Match");
 
+    Query query = new Query("Match");
     PreparedQuery results = datastore.prepare(query);
     List<Entity> entityList = results.asList(fetchOptions);
     String userBlobKeyString = "";
@@ -39,7 +39,6 @@ public class BlobstoreServeServlet extends HttpServlet {
         userBlobKeyString = pair.getProperty("resumeBlobKey").toString();
       }
     }
-    //TODO: (sesexton) Included more logic if the user is both a reviewee and a reviewer
 
     BlobKey userBlobKey = new BlobKey(userBlobKeyString);
     blobstoreService.serve(userBlobKey, response);
