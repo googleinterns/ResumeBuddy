@@ -1,6 +1,13 @@
 /** Run functions when page is loaded */
 function onLoad() {
-  getComments();
+  document.getElementById('comments').style.display = "none";
+  fetch('/user-data')
+    .then(response => response.json())
+    .then(user => {
+        // only load comments if user has a non empty match ID (aka they have a match)
+        if (!((user.matchID).equals(""))) { getComments(); }
+    });
+
 }
 
 /**
@@ -11,6 +18,9 @@ function getComments() {
   /* Only if the user has a match, display comments functionality
    * https://github.com/googleinterns/ResumeBuddy/issues/67
    */
+   // OR only call getComments() when a match is made
+  document.getElementById('match-id').style.display = "none";
+  document.getElementById('comments').style.display = "block";
   fetch('/comment').
     then(response => response.json())
     .then((comments) => {
