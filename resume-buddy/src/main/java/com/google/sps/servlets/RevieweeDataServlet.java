@@ -13,7 +13,6 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
@@ -29,16 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/reviewee-data")
 public class RevieweeDataServlet extends HttpServlet {
 
-  private Reviewee reviewee;
   private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Send the JSON as the response
-    response.setContentType("application/json");
-    String json = new Gson().toJson(reviewee);
-    response.getWriter().println(json);
-  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -54,7 +44,7 @@ public class RevieweeDataServlet extends HttpServlet {
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
     String resumeBlobKey = getBlobstoreKey(request, response, "resume");
 
-    reviewee =
+    Reviewee reviewee =
         new Reviewee(
             fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
 
