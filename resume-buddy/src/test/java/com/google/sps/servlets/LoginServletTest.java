@@ -34,7 +34,7 @@ public class LoginServletTest {
   // TODO: Modify test cases accordingly when LoginServlet is changed
 
   private static final String USER_EMAIL = "animachaidze@gmail.com";
-  private Entity REVIEWEE;
+  private Entity reviewee;
   @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
   private LoginServlet loginServlet;
@@ -56,9 +56,9 @@ public class LoginServletTest {
     loginServlet = new LoginServlet();
     datastore = DatastoreServiceFactory.getDatastoreService();
 
-    REVIEWEE = new Entity("Reviewee");
-    REVIEWEE.setProperty("email", "animachaidze@gmail.com");
-    datastore.put(REVIEWEE);
+    reviewee = new Entity("Reviewee");
+    reviewee.setProperty("email", "animachaidze@gmail.com");
+    datastore.put(reviewee);
   }
 
   @After
