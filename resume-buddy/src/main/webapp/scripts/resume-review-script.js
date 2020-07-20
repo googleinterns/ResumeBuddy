@@ -91,7 +91,7 @@ async function getRevieweeResume() {
         metaData: {
           fileName: "revieweeResume.pdf"
         }
-      }, {embedMode : "IN-LINE"});
+      }, {});
     });
 }
 
