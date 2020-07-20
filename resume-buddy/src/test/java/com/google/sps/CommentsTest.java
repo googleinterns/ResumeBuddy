@@ -66,7 +66,6 @@ public class CommentsTest {
     helper.tearDown();
   }
 
-  // TODO: fix this test!
   @Test
   public void getAllComments() throws ParseException {
     datastore.put(match);

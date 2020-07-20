@@ -74,6 +74,7 @@ public class CommentServlet extends HttpServlet {
     response.sendRedirect("/resume-review.html");
   }
 
+  /* Returns the unique match ID for the given user email. */
   public static String getMatchID(String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User");
@@ -85,7 +86,7 @@ public class CommentServlet extends HttpServlet {
     return (String) userEntity.getProperty("matchID");
   }
 
-  /* add all comments that have the given match id */
+  /* Populates the given list of Comments with all comments that have the given match ID. */
   public static void addComments(String matchID, List<Comment> comments) {
     Query query = new Query("Review-comments");
     Filter idFilter;

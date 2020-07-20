@@ -9,6 +9,7 @@ function onLoad() {
 function getComments() {
   /* TODO: default hide comments section
   /* Only if the user has a match, display comments functionality
+   * https://github.com/googleinterns/ResumeBuddy/issues/67
    */
   fetch('/comment').
     then(response => response.json())

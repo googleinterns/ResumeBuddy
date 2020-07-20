@@ -36,14 +36,12 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     UserService userService = UserServiceFactory.getUserService();
-    boolean status = userService.isUserLoggedIn();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String email = "";
-    if (status) {
+    if (userService.isUserLoggedIn()) {
       email = userService.getCurrentUser().getEmail();
-      if (newUser(email)) {
+      if (isNewUser(email)) {
         System.out.println("new user");
         Entity userEntity = new Entity("User");
         userEntity.setProperty("email", email);
@@ -71,7 +69,7 @@ public class LoginServlet extends HttpServlet {
   }
 
   /* return true if this user does not exist in the User db yet*/
-  public static boolean newUser(String email) {
+  public static boolean isNewUser(String email) {
     Query query = new Query("User");
     Filter emailFilter;
     emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
