@@ -8,17 +8,15 @@
     <script src="scripts/script.js"></script>
   </head>
 
-  <body onload="start()">
+  <body onload="startForm()">
     <div>
       <h1 id="title">Sign Up to Receive Resume Review</h1>
       <form id="reviewee-form" action="/reviewee-data" method="POST" enctype="multipart/form-data">
         <h3 class="heading">Personal Info</h3>
         <label>First name:</label><br>
-        <input type="text" name="fname" required><br>
+        <input type="text" name="fname" id="fname" required><br>
         <label>Last name:</label><br>
-        <input type="text" name="lname" required><br>
-        <label>Email:</label><br>
-        <input type="text" name="email" required><br>
+        <input type="text" name="lname" id="lname" required><br>
         <h3 class="heading">Education</h3>
         <label>School:</label><br>
         <select name="school" id="school" required>
@@ -56,7 +54,6 @@
           <option value="bachelor">Bachelor's degree</option>
           <option value="master">Master's degree</option>
           <option value="doctorate">Doctorate</option>
-          <option value="no_preference">No preference</option>
         </select>
         <br><br>
         <label>Years of work experience:</label><br>
@@ -65,7 +62,6 @@
           <option value="no_preference">No preference</option>
           <option value="greater_than_5">greater than 5</option>
           <option value="greater_than_10">greater than 10</option>
-          <option value="no_preference">No preference</option>
         </select>
         <br>
         <p class="heading">Upload Resume PDF</p>

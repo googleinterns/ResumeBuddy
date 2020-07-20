@@ -8,6 +8,13 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
@@ -38,10 +45,10 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
-    String email = ServletHelpers.getParameter(request, "email", "");
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
     String school = ServletHelpers.getParameter(request, "school", "");
     String year = ServletHelpers.getParameter(request, "school-year", "");
     String career = ServletHelpers.getParameter(request, "career", "");
@@ -75,8 +82,24 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
 
+    // Gets user entity from User db and updates fields
+    Query query = new Query("User");
+    Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(userFilter);
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+
+    userEntity.setProperty("first-name", fname);
+    userEntity.setProperty("last-name", lname);
+    userEntity.setProperty("school-year", year);
+    userEntity.setProperty("school", school);
+    userEntity.setProperty("career", career);
+    userEntity.setProperty("isReviewee", true);
+
     datastore.put(revieweeEntity);
+    datastore.put(userEntity);
 
     response.sendRedirect("/index.html");
   }
