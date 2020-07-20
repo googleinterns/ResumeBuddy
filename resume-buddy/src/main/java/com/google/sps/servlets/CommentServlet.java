@@ -34,7 +34,9 @@ public class CommentServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
 
     String id = getMatchID(email);
-    addComments(id, comments);
+    if (id.equals("") == false) {
+      addComments(id, comments);
+    }
 
     Collections.sort(comments, Comment.ORDER_BY_DATE);
     Gson gson = new Gson();

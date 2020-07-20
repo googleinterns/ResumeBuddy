@@ -4,21 +4,14 @@ function onLoad() {
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-        // only load comments if user has a non empty match ID (aka they have a match)
-        if (!((user.matchID).equals(""))) { getComments(); }
+      if (((user.matchID).equals("")) == false) { getComments(); }
     });
-
 }
 
 /**
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-  /* TODO: default hide comments section
-  /* Only if the user has a match, display comments functionality
-   * https://github.com/googleinterns/ResumeBuddy/issues/67
-   */
-   // OR only call getComments() when a match is made
   document.getElementById('match-id').style.display = "none";
   document.getElementById('comments').style.display = "block";
   fetch('/comment').
