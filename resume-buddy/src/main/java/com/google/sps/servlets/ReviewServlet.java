@@ -11,6 +11,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.api.Email;
+import com.google.sps.data.EmailTemplates;
 import com.google.sps.data.ReviewStatus;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -44,8 +45,8 @@ public class ReviewServlet extends HttpServlet {
 
     Email.sendEmail(
         revieweeEmail,
-        "ResumeBuddy - Resume Reviewed",
-        "Your resume have been reviewed. Please log in to our website to see feedback",
+        EmailTemplates.RESUME_REVIEWED_SUBJECT_LINE,
+        EmailTemplates.RESUME_REVIEWED_BODY,
         null);
 
     response.sendRedirect("/index.html");

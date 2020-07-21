@@ -27,4 +27,18 @@ public final class EmailTemplates {
           + ""
           + "<p>- ResumeBuddy Team"
           + "</body>";
+
+  public static final String RESUME_REVIEWED_SUBJECT_LINE = "ResumeBuddy - Resume Reviewed";
+
+  public static final String RESUME_REVIEWED_BODY =
+      "<body style=\"font-family:arial\">"
+          + ""
+          + "<img class=\"logo\" src=\"https://resume-buddy-step-2020.appspot.com/images/logo.png\" alt=\"ResumeBuddy Logo\" width=\"50\">"
+          + ""
+          + "<p>Hi, </p>"
+          + ""
+          + "<p>Your resume have been reviewed! Please log in to your <a href=\"https://resume-buddy-step-2020.appspot.com/\">account</a> to see feedback. <p>"
+          + ""
+          + "<p>- ResumeBuddy Team"
+          + "</body>";
 }
