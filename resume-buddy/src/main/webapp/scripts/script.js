@@ -76,7 +76,7 @@ function populateFormWithKnownData() {
     });
 }
 
-function fillOutForm(page) {
+function openForm(page) {
   fetch('/login?redirect=' + page).then(response => response.json()).then((login) => {
     if (login.status) {
       window.location.href = page;
