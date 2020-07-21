@@ -24,16 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/reviewer-data")
 public class ReviewerDataServlet extends HttpServlet {
 
-  private Reviewer reviewer;
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Send the JSON as the response
-    response.setContentType("application/json");
-    String json = new Gson().toJson(reviewer);
-    response.getWriter().println(json);
-  }
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
@@ -47,7 +37,8 @@ public class ReviewerDataServlet extends HttpServlet {
     String career = ServletHelpers.getParameter(request, "career", "");
     String company = ServletHelpers.getParameter(request, "company", "");
     String numYears = ServletHelpers.getParameter(request, "years-experience", "");
-    reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
+    Reviewer reviewer =
+        new Reviewer(fname, lname, email, degree, school, career, company, numYears);
 
     if (school.equals("Other")) {
       school = ServletHelpers.getParameter(request, "other-school", "");
