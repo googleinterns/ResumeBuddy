@@ -13,6 +13,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
@@ -33,10 +36,10 @@ public class RevieweeDataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
-    String email = ServletHelpers.getParameter(request, "email", "");
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
     String school = ServletHelpers.getParameter(request, "school", "");
     String year = ServletHelpers.getParameter(request, "school-year", "");
     String career = ServletHelpers.getParameter(request, "career", "");

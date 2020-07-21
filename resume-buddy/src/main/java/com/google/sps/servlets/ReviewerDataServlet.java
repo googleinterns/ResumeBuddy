@@ -8,6 +8,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewer;
 import java.io.IOException;
@@ -27,7 +30,8 @@ public class ReviewerDataServlet extends HttpServlet {
 
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
-    String email = ServletHelpers.getParameter(request, "email", "");
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
     String degree = ServletHelpers.getParameter(request, "degree", "");
     String school = ServletHelpers.getParameter(request, "school", "");
     String career = ServletHelpers.getParameter(request, "career", "");
