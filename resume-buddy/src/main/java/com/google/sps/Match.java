@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.sps.api.Email;
+import com.google.sps.data.EmailTemplates;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
 import java.io.IOException;
@@ -148,17 +149,16 @@ public class Match {
       datastore.put(matchEntity);
 
       // Sending emails to reviewee and reviewer
-
       try {
         Email.sendEmail(
             revieweeEmail,
-            "ResumeBuddy - Matched with Reviewer",
-            "You have been matched with resume reviewer. Please log in to your account to see details about your reviewer",
+            EmailTemplates.MATCH_SUBJECT_LINE_REVIEWEE,
+            EmailTemplates.MATCH_BODY_REVIEWEE,
             null);
         Email.sendEmail(
             reviewerEmail,
-            "ResumeBuddy - Matched with Reviewee",
-            "You have been matched with a reviewee. Please log in to your account to see details about your reviewee and their resume",
+            EmailTemplates.MATCH_SUBJECT_LINE_REVIEWER,
+            EmailTemplates.MATCH_BODY_REVIEWER,
             null);
       } catch (IOException io) {
       }
