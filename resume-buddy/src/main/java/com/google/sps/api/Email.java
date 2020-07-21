@@ -66,7 +66,6 @@ public class Email {
     email.setFrom(new InternetAddress(from));
     email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
     email.setSubject(subject);
-    // email.setText(bodyText);
     email.setContent(bodyText, "text/html");
     return email;
   }
@@ -114,8 +113,7 @@ public class Email {
     email.setSubject(subject);
 
     MimeBodyPart mimeBodyPart = new MimeBodyPart();
-    mimeBodyPart.setHeader("Content-Type", "text/html");
-    mimeBodyPart.setContent(bodyText, "html");
+    mimeBodyPart.setContent(bodyText, "text/html");
 
     Multipart multipart = new MimeMultipart();
     multipart.addBodyPart(mimeBodyPart);

@@ -23,13 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 public class ReviewServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-  }
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {}
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-            UserService userService = UserServiceFactory.getUserService();
+    UserService userService = UserServiceFactory.getUserService();
     String reviewerEmail = userService.getCurrentUser().getEmail();
 
     Query query = new Query("Match");
