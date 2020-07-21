@@ -48,11 +48,10 @@ public final class Comment {
   }
 
   /** A comparator for sorting comments by their date. */
-  public static final Comparator<Comment> ORDER_BY_DATE =
-      new Comparator<Comment>() {
-        @Override
-        public int compare(Comment a, Comment b) {
-          return (b.getDate()).compareTo(a.getDate());
-        }
-      };
+  public static final Comparator<Comment> ORDER_BY_DATE = new Comparator<Comment>() {
+    @Override
+    public int compare(Comment a, Comment b) {
+      return (b.getDate()).compareTo(a.getDate());
+    }
+  };
 }
