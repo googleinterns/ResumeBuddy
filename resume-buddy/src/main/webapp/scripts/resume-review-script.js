@@ -77,6 +77,15 @@ function createListElement(date, type, text, id) {
 /**
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
+ const previewConfig={
+  "showLeftHandPanel":true,
+  "showPageControls":false,
+  "showDownloadPDF": false,
+  "showAnnotationTools": false,
+  "showPrintPDF": false,
+  "embedMode": "IN_LINE"
+}
+
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
@@ -90,10 +99,9 @@ async function getRevieweeResume() {
         },
         metaData: {
           fileName: "revieweeResume.pdf"
-        }
-        //TODO (sesexton): Add embed mode correctly
-      }, {});
-    });
+        }},
+    previewConfig);
+});
 }
 
  /*
