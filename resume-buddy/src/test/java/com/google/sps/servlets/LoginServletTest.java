@@ -31,7 +31,6 @@ import org.mockito.MockitoAnnotations;
 /** Tests for LoginServlet */
 @RunWith(JUnit4.class)
 public class LoginServletTest {
-  // TODO: Modify test cases accordingly when LoginServlet is changed
 
   private static final String USER_EMAIL = "animachaidze@gmail.com";
   private Entity reviewee;
@@ -74,12 +73,12 @@ public class LoginServletTest {
     String loginUrl = response.get("login_url").getAsString();
     String logoutUrl = response.get("logout_url").getAsString();
     String email = response.get("email").getAsString();
-    String isValidUser = response.get("isValidUser").getAsString();
+    String status = response.get("status").getAsString();
 
     Assert.assertTrue(loginUrl.contains("login"));
     Assert.assertTrue(logoutUrl.contains("logout"));
     Assert.assertTrue(email.equals("animachaidze@gmail.com"));
-    Assert.assertTrue(isValidUser.equals("true"));
+    Assert.assertTrue(status.equals("true"));
   }
 
   @Test
@@ -90,22 +89,20 @@ public class LoginServletTest {
     String loginUrl = response.get("login_url").getAsString();
     String logoutUrl = response.get("logout_url").getAsString();
     String email = response.get("email").getAsString();
-    String isValidUser = response.get("isValidUser").getAsString();
+    String status = response.get("status").getAsString();
 
     Assert.assertTrue(loginUrl.contains("login"));
     Assert.assertTrue(logoutUrl.contains("logout"));
     Assert.assertTrue(email.isEmpty());
-    Assert.assertTrue(isValidUser.equals("false"));
+    Assert.assertTrue(status.equals("false"));
   }
 
   /** Sets up mock returns and gets response json object */
   private JsonObject getLoginServletResponse() throws ServletException, IOException {
     StringWriter stringWriter = new StringWriter();
     PrintWriter printWriter = new PrintWriter(stringWriter);
-    when(request.getParameter("user-type")).thenReturn("Reviewee");
     when(response.getWriter()).thenReturn(printWriter);
 
-    loginServlet.doPost(request, response);
     loginServlet.doGet(request, response);
 
     String responseStr = stringWriter.getBuffer().toString().trim();
