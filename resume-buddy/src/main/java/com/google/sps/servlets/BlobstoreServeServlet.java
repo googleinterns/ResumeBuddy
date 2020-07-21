@@ -3,14 +3,15 @@ import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,22 +30,25 @@ public class BlobstoreServeServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
 
     Query revieweeQuery = new Query("Match");
-    Filter revieweeFilter = new FilterPredicate("reviewee", FilterOperation.EQUAL, email);
+    Filter revieweeFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
     revieweeQuery.setFilter(revieweeFilter);
-    PreparedQuery results = datastore.prepare(revieweeQuery);
+    PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
 
-    if(results.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
-        Query reviewerQuery = new Query("Match");
-        Filter reviewerFilter = new FilterPredicate("reviewer", FilterOperation.EQUAL, email);
-        reviewerQuery.setFilter(revieweeFilter);
-        PreparedQuery reviewerResults = datastore.prepare(revieweeQuery);
-        String reviewerBlobKeyString = reviewerResults.getProperty("resumeBlobKey").toString();
-        BlobKey userblobKey = new BlobKey(userBlobKeyString);
-        blobstoreService.serve(userBlobKey, response);
+    if (revieweeResults.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
+      Query reviewerQuery = new Query("Match");
+      Filter reviewerFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
+      reviewerQuery.setFilter(reviewerFilter);
+      PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
+      String reviewerBlobKeyString =
+          reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
+      BlobKey reviewerBlobKey = new BlobKey(reviewerBlobKeyString);
+      blobstoreService.serve(reviewerBlobKey, response);
+      return;
     }
 
-    String revieweeBlobKeyString = revieweeResults.getProperty("resumeBlobKey").toString();
-    BlobKey userBlobKey = new BlobKey(revieweeBlobKeyString);
-    blobstoreService.serve(userBlobKey, response);
+    String revieweeBlobKeyString =
+        revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
+    BlobKey revieweeBlobKey = new BlobKey(revieweeBlobKeyString);
+    blobstoreService.serve(revieweeBlobKey, response);
   }
 }
