@@ -56,7 +56,7 @@ public class LoginServletTest {
     datastore = DatastoreServiceFactory.getDatastoreService();
 
     reviewee = new Entity("Reviewee");
-    reviewee.setProperty("email", "animachaidze@gmail.com");
+    reviewee.setProperty("email", USER_EMAIL);
     datastore.put(reviewee);
   }
 
