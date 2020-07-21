@@ -3,7 +3,6 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -28,21 +27,73 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comment")
 public class CommentServlet extends HttpServlet {
 
-  private List<Comment> comments;
-  static final int DEFAULT_COMMENTS_NUMBER = 5;
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    List<Comment> comments = new ArrayList<>();
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
-    Query query = new Query("Review-comments");
-    Filter emailFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
-    query.setFilter(emailFilter);
+
+    String id = getMatchID(email);
+    addComments(id, comments);
+
+    Collections.sort(comments, Comment.ORDER_BY_DATE);
+    Gson gson = new Gson();
+
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String type = ServletHelpers.getParameter(request, "type", "");
+    String text = ServletHelpers.getParameter(request, "text", "");
+    Date date = new Date();
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
+
+    String reviewee = "";
+    String reviewer = "";
+
+    UUID id = UUID.randomUUID();
+    while (ServletHelpers.collides(id, "Review-comments")) {
+      id = UUID.randomUUID();
+    }
+
+    Entity commentEntity = new Entity("Review-comments");
+    commentEntity.setProperty("reviewer", reviewer);
+    commentEntity.setProperty("reviewee", reviewee);
+    commentEntity.setProperty("type", type);
+    commentEntity.setProperty("text", text);
+    commentEntity.setProperty("date", date);
+    commentEntity.setProperty("uuid", id.toString());
+    commentEntity.setProperty("matchID", getMatchID(email));
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
+    datastore.put(commentEntity);
 
-    comments = new ArrayList<>();
+    response.sendRedirect("/resume-review.html");
+  }
+
+  /* Returns the unique match ID for the given user email. */
+  public static String getMatchID(String email) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("User");
+    Filter emailFilter;
+    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+    return (String) userEntity.getProperty("matchID");
+  }
+
+  /* Populates the given list of Comments with all comments that have the given match ID. */
+  public static void addComments(String matchID, List<Comment> comments) {
+    Query query = new Query("Review-comments");
+    Filter idFilter;
+    idFilter = new FilterPredicate("matchID", FilterOperator.EQUAL, matchID);
+    query.setFilter(idFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
     String reviewer, reviewee, type, text, id;
     Date date;
     for (Entity entity : results.asIterable()) {
@@ -57,59 +108,7 @@ public class CommentServlet extends HttpServlet {
         System.err.println("Could not cast entry property");
         break;
       }
-
       comments.add(new Comment(reviewer, reviewee, text, type, date, id));
     }
-
-    Collections.sort(comments, Comment.ORDER_BY_DATE);
-    Gson gson = new Gson();
-
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(comments));
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String type = ServletHelpers.getParameter(request, "type", "");
-    String text = ServletHelpers.getParameter(request, "text", "");
-    Date date = new Date();
-
-    UserService userService = UserServiceFactory.getUserService();
-
-    // TODO: Get real reviewer and reviewee info when auth implemented
-    /*Currently signed in user is assumed to be Reviewee
-    TODO: add option for user to sign in as either a reviewer or reviewee*/
-    String reviewee = userService.getCurrentUser().getEmail();
-    String reviewer = "";
-
-    UUID id = UUID.randomUUID();
-    while (collides(id)) {
-      id = UUID.randomUUID();
-    }
-
-    Entity commentEntity = new Entity("Review-comments");
-    commentEntity.setProperty("reviewer", reviewer);
-    commentEntity.setProperty("reviewee", reviewee);
-    commentEntity.setProperty("type", type);
-    commentEntity.setProperty("text", text);
-    commentEntity.setProperty("date", date);
-    commentEntity.setProperty("uuid", id.toString());
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
-
-    response.sendRedirect("/resume-review.html");
-  }
-
-  /** Checks if the id collides with other ids in datastore */
-  private boolean collides(UUID id) {
-    Query query = new Query("Review-comments");
-
-    Filter uuidPropertyFilter = new FilterPredicate("uuid", FilterOperator.EQUAL, id.toString());
-    query.setFilter(uuidPropertyFilter);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
   }
 }

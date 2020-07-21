@@ -3,6 +3,13 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewer;
@@ -17,29 +24,21 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/reviewer-data")
 public class ReviewerDataServlet extends HttpServlet {
 
-  private Reviewer reviewer;
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Send the JSON as the response
-    response.setContentType("application/json");
-    String json = new Gson().toJson(reviewer);
-    response.getWriter().println(json);
-  }
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
 
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
-    String email = ServletHelpers.getParameter(request, "email", "");
-    String degree = ServletHelpers.getParameter(request, "education-level", "");
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
+    String degree = ServletHelpers.getParameter(request, "degree", "");
     String school = ServletHelpers.getParameter(request, "school", "");
     String career = ServletHelpers.getParameter(request, "career", "");
     String company = ServletHelpers.getParameter(request, "company", "");
     String numYears = ServletHelpers.getParameter(request, "years-experience", "");
-    reviewer = new Reviewer(fname, lname, email, degree, school, career, company, numYears);
+    Reviewer reviewer =
+        new Reviewer(fname, lname, email, degree, school, career, company, numYears);
 
     if (school.equals("Other")) {
       school = ServletHelpers.getParameter(request, "other-school", "");
@@ -58,8 +57,24 @@ public class ReviewerDataServlet extends HttpServlet {
     reviewerEntity.setProperty("years-experience", numYears);
     reviewerEntity.setProperty("submit-date", new Date());
 
+    // Gets user entity from User db and updates fields
+    Query query = new Query("User");
+    Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(userFilter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+
+    userEntity.setProperty("first-name", fname);
+    userEntity.setProperty("last-name", lname);
+    userEntity.setProperty("email", email);
+    userEntity.setProperty("degree", degree);
+    userEntity.setProperty("school", school);
+    userEntity.setProperty("career", career);
+    userEntity.setProperty("isReviewer", true);
+
     datastore.put(reviewerEntity);
+    datastore.put(userEntity);
 
     response.sendRedirect("/index.html");
   }

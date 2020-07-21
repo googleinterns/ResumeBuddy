@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -36,21 +37,28 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    boolean isValidUser;
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String email = "";
     if (userService.isUserLoggedIn()) {
       email = userService.getCurrentUser().getEmail();
-      isValidUser = validEmail("Reviewer", email) || validEmail("Reviewee", email);
-    } else {
-      isValidUser = false;
+      if (isNewUser(email)) {
+        System.out.println("new user");
+        Entity userEntity = new Entity("User");
+        userEntity.setProperty("email", email);
+        userEntity.setProperty("matchID", "");
+        datastore.put(userEntity);
+      }
     }
     String jsonLogin;
     String urlToRedirectToAfterUserLogsIn = "/index.html";
     String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
     String urlToRedirectToAfterUserLogsOut = "/index.html";
     String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-
-    jsonLogin = "{\"isValidUser\": " + String.valueOf(isValidUser) + ", ";
+    if (userService.isUserLoggedIn()) {
+      jsonLogin = "{\"status\": true, ";
+    } else {
+      jsonLogin = "{\"status\": false, ";
+    }
     jsonLogin += "\"login_url\": \"" + loginUrl + "\", ";
     jsonLogin += "\"logout_url\": \"" + logoutUrl + "\", ";
     jsonLogin += "\"email\": \"" + email + "\"}";
@@ -60,13 +68,14 @@ public class LoginServlet extends HttpServlet {
     response.getWriter().println(jsonLogin);
   }
 
-  /* checks if email_key exists in the database of queryType */
-  public boolean validEmail(String queryType, String email_key) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query(queryType);
-    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email_key);
+  /* return true if this user does not exist in the User db yet*/
+  public static boolean isNewUser(String email) {
+    Query query = new Query("User");
+    Filter emailFilter;
+    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    return results.countEntities(FetchOptions.Builder.withDefaults()) != 0;
+    return results.countEntities(FetchOptions.Builder.withDefaults()) == 0;
   }
 }

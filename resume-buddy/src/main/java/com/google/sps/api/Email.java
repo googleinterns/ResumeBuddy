@@ -22,7 +22,7 @@ import javax.mail.internet.MimeMultipart;
 /** Class responsible to create an email and send it to recipient */
 public class Email {
   // TODO: Add tests for functions in this class
-
+  
   private Email() {};
 
   /**

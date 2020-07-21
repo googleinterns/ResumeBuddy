@@ -1,42 +1,37 @@
 function blobUpload() {
-    fetch('/blobstore-upload-url')
-        .then((response) => {
-            return response.text();
+  fetch('/blobstore-upload-url')
+    .then((response) => {
+      return response.text();
     })
-    .then((resumeUploadUrl) => { 
-        const resume = document.getElementById('reviewee-form'); 
-        resume.action = resumeUploadUrl; 
+    .then((resumeUploadUrl) => {
+      const resume = document.getElementById('reviewee-form');
+      resume.action = resumeUploadUrl;
     });
 }
 
 function login() {
-    fetch('/login').then(response => response.json()).then((login) => {
-        const loginLinkElement = document.getElementById('login-container');
-        const myAccountElement = document.getElementById('my-account');
-        const greetingElement = document.getElementById('greeting-container');
-        if (login.isValidUser) {
-            // Show the 'my account' option
-            // Show a log out option
-            greetingElement.innerHTML = "Welcome " + login.email + "!";
-            myAccountElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
-            "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
-            loginLinkElement.style.display = "none";
-        }
-        else {
-            // Show the log in option
-            loginLinkElement.innerHTML = "<a href=\"" + 
-            login.login_url + "\">Log In</a>";
-            myAccountElement.style.display = "none";
-            greetingElement.style.display = "none";
-        }
-    });
+  fetch('/login').then(response => response.json()).then((login) => {
+    const loginLinkElement = document.getElementById('login-link-container');
+    const greetingElement = document.getElementById('greeting-container');
+    loginLinkElement.style.display="block";
+    if (login.status) {
+      greetingElement.innerHTML = "Welcome " + login.email + "!";
+      loginLinkElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
+      "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
+    }
+    else {
+      loginLinkElement.innerHTML = "Log in <a href=\"" + login.login_url + "\">here</a>";
+      greetingElement.style.display = "none";
+    }
+  });
 }
 
-/** Class function when page loads */
-function start() {
+/** Class function when form page loads */
+function startForm() {
   blobUpload();
   populateUnis();
   populateCareers();
+  populateFormWithKnownData();
 }
 
 /** Gets university names from json file and populates options for school */
@@ -47,9 +42,7 @@ function populateUnis() {
     .then(unis => {
       unis.forEach((uni) => {
         let option = document.createElement("option");
-        console.log(uni.institution);
         option.text = uni.institution;
-        console.log(option.text);
         option.value = uni.institution;
         schoolSelect.appendChild(option);
       })
@@ -68,5 +61,18 @@ function populateCareers() {
         option.value = career.name;
         careerSelect.appendChild(option);
       })
+    });
+}
+
+/** Gets known data from the User db and populates form */
+function populateFormWithKnownData() {
+  fetch('/user-data')
+    .then(response => response.json())
+    .then(user => {
+      document.getElementById("fname").value = user.firstName;
+      document.getElementById("lname").value = user.lastName;
+      document.getElementById("email").value = user.email;
+
+      // TODO: fill out other known fields too
     });
 }
