@@ -30,25 +30,22 @@ public class BlobstoreServeServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
 
     Query revieweeQuery = new Query("Match");
+    Query reviewerQuery = new Query("Match");
     Filter revieweeFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
+    Filter reviewerFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
     revieweeQuery.setFilter(revieweeFilter);
+    reviewerQuery.setFilter(reviewerFilter);
+    PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
     PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
+    String matchBlobKeyString = "";
 
     if (revieweeResults.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
-      Query reviewerQuery = new Query("Match");
-      Filter reviewerFilter = new FilterPredicate("reviewer", FilterOperator.EQUAL, email);
-      reviewerQuery.setFilter(reviewerFilter);
-      PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
-      String reviewerBlobKeyString =
-          reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
-      BlobKey reviewerBlobKey = new BlobKey(reviewerBlobKeyString);
-      blobstoreService.serve(reviewerBlobKey, response);
-      return;
+      matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
+    } else {
+      matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
     }
 
-    String revieweeBlobKeyString =
-        revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
-    BlobKey revieweeBlobKey = new BlobKey(revieweeBlobKeyString);
-    blobstoreService.serve(revieweeBlobKey, response);
+    BlobKey matchBlobKey = new BlobKey(matchBlobKeyString);
+    blobstoreService.serve(matchBlobKey, response);
   }
 }
