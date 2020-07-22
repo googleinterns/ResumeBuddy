@@ -79,16 +79,19 @@ function createListElement(date, type, text, id) {
  */
  const previewConfig={
   "showLeftHandPanel":true,
-  "showPageControls":false,
-  "showDownloadPDF": false,
-  "showAnnotationTools": false,
-  "showPrintPDF": false,
-  "embedMode": "IN_LINE"
+  "showPageControls":true,
+  "showDownloadPDF": true,
+  "showAnnotationTools": true,
+  "showPrintPDF": true,
+  //"embedMode": "IN_LINE",
+  "enableAnnotationsAPI": true,
+  "includePDFAnnotations": true
 }
 
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
+        const pdfId = response.headers.get('blobKeyString');
       var adobeDCView = new AdobeDC.View({
         clientId: "",
         divId: "adobe-dc-view"
@@ -98,7 +101,8 @@ async function getRevieweeResume() {
           promise: response.arrayBuffer()
         },
         metaData: {
-          fileName: "revieweeResume.pdf"
+          fileName: "revieweeResume.pdf",
+          id: pdfId
         }},
     previewConfig);
 });
