@@ -10,7 +10,6 @@ import com.google.sps.api.Email;
 import com.google.sps.data.EmailTemplates;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -149,19 +148,17 @@ public class Match {
       datastore.put(matchEntity);
 
       // Sending emails to reviewee and reviewer
-      try {
-        Email.sendEmail(
-            revieweeEmail,
-            EmailTemplates.MATCH_SUBJECT_LINE_REVIEWEE,
-            EmailTemplates.MATCH_BODY_REVIEWEE,
-            null);
-        Email.sendEmail(
-            reviewerEmail,
-            EmailTemplates.MATCH_SUBJECT_LINE_REVIEWER,
-            EmailTemplates.MATCH_BODY_REVIEWER,
-            null);
-      } catch (IOException io) {
-      }
+      Email.sendEmail(
+          revieweeEmail,
+          EmailTemplates.MATCH_SUBJECT_LINE_REVIEWEE,
+          EmailTemplates.MATCH_BODY_REVIEWEE,
+          null);
+      Email.sendEmail(
+          reviewerEmail,
+          EmailTemplates.MATCH_SUBJECT_LINE_REVIEWER,
+          EmailTemplates.MATCH_BODY_REVIEWER,
+          null);
+
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
       datastore.delete(reviewee.getKey());

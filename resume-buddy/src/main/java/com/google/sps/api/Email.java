@@ -29,8 +29,7 @@ public class Email {
    * Creates email with the given information and file if present, and calls function to send the
    * email
    */
-  public static void sendEmail(String to, String subjectLine, String text, File file)
-      throws IOException {
+  public static void sendEmail(String to, String subjectLine, String text, File file) {
     try {
       Gmail service = GmailService.getGmailService();
       MimeMessage mimeMessage = null;
