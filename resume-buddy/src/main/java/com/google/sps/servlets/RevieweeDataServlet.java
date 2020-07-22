@@ -15,7 +15,6 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.gson.Gson;
 import com.google.sps.ServletHelpers;
 import com.google.sps.data.Reviewee;
 import java.io.IOException;
@@ -88,6 +87,7 @@ public class RevieweeDataServlet extends HttpServlet {
     userEntity.setProperty("school", school);
     userEntity.setProperty("career", career);
     userEntity.setProperty("isReviewee", true);
+    userEntity.setProperty("degree", "");
 
     datastore.put(revieweeEntity);
     datastore.put(userEntity);

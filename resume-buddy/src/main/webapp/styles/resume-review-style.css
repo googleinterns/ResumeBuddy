@@ -17,7 +17,7 @@ body {
   padding: 25px;
   font-family: Impact, Charcoal, sans-serif;
   color: #444343;
-  display: block;
+  display: none;
 }
 
 textarea {

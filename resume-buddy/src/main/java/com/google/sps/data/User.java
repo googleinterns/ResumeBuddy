@@ -10,6 +10,7 @@ public final class User {
   private final String career;
   private final Degree degree;
   private final SchoolYear schoolYear;
+  private final String matchID;
 
   public User(
       String fname,
@@ -18,13 +19,15 @@ public final class User {
       String school,
       String career,
       String degree,
-      String year) {
+      String year,
+      String matchID) {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;
     this.degree = Degree.valueOf(degree.toUpperCase());
     this.school = school;
-    this.career = career.toLowerCase();
+    this.career = career;
     this.schoolYear = SchoolYear.valueOf(year.toUpperCase());
+    this.matchID = matchID;
   }
 }

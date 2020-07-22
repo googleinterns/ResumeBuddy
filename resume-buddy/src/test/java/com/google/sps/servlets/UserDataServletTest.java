@@ -80,7 +80,7 @@ public class UserDataServletTest {
   public void testNewUser() throws ServletException, IOException {
     helper.setEnvEmail(NEW_USER_EMAIL).setEnvAuthDomain("gmail.com").setEnvIsLoggedIn(true);
     JsonObject response = getLoginServletResponse();
-    
+
     Object fname = response.get("firstName");
     Object lname = response.get("lastName");
     String email = response.get("email").getAsString();

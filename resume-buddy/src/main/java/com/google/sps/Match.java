@@ -178,6 +178,7 @@ public class Match {
     }
   }
 
+  /* Update the matchID property of the User with the given email to contain the given id */
   public static void updateUserMatchID(UUID id, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User");
@@ -187,10 +188,12 @@ public class Match {
     for (Entity entity : results.asIterable()) {
       if (entity.getProperty("matchID").equals("")) {
         entity.setProperty("matchID", id.toString());
+        datastore.put(entity);
         break;
       }
     }
   }
+
   /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {
     @Override

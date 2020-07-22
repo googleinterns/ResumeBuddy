@@ -1,6 +1,6 @@
 package com.google.sps.data;
 
-enum SchoolYear {
+public enum SchoolYear {
   HIGH_SCHOOL,
   YEAR_1,
   YEAR_2,
