@@ -1,16 +1,23 @@
 /** Run functions when page is loaded */
 function onLoad() {
-  getComments();
+  fetch('/user-data')
+    .then(response => response.json())
+    .then(user => {
+      if (user.matchID != '') { getComments(); }
+      else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
+    });
 }
 
 /**
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-  /* TODO: default hide comments section
-  /* Only if the user has a match, display comments functionality
-   * https://github.com/googleinterns/ResumeBuddy/issues/67
+  /* TODO: Add information about the match to match-info
+   * (match's name, background/career etc.) 
+   * https://github.com/googleinterns/ResumeBuddy/issues/73
    */
+  document.getElementById('match-info').style.display = "none";
+  document.getElementById('comments').style.display = "block";
   fetch('/comment').
     then(response => response.json())
     .then((comments) => {

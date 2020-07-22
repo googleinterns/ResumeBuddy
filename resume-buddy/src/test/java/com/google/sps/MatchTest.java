@@ -5,6 +5,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Career;
@@ -15,6 +18,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,16 +31,17 @@ import org.junit.runners.JUnit4;
 public class MatchTest {
 
   private DatastoreService datastore;
-  private Entity REVIEWEE_A;
-  private Entity REVIEWEE_B;
-  private Entity REVIEWEE_C;
-  private Entity REVIEWER_D;
-  private Entity REVIEWER_E;
-  private Entity REVIEWER_F;
+  private Entity revieweeA;
+  private Entity revieweeB;
+  private Entity revieweeC;
+  private Entity reviewerD;
+  private Entity reviewerE;
+  private Entity reviewerF;
   private Entity REVIEWER_G;
-  private final long DAY_IN_MS = 1000 * 60 * 60 * 24;
-  private final Date FOUR_DAYS_AGO = new Date(System.currentTimeMillis() - (4 * DAY_IN_MS));
-  private final Date ONE_DAY_AGO = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
+  private Entity userA;
+  private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
+  private static final Date FOUR_DAYS_AGO = new Date(System.currentTimeMillis() - (4 * DAY_IN_MS));
+  private static final Date ONE_DAY_AGO = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
@@ -48,51 +53,55 @@ public class MatchTest {
     helper.setUp();
     datastore = DatastoreServiceFactory.getDatastoreService();
 
-    REVIEWEE_A = new Entity("Reviewee");
-    REVIEWEE_B = new Entity("Reviewee");
-    REVIEWEE_C = new Entity("Reviewee");
-    REVIEWER_D = new Entity("Reviewer");
-    REVIEWER_E = new Entity("Reviewer");
-    REVIEWER_F = new Entity("Reviewer");
+    revieweeA = new Entity("Reviewee");
+    revieweeB = new Entity("Reviewee");
+    revieweeC = new Entity("Reviewee");
+    reviewerD = new Entity("Reviewer");
+    reviewerE = new Entity("Reviewer");
+    reviewerF = new Entity("Reviewer");
     REVIEWER_G = new Entity("Reviewer");
+    userA = new Entity("User");
 
-    REVIEWEE_A.setProperty("email", "A");
-    REVIEWEE_A.setProperty("school", "Penn");
-    REVIEWEE_A.setProperty("career", Career.COMPUTER_SCIENCE.toString());
-    REVIEWEE_A.setProperty("preferred-degree", Degree.BACHELOR.toString());
-    REVIEWEE_A.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
+    userA.setProperty("email", "user@gmail.com");
+    userA.setProperty("matchID", "");
 
-    REVIEWEE_B.setProperty("email", "B");
-    REVIEWEE_B.setProperty("school", "Cornell");
-    REVIEWEE_B.setProperty("career", Career.ENGINEERING.toString());
-    REVIEWEE_B.setProperty("preferred-degree", Degree.MASTER.toString());
-    REVIEWEE_B.setProperty("preferred-experience", NumYears.NO_PREFERENCE.toString());
-    REVIEWEE_B.setProperty("submit-date", FOUR_DAYS_AGO);
+    revieweeA.setProperty("email", "A");
+    revieweeA.setProperty("school", "Penn");
+    revieweeA.setProperty("career", Career.COMPUTER_SCIENCE.toString());
+    revieweeA.setProperty("preferred-degree", Degree.BACHELOR.toString());
+    revieweeA.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
 
-    REVIEWEE_C.setProperty("email", "C");
-    REVIEWEE_C.setProperty("school", "RPI");
-    REVIEWEE_C.setProperty("career", Career.COMPUTER_SCIENCE.toString());
-    REVIEWEE_C.setProperty("preferred-degree", Degree.DOCTORATE.toString());
-    REVIEWEE_C.setProperty("preferred-experience", NumYears.GREATER_THAN_10.toString());
+    revieweeB.setProperty("email", "B");
+    revieweeB.setProperty("school", "Cornell");
+    revieweeB.setProperty("career", Career.ENGINEERING.toString());
+    revieweeB.setProperty("preferred-degree", Degree.MASTER.toString());
+    revieweeB.setProperty("preferred-experience", NumYears.NO_PREFERENCE.toString());
+    revieweeB.setProperty("submit-date", FOUR_DAYS_AGO);
 
-    REVIEWER_D.setProperty("email", "D");
-    REVIEWER_D.setProperty("school", "A&T");
-    REVIEWER_D.setProperty("career", Career.COMPUTER_SCIENCE.toString());
-    REVIEWER_D.setProperty("degree", Degree.BACHELOR.toString());
-    REVIEWER_D.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
+    revieweeC.setProperty("email", "C");
+    revieweeC.setProperty("school", "RPI");
+    revieweeC.setProperty("career", Career.COMPUTER_SCIENCE.toString());
+    revieweeC.setProperty("preferred-degree", Degree.DOCTORATE.toString());
+    revieweeC.setProperty("preferred-experience", NumYears.GREATER_THAN_10.toString());
 
-    REVIEWER_E.setProperty("email", "E");
-    REVIEWER_E.setProperty("school", "Penn");
-    REVIEWER_E.setProperty("career", Career.COMPUTER_SCIENCE.toString());
-    REVIEWER_E.setProperty("degree", Degree.BACHELOR.toString());
-    REVIEWER_E.setProperty("preferred-experience", NumYears.GREATER_THAN_5.toString());
+    reviewerD.setProperty("email", "D");
+    reviewerD.setProperty("school", "A&T");
+    reviewerD.setProperty("career", Career.COMPUTER_SCIENCE.toString());
+    reviewerD.setProperty("degree", Degree.BACHELOR.toString());
+    reviewerD.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
 
-    REVIEWER_F.setProperty("email", "F");
-    REVIEWER_F.setProperty("school", "RPI");
-    REVIEWER_F.setProperty("career", Career.BUSINESS.toString());
-    REVIEWER_F.setProperty("degree", Degree.MASTER.toString());
-    REVIEWER_F.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
-    REVIEWER_F.setProperty("submit-date", FOUR_DAYS_AGO);
+    reviewerE.setProperty("email", "E");
+    reviewerE.setProperty("school", "Penn");
+    reviewerE.setProperty("career", Career.COMPUTER_SCIENCE.toString());
+    reviewerE.setProperty("degree", Degree.BACHELOR.toString());
+    reviewerE.setProperty("preferred-experience", NumYears.GREATER_THAN_5.toString());
+
+    reviewerF.setProperty("email", "F");
+    reviewerF.setProperty("school", "RPI");
+    reviewerF.setProperty("career", Career.BUSINESS.toString());
+    reviewerF.setProperty("degree", Degree.MASTER.toString());
+    reviewerF.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
+    reviewerF.setProperty("submit-date", FOUR_DAYS_AGO);
 
     REVIEWER_G.setProperty("email", "G");
     REVIEWER_G.setProperty("school", "A&T");
@@ -108,12 +117,12 @@ public class MatchTest {
 
   @Test
   public void findsBestMatches() throws ParseException {
-    datastore.put(REVIEWEE_A);
-    datastore.put(REVIEWEE_B);
-    datastore.put(REVIEWEE_C);
-    datastore.put(REVIEWER_D);
-    datastore.put(REVIEWER_E);
-    datastore.put(REVIEWER_F);
+    datastore.put(revieweeA);
+    datastore.put(revieweeB);
+    datastore.put(revieweeC);
+    datastore.put(reviewerD);
+    datastore.put(reviewerE);
+    datastore.put(reviewerF);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
     List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
@@ -132,9 +141,9 @@ public class MatchTest {
 
   @Test
   public void noReviewers() {
-    datastore.put(REVIEWEE_A);
-    datastore.put(REVIEWEE_B);
-    datastore.put(REVIEWEE_C);
+    datastore.put(revieweeA);
+    datastore.put(revieweeB);
+    datastore.put(revieweeC);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
     List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
@@ -149,11 +158,11 @@ public class MatchTest {
 
   @Test
   public void moreReviewees() {
-    datastore.put(REVIEWEE_A);
-    datastore.put(REVIEWEE_B);
-    datastore.put(REVIEWEE_C);
-    datastore.put(REVIEWER_D);
-    datastore.put(REVIEWER_E);
+    datastore.put(revieweeA);
+    datastore.put(revieweeB);
+    datastore.put(revieweeC);
+    datastore.put(reviewerD);
+    datastore.put(reviewerE);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
     List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
@@ -185,10 +194,10 @@ public class MatchTest {
   /** A and G don't have in common but A submitted 4 days ago so needs to be matched */
   @Test
   public void notAGoodMatchButTimeExpired() throws ParseException {
-    REVIEWEE_A.setProperty("submit-date", FOUR_DAYS_AGO);
+    revieweeA.setProperty("submit-date", FOUR_DAYS_AGO);
     REVIEWER_G.setProperty("submit-date", new Date());
 
-    datastore.put(REVIEWEE_A);
+    datastore.put(revieweeA);
     datastore.put(REVIEWER_G);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
@@ -206,10 +215,10 @@ public class MatchTest {
   /** A and G are not simmilar and they just submitted forms so they are not matched */
   @Test
   public void isNotMatchAndStillHaveTime() throws ParseException {
-    REVIEWEE_A.setProperty("submit-date", ONE_DAY_AGO);
+    revieweeA.setProperty("submit-date", ONE_DAY_AGO);
     REVIEWER_G.setProperty("submit-date", new Date());
 
-    datastore.put(REVIEWEE_A);
+    datastore.put(revieweeA);
     datastore.put(REVIEWER_G);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
@@ -221,6 +230,19 @@ public class MatchTest {
     List<Pair<String, String>> actualMatches = getActualMatches();
 
     Assert.assertEquals(expectedMatches, actualMatches);
+  }
+
+  @Test
+  public void testUpdateUserID() throws ParseException {
+    datastore.put(userA);
+    UUID id = UUID.randomUUID();
+    Match.updateUserMatchID(id, "user@gmail.com");
+    Query query = new Query("User");
+    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, "user@gmail.com");
+    query.setFilter(emailFilter);
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+    Assert.assertEquals(id.toString(), userEntity.getProperty("matchID"));
   }
 
   /** Gets matches from db and puts as a list of Pairs */

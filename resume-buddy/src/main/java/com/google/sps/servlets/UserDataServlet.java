@@ -42,6 +42,7 @@ public class UserDataServlet extends HttpServlet {
       String school = (String) userEntity.getProperty("school");
       String career = (String) userEntity.getProperty("career");
       String degree = (String) userEntity.getProperty("degree");
+      String matchID = (String) userEntity.getProperty("matchID");
       if (degree == null || degree.equals("")) {
         degree = "other";
       }
@@ -49,8 +50,7 @@ public class UserDataServlet extends HttpServlet {
       if (schoolYear == null || schoolYear.equals("")) {
         schoolYear = "other";
       }
-
-      User user = new User(fname, lname, email, school, career, degree, schoolYear);
+      User user = new User(fname, lname, email, school, career, degree, schoolYear, matchID);
 
       Gson gson = new Gson();
       response.setContentType("application/json");
