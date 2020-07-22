@@ -53,7 +53,6 @@ public class UserDataServlet extends HttpServlet {
       User user = new User(fname, lname, email, school, career, degree, schoolYear);
 
       Gson gson = new Gson();
-      // Send the JSON as the response
       response.setContentType("application/json");
       String json = gson.toJson(user);
       response.getWriter().println(json);
