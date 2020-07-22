@@ -111,11 +111,11 @@ async function getRevieweeResume() {
 });
 }
 
- /*
-  * Sends POST request to /review-done which updates status
-  */
+/*
+ * Sends POST request to /review-done which updates status
+ */
 function reviewIsDone() {
-  fetch('/review-done', {
+  fetch('/review-page', {
     method: 'POST',
   });
 }
