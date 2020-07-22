@@ -46,6 +46,8 @@ public class BlobstoreServeServlet extends HttpServlet {
     }
 
     BlobKey matchBlobKey = new BlobKey(matchBlobKeyString);
+    // Sets the blob key string as the response header so it can be set as the unquie pdf ID
+    response.addHeader("blobKeyString", matchBlobKeyString);
     blobstoreService.serve(matchBlobKey, response);
   }
 }
