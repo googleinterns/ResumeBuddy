@@ -42,15 +42,18 @@ public class LoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       email = userService.getCurrentUser().getEmail();
       if (isNewUser(email)) {
-        System.out.println("new user");
         Entity userEntity = new Entity("User");
         userEntity.setProperty("email", email);
         userEntity.setProperty("matchID", "");
         datastore.put(userEntity);
       }
     }
+    String redirectUrl = (String) request.getParameter("redirect");
+    if (redirectUrl == null) {
+      redirectUrl = "index.html";
+    }
     String jsonLogin;
-    String urlToRedirectToAfterUserLogsIn = "/index.html";
+    String urlToRedirectToAfterUserLogsIn = "/" + redirectUrl;
     String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
     String urlToRedirectToAfterUserLogsOut = "/index.html";
     String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);

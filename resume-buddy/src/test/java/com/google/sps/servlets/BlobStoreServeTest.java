@@ -31,7 +31,7 @@ import org.mockito.MockitoAnnotations;
 
 /** Tests for LoginServlet */
 @RunWith(JUnit4.class)
-public class BlobStoreServeServletTest {
+public class BlobStoreServeTest {
 
   private static final String USER_EMAIL = "";
   @Mock private HttpServletRequest request;
@@ -40,8 +40,7 @@ public class BlobStoreServeServletTest {
   private DatastoreService datastore;
   private String uuid;
   private Entity match1;
-  private entity match2;
-
+  private Entity match2;
 
   private LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
@@ -71,7 +70,6 @@ public class BlobStoreServeServletTest {
 
   @Test
   public void testLogedInUser() throws ServletException, IOException {
-    helper.setEnvIsLoggedIn(true);
 
     JsonObject response = getLoginServletResponse();
     String loginUrl = response.get("login_url").getAsString();
@@ -83,36 +81,5 @@ public class BlobStoreServeServletTest {
     Assert.assertTrue(logoutUrl.contains("logout"));
     Assert.assertTrue(email.equals("animachaidze@gmail.com"));
     Assert.assertTrue(status.equals("true"));
-  }
-
-  @Test
-  public void testLogedOutUser() throws ServletException, IOException {
-    helper.setEnvIsLoggedIn(false);
-
-    JsonObject response = getLoginServletResponse();
-    String loginUrl = response.get("login_url").getAsString();
-    String logoutUrl = response.get("logout_url").getAsString();
-    String email = response.get("email").getAsString();
-    String status = response.get("status").getAsString();
-
-    Assert.assertTrue(loginUrl.contains("login"));
-    Assert.assertTrue(logoutUrl.contains("logout"));
-    Assert.assertTrue(email.isEmpty());
-    Assert.assertTrue(status.equals("false"));
-  }
-
-  /** Sets up mock returns and gets response json object */
-  private JsonObject getLoginServletResponse() throws ServletException, IOException {
-    StringWriter stringWriter = new StringWriter();
-    PrintWriter printWriter = new PrintWriter(stringWriter);
-    when(response.getWriter()).thenReturn(printWriter);
-
-    loginServlet.doGet(request, response);
-
-    String responseStr = stringWriter.getBuffer().toString().trim();
-    JsonElement responseJsonElement = new JsonParser().parse(responseStr);
-    JsonObject responseJson = responseJsonElement.getAsJsonObject();
-
-    return responseJson;
   }
 }

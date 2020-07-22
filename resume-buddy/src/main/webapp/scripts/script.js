@@ -13,11 +13,11 @@ function login() {
   fetch('/login').then(response => response.json()).then((login) => {
     const loginLinkElement = document.getElementById('login-link-container');
     const greetingElement = document.getElementById('greeting-container');
-    loginLinkElement.style.display="block";
+    loginLinkElement.style.display = "block";
     if (login.status) {
       greetingElement.innerHTML = "Welcome " + login.email + "!";
       loginLinkElement.innerHTML = "<a href=\"resume-review.html\">My Account</a>" +
-      "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
+        "  •  " + "<a href=\"" + login.logout_url + "\">Log Out</a>";
     }
     else {
       loginLinkElement.innerHTML = "Log in <a href=\"" + login.login_url + "\">here</a>";
@@ -69,10 +69,20 @@ function populateFormWithKnownData() {
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-      document.getElementById("fname").value = user.firstName;
-      document.getElementById("lname").value = user.lastName;
-      document.getElementById("email").value = user.email;
-
-      // TODO: fill out other known fields too
+      if (user.firstName !== 'undefined' && user.lastName !== 'undefined') {
+        document.getElementById("fname").value = user.firstName;
+        document.getElementById("lname").value = user.lastName;
+      }
     });
+}
+
+function openForm(page) {
+  fetch('/login?redirect=' + page).then(response => response.json()).then((login) => {
+    if (login.status) {
+      window.location.href = page;
+    }
+    else {
+      window.location.href = login.login_url;
+    }
+  });
 }

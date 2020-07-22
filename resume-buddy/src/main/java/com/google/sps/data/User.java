@@ -24,7 +24,7 @@ public final class User {
     this.email = email;
     this.degree = Degree.valueOf(degree.toUpperCase());
     this.school = school;
-    this.career = career.toLowerCase();
+    this.career = career;
     this.schoolYear = SchoolYear.valueOf(year.toUpperCase());
   }
 }

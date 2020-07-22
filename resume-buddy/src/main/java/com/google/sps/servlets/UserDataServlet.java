@@ -45,7 +45,7 @@ public class UserDataServlet extends HttpServlet {
       if (degree == null || degree.equals("")) {
         degree = "other";
       }
-      String schoolYear = (String) userEntity.getProperty("schoolYear");
+      String schoolYear = (String) userEntity.getProperty("school-year");
       if (schoolYear == null || schoolYear.equals("")) {
         schoolYear = "other";
       }
