@@ -68,6 +68,7 @@ public class ReviewerDataServlet extends HttpServlet {
     userEntity.setProperty("last-name", lname);
     userEntity.setProperty("email", email);
     userEntity.setProperty("degree", degree);
+    userEntity.setProperty("school-year", "");
     userEntity.setProperty("school", school);
     userEntity.setProperty("career", career);
     userEntity.setProperty("isReviewer", true);

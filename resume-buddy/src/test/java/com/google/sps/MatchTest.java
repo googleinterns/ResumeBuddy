@@ -5,6 +5,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Career;
@@ -15,6 +18,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,6 +38,7 @@ public class MatchTest {
   private Entity REVIEWER_E;
   private Entity REVIEWER_F;
   private Entity REVIEWER_G;
+  private Entity USER_A;
   private final long DAY_IN_MS = 1000 * 60 * 60 * 24;
   private final Date FOUR_DAYS_AGO = new Date(System.currentTimeMillis() - (4 * DAY_IN_MS));
   private final Date ONE_DAY_AGO = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
@@ -55,6 +60,10 @@ public class MatchTest {
     REVIEWER_E = new Entity("Reviewer");
     REVIEWER_F = new Entity("Reviewer");
     REVIEWER_G = new Entity("Reviewer");
+    USER_A = new Entity("User");
+
+    USER_A.setProperty("email", "user@gmail.com");
+    USER_A.setProperty("matchID", "");
 
     REVIEWEE_A.setProperty("email", "A");
     REVIEWEE_A.setProperty("school", "Penn");
@@ -221,6 +230,19 @@ public class MatchTest {
     List<Pair<String, String>> actualMatches = getActualMatches();
 
     Assert.assertEquals(expectedMatches, actualMatches);
+  }
+
+  @Test
+  public void testUpdateUserID() throws ParseException {
+    datastore.put(USER_A);
+    UUID id = UUID.randomUUID();
+    Match.updateUserMatchID(id, "user@gmail.com");
+    Query query = new Query("User");
+    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, "user@gmail.com");
+    query.setFilter(emailFilter);
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+    Assert.assertEquals(id.toString(), userEntity.getProperty("matchID"));
   }
 
   /** Gets matches from db and puts as a list of Pairs */

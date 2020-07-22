@@ -34,7 +34,7 @@ public class CommentServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
 
     String id = getMatchID(email);
-    if (id.equals("") == false) {
+    if (!id.isEmpty()) {
       addComments(id, comments);
     }
 

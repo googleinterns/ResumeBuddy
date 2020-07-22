@@ -1,10 +1,10 @@
 /** Run functions when page is loaded */
 function onLoad() {
-  document.getElementById('comments').style.display = "none";
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-      if (((user.matchID).equals("")) == false) { getComments(); }
+      if (user.matchID != '') { getComments(); }
+      else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
     });
 }
 
@@ -12,7 +12,11 @@ function onLoad() {
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-  document.getElementById('match-id').style.display = "none";
+  /* TODO: Add information about the match to match-info
+   * (match's name, background/career etc.) 
+   * https://github.com/googleinterns/ResumeBuddy/issues/73
+   */
+  document.getElementById('match-info').style.display = "none";
   document.getElementById('comments').style.display = "block";
   fetch('/comment').
     then(response => response.json())
