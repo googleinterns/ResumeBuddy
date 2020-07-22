@@ -16,6 +16,7 @@ import com.google.sps.servlets.LoginServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,34 +31,37 @@ import org.mockito.MockitoAnnotations;
 
 /** Tests for LoginServlet */
 @RunWith(JUnit4.class)
-public class LoginServletTest {
+public class BlobStoreServeServletTest {
 
-  private static final String USER_EMAIL = "animachaidze@gmail.com";
-  private Entity reviewee;
+  private static final String USER_EMAIL = "";
   @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
-  private LoginServlet loginServlet;
+  private BlobStoreServeServlet blobStoreServeServlet;
   private DatastoreService datastore;
+  private String uuid;
+  private Entity match1;
+  private entity match2;
+
 
   private LocalServiceTestHelper helper =
       new LocalServiceTestHelper(
               new LocalDatastoreServiceTestConfig()
                   .setDefaultHighRepJobPolicyUnappliedJobPercentage(0),
               new LocalUserServiceTestConfig(),
-              new LocalURLFetchServiceTestConfig())
-          .setEnvEmail(USER_EMAIL)
-          .setEnvAuthDomain("gmail.com");
+              new LocalURLFetchServiceTestConfig(),
+              new LocalBlobStoreServiceTestConfig());
 
   @Before
   public void setUp() {
     helper.setUp();
     MockitoAnnotations.initMocks(this);
-    loginServlet = new LoginServlet();
+    blobStoreServeServlet = new BlobStoreServeServlet();
     datastore = DatastoreServiceFactory.getDatastoreService();
-
-    reviewee = new Entity("Reviewee");
-    reviewee.setProperty("email", USER_EMAIL);
-    datastore.put(reviewee);
+    
+    match1 = new Entity("Match");
+    match1.setProperty("reviewee", "alexham@google.com");
+    match1.setProperty("reviewer", "sesexton@google.com");
+    match1.setProperty("resumeBlobKey",  //gotta figure out something for here);
   }
 
   @After
