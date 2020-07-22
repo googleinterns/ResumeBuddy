@@ -31,7 +31,7 @@ function getComments() {
           createListElement(
             date.getMonth() + '/' + date.getDate() + '/' +
             date.getFullYear(), comment.type, comment.text,
-            comment.id));
+            comment.id, comment.author));
       })
 
     });
@@ -57,7 +57,7 @@ function deleteComments(id) {
 /** 
  * Creates an <li> element containing date, comment type and text
  */
-function createListElement(date, type, text, id) {
+function createListElement(date, type, text, id, author) {
   const liElement = document.createElement('li');
   const containerDiv = document.createElement('div');
 
@@ -68,6 +68,10 @@ function createListElement(date, type, text, id) {
 
   const textNode = document.createTextNode(text + " ");
   liElement.appendChild(textNode);
+
+  const signatureNode = document.createElement("div");
+  signatureNode.innerHTML = "<i>" + author + " " + date + "</i>";
+  liElement.appendChild(signatureNode);
 
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '&#10005;';
