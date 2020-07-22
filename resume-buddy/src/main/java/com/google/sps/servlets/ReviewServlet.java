@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -9,6 +10,8 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.sps.api.Email;
+import com.google.sps.data.EmailTemplates;
 import com.google.sps.data.ReviewStatus;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +39,15 @@ public class ReviewServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     // Currently, we assume that reviewer only has one reviewee
-    results.asSingleEntity().setProperty("status", ReviewStatus.DONE.toString());
+    Entity entity = results.asSingleEntity();
+    entity.setProperty("status", ReviewStatus.DONE.toString());
+    String revieweeEmail = (String) entity.getProperty("reviewee");
+
+    Email.sendEmail(
+        revieweeEmail,
+        EmailTemplates.RESUME_REVIEWED_SUBJECT_LINE,
+        EmailTemplates.RESUME_REVIEWED_BODY,
+        null);
 
     response.sendRedirect("/index.html");
   }
