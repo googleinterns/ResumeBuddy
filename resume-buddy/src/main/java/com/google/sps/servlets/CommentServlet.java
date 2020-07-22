@@ -34,9 +34,7 @@ public class CommentServlet extends HttpServlet {
     String email = userService.getCurrentUser().getEmail();
 
     String id = getMatchID(email);
-    if (!id.isEmpty()) {
-      addComments(id, comments);
-    }
+    if (!id.isEmpty()) { addComments(id, comments); }
 
     Collections.sort(comments, Comment.ORDER_BY_DATE);
     Gson gson = new Gson();
@@ -69,6 +67,8 @@ public class CommentServlet extends HttpServlet {
     commentEntity.setProperty("date", date);
     commentEntity.setProperty("uuid", id.toString());
     commentEntity.setProperty("matchID", getMatchID(email));
+    String username = email.substring(0, email.indexOf('@'));
+    commentEntity.setProperty("author", username);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
@@ -96,7 +96,7 @@ public class CommentServlet extends HttpServlet {
     query.setFilter(idFilter);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    String reviewer, reviewee, type, text, id;
+    String reviewer, reviewee, type, text, id, author;
     Date date;
     for (Entity entity : results.asIterable()) {
       try {
@@ -106,11 +106,12 @@ public class CommentServlet extends HttpServlet {
         text = (String) entity.getProperty("text");
         date = (Date) entity.getProperty("date");
         id = (String) entity.getProperty("uuid");
+        author = (String) entity.getProperty("author");
       } catch (ClassCastException e) {
         System.err.println("Could not cast entry property");
         break;
       }
-      comments.add(new Comment(reviewer, reviewee, text, type, date, id));
+      comments.add(new Comment(reviewer, reviewee, text, type, date, id, author));
     }
   }
 }
