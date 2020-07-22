@@ -6,5 +6,6 @@ public enum Degree {
   BACHELOR,
   MASTER,
   DOCTORATE,
-  NO_PREFERENCE;
+  NO_PREFERENCE,
+  OTHER;
 }
