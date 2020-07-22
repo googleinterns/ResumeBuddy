@@ -22,7 +22,7 @@ import javax.mail.internet.MimeMultipart;
 /** Class responsible to create an email and send it to recipient */
 public class Email {
   // TODO: Add tests for functions in this class
-  
+
   private Email() {};
 
   /**
@@ -56,7 +56,7 @@ public class Email {
    * @return the MimeMessage to be used to send email
    * @throws MessagingException
    */
-  public static MimeMessage createEmail(String to, String from, String subject, String bodyText)
+  private static MimeMessage createEmail(String to, String from, String subject, String bodyText)
       throws MessagingException {
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
