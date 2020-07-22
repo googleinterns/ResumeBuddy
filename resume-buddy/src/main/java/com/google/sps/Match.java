@@ -174,7 +174,7 @@ public class Match {
     query.setFilter(emailFilter);
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      if ((entity.getProperty("matchID")).equals("")) {
+      if (entity.getProperty("matchID").equals("")) {
         entity.setProperty("matchID", id.toString());
         datastore.put(entity);
         break;
