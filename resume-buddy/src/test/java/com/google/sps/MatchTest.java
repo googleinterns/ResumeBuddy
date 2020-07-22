@@ -39,7 +39,7 @@ public class MatchTest {
   private Entity reviewerF;
   private Entity reviewerG;
   private Entity userA;
-//   private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
+  private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
   private static final Date FOUR_DAYS_AGO = new Date(System.currentTimeMillis() - (4 * DAY_IN_MS));
   private static final Date ONE_DAY_AGO = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
 
