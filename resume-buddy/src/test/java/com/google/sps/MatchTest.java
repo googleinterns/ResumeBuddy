@@ -266,11 +266,11 @@ public class MatchTest {
   }
 
   private void sendingEmailsWhenMatched() {
-    REVIEWEE_A.setProperty("email", "animachaidze@gmail.com");
-    REVIEWER_E.setProperty("email", "animach@google.com");
+    revieweeA.setProperty("email", "animachaidze@gmail.com");
+    reviewerE.setProperty("email", "animach@google.com");
 
-    datastore.put(REVIEWEE_A);
-    datastore.put(REVIEWER_E);
+    datastore.put(revieweeA);
+    datastore.put(reviewerE);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
     List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
