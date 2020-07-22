@@ -37,9 +37,9 @@ public class MatchTest {
   private Entity reviewerD;
   private Entity reviewerE;
   private Entity reviewerF;
-  private Entity REVIEWER_G;
+  private Entity reviewerG;
   private Entity userA;
-  private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
+//   private static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
   private static final Date FOUR_DAYS_AGO = new Date(System.currentTimeMillis() - (4 * DAY_IN_MS));
   private static final Date ONE_DAY_AGO = new Date(System.currentTimeMillis() - (1 * DAY_IN_MS));
 
@@ -59,7 +59,7 @@ public class MatchTest {
     reviewerD = new Entity("Reviewer");
     reviewerE = new Entity("Reviewer");
     reviewerF = new Entity("Reviewer");
-    REVIEWER_G = new Entity("Reviewer");
+    reviewerG = new Entity("Reviewer");
     userA = new Entity("User");
 
     userA.setProperty("email", "user@gmail.com");
@@ -103,11 +103,11 @@ public class MatchTest {
     reviewerF.setProperty("preferred-experience", NumYears.LESS_THAN_5.toString());
     reviewerF.setProperty("submit-date", FOUR_DAYS_AGO);
 
-    REVIEWER_G.setProperty("email", "G");
-    REVIEWER_G.setProperty("school", "A&T");
-    REVIEWER_G.setProperty("career", Career.HEALTHCARE.toString());
-    REVIEWER_G.setProperty("degree", Degree.MASTER.toString());
-    REVIEWER_G.setProperty("preferred-experience", NumYears.GREATER_THAN_10.toString());
+    reviewerG.setProperty("email", "G");
+    reviewerG.setProperty("school", "A&T");
+    reviewerG.setProperty("career", Career.HEALTHCARE.toString());
+    reviewerG.setProperty("degree", Degree.MASTER.toString());
+    reviewerG.setProperty("preferred-experience", NumYears.GREATER_THAN_10.toString());
   }
 
   @After
@@ -195,10 +195,10 @@ public class MatchTest {
   @Test
   public void notAGoodMatchButTimeExpired() throws ParseException {
     revieweeA.setProperty("submit-date", FOUR_DAYS_AGO);
-    REVIEWER_G.setProperty("submit-date", new Date());
+    reviewerG.setProperty("submit-date", new Date());
 
     datastore.put(revieweeA);
-    datastore.put(REVIEWER_G);
+    datastore.put(reviewerG);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
     List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
@@ -216,10 +216,10 @@ public class MatchTest {
   @Test
   public void isNotMatchAndStillHaveTime() throws ParseException {
     revieweeA.setProperty("submit-date", ONE_DAY_AGO);
-    REVIEWER_G.setProperty("submit-date", new Date());
+    reviewerG.setProperty("submit-date", new Date());
 
     datastore.put(revieweeA);
-    datastore.put(REVIEWER_G);
+    datastore.put(reviewerG);
 
     List<Entity> reviewees = Match.getNotMatchedUsers("Reviewee");
     List<Entity> reviewers = Match.getNotMatchedUsers("Reviewer");
