@@ -38,16 +38,20 @@ public class BlobstoreServeServlet extends HttpServlet {
     PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
     PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
     String matchBlobKeyString = "";
+    String newResumeFileName = "";
 
     if (revieweeResults.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
       matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
+      newResumeFileName = reviewerResults.asSingleEntity().getProperty("reviewee").toString();
     } else {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
+      newResumeFileName = revieweeResults.asSingleEntity().getProperty("reviewee").toString();
     }
 
     BlobKey matchBlobKey = new BlobKey(matchBlobKeyString);
     // Sets the blob key string as the response header so it can be set as the unquie pdf ID
     response.addHeader("blobKeyString", matchBlobKeyString);
+    response.addHeader("newResumeFileName", newResumeFileName);
     blobstoreService.serve(matchBlobKey, response);
   }
 }
