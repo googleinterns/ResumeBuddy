@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.google.sps.api.Email;
 import com.google.sps.data.EmailTemplates;
 =======
@@ -14,6 +15,13 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 >>>>>>> db485c42856d1d91690120b382774f705fba6a8a
+=======
+import com.google.sps.api.Email;
+import com.google.sps.data.EmailTemplates;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+>>>>>>> refs/remotes/origin/emailSend
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
 import java.util.ArrayList;
