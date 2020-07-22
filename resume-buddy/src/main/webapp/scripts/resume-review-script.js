@@ -7,6 +7,10 @@ function onLoad() {
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
+  /* TODO: default hide comments section
+  /* Only if the user has a match, display comments functionality
+   * https://github.com/googleinterns/ResumeBuddy/issues/67
+   */
   fetch('/comment').
     then(response => response.json())
     .then((comments) => {
@@ -73,11 +77,20 @@ function createListElement(date, type, text, id) {
 /**
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
+ const previewConfig={
+  "showLeftHandPanel":true,
+  "showPageControls":false,
+  "showDownloadPDF": false,
+  "showAnnotationTools": false,
+  "showPrintPDF": false,
+  "embedMode": "IN_LINE"
+}
+
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
       var adobeDCView = new AdobeDC.View({
-        clientId: "b98bbf69d44442479396583253ac267c",
+        clientId: "",
         divId: "adobe-dc-view"
       });
       adobeDCView.previewFile({
@@ -86,9 +99,9 @@ async function getRevieweeResume() {
         },
         metaData: {
           fileName: "revieweeResume.pdf"
-        }
-      }, {embedMode : "IN-LINE"});
-    });
+        }},
+    previewConfig);
+});
 }
 
  /*

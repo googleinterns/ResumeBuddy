@@ -6,8 +6,14 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+<<<<<<< HEAD
 import com.google.sps.api.Email;
 import com.google.sps.data.EmailTemplates;
+=======
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+>>>>>>> db485c42856d1d91690120b382774f705fba6a8a
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
 import java.util.ArrayList;
@@ -17,6 +23,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /** Class that matches reviewers to reviewees */
@@ -145,6 +152,11 @@ public class Match {
       matchEntity.setProperty("status", ReviewStatus.IN_PROCESS.toString());
       String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
       matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
+      UUID id = UUID.randomUUID();
+      while (ServletHelpers.collides(id, "Match")) {
+        id = UUID.randomUUID();
+      }
+      matchEntity.setProperty("uuid", id.toString());
       datastore.put(matchEntity);
 
       // Sending emails to reviewee and reviewer
@@ -159,12 +171,29 @@ public class Match {
           EmailTemplates.MATCH_BODY_REVIEWER,
           null);
 
+      // update reviewer and reviewee User db to also contain the match ID
+      updateUserMatchID(id, revieweeEmail);
+      updateUserMatchID(id, reviewerEmail);
+
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
       datastore.delete(reviewee.getKey());
     }
   }
 
+  public static void updateUserMatchID(UUID id, String email) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("User");
+    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(emailFilter);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      if (entity.getProperty("matchID").equals("")) {
+        entity.setProperty("matchID", id.toString());
+        break;
+      }
+    }
+  }
   /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {
     @Override
