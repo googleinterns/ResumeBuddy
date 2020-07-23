@@ -3,8 +3,46 @@ function onLoad() {
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-      if (user.matchID != '') { getComments(); }
+      if (user.matchID != '') { 
+        console.log(user.matchID);
+        getMatch(user.matchID);
+        getComments(); 
+      }
       else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
+    });
+}
+
+/** Gets reviewer and reviewee using matchID */
+async function getMatch(matchID) {
+  fetch('/review-page?matchId=' + matchID)
+    .then(response => response.json())
+    .then((match) => {
+        populateReviewer(match.reviewer);
+        populateReviewee(match.reviewee);
+      }) 
+}
+
+/** Add information about reviewer in HTML DOM */
+async function populateReviewer(reviewerEmail) {
+  fetch('/user-data?email=' + reviewerEmail)
+    .then(response => response.json())
+    .then(reviewer => {
+      document.getElementById("reviewer-name").innerHTML = reviewer.firstName + ' ' + reviewer.lastName;
+      document.getElementById("reviewer-education").innerHTML = reviewer.degree;
+      document.getElementById("reviewer-school").innerHTML = reviewer.school;
+      document.getElementById("reviewer-career").innerHTML = reviewer.career;      
+    });
+}
+
+/** Add information about reviewee in HTML DOM */
+async function populateReviewee(revieweeEmail) {
+  fetch('/user-data?email=' + revieweeEmail)
+    .then(response => response.json())
+    .then(reviewee => {
+      document.getElementById("reviewee-name").innerHTML = reviewee.firstName + ' ' + reviewee.lastName;
+      document.getElementById("reviewee-school-year").innerHTML = reviewee.schoolYear;
+      document.getElementById("reviewee-school").innerHTML = reviewee.school;
+      document.getElementById("reviewee-career").innerHTML = reviewee.career;
     });
 }
 
@@ -12,10 +50,6 @@ function onLoad() {
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-  /* TODO: Add information about the match to match-info
-   * (match's name, background/career etc.) 
-   * https://github.com/googleinterns/ResumeBuddy/issues/73
-   */
   document.getElementById('match-info').style.display = "none";
   document.getElementById('comments').style.display = "block";
   fetch('/comment').

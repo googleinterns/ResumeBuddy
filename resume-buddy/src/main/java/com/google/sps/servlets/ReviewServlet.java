@@ -20,11 +20,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servelt that updates reviewing status */
-@WebServlet("/review-done")
+@WebServlet("/review-page")
 public class ReviewServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {}
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String matchId = request.getParameter("matchId");
+    Query query = new Query("Match");
+    Filter matchIdFilter = new FilterPredicate("uuid", FilterOperator.EQUAL, matchId);
+    query.setFilter(matchIdFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    String reviewer = (String) entity.getProperty("reviewer");
+    String reviewee = (String) entity.getProperty("reviewee");
+
+    String jsonMatch =
+        "{ \"reviewer\": \"" + reviewer + "\", " + "\"reviewee\": \"" + reviewee + "\" }";
+
+    response.setContentType("application/json");
+    response.getWriter().println(jsonMatch);
+  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
