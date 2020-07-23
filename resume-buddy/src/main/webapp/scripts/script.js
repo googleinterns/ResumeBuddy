@@ -88,5 +88,5 @@ function openForm(page) {
 }
 
 function successMessage() {
-  alert("Thank you, your form has been submitted.");
+  alert('Thank you, your form has been submitted.');
 }
