@@ -13,14 +13,23 @@ public final class Comment {
   private final String text;
   private final Date date;
   private final String id;
+  private final String author;
 
-  public Comment(String reviewer, String reviewee, String text, String type, Date date, String id) {
+  public Comment(
+      String reviewer,
+      String reviewee,
+      String text,
+      String type,
+      Date date,
+      String id,
+      String author) {
     this.text = text;
     this.reviewer = reviewer;
     this.reviewee = reviewee;
     this.date = date;
     this.type = type;
     this.id = id;
+    this.author = author;
   }
 
   public String getReviewer() {
@@ -48,10 +57,11 @@ public final class Comment {
   }
 
   /** A comparator for sorting comments by their date. */
-  public static final Comparator<Comment> ORDER_BY_DATE = new Comparator<Comment>() {
-    @Override
-    public int compare(Comment a, Comment b) {
-      return (b.getDate()).compareTo(a.getDate());
-    }
-  };
+  public static final Comparator<Comment> ORDER_BY_DATE =
+    new Comparator<Comment>() {
+      @Override
+      public int compare(Comment a, Comment b) {
+        return (b.getDate()).compareTo(a.getDate());
+      }
+    };
 }

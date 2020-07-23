@@ -9,6 +9,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.sps.api.Email;
+import com.google.sps.data.EmailTemplates;
 import com.google.sps.data.Pair;
 import com.google.sps.data.ReviewStatus;
 import java.util.ArrayList;
@@ -154,11 +156,21 @@ public class Match {
       matchEntity.setProperty("uuid", id.toString());
       datastore.put(matchEntity);
 
+      // Sending emails to reviewee and reviewer
+      Email.sendEmail(
+          revieweeEmail,
+          EmailTemplates.MATCH_SUBJECT_LINE_REVIEWEE,
+          EmailTemplates.MATCH_BODY_REVIEWEE,
+          null);
+      Email.sendEmail(
+          reviewerEmail,
+          EmailTemplates.MATCH_SUBJECT_LINE_REVIEWER,
+          EmailTemplates.MATCH_BODY_REVIEWER,
+          null);
+
       // update reviewer and reviewee User db to also contain the match ID
       updateUserMatchID(id, revieweeEmail);
       updateUserMatchID(id, reviewerEmail);
-
-      // TODO: Send emails to matched people
 
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
@@ -166,6 +178,7 @@ public class Match {
     }
   }
 
+  /* Update the matchID property of the User with the given email to contain the given id */
   public static void updateUserMatchID(UUID id, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User");
@@ -175,10 +188,12 @@ public class Match {
     for (Entity entity : results.asIterable()) {
       if (entity.getProperty("matchID").equals("")) {
         entity.setProperty("matchID", id.toString());
+        datastore.put(entity);
         break;
       }
     }
   }
+
   /** Comparator that compares based on the point value and sorts list from biggest to smallest */
   public static class SortByPoints implements Comparator<Pair<Integer, Pair<Entity, Entity>>> {
     @Override

@@ -22,14 +22,14 @@ import javax.mail.internet.MimeMultipart;
 /** Class responsible to create an email and send it to recipient */
 public class Email {
   // TODO: Add tests for functions in this class
+
   private Email() {};
 
   /**
    * Creates email with the given information and file if present, and calls function to send the
    * email
    */
-  public static void sendEmail(String to, String subjectLine, String text, File file)
-      throws IOException {
+  public static void sendEmail(String to, String subjectLine, String text, File file) {
     try {
       Gmail service = GmailService.getGmailService();
       MimeMessage mimeMessage = null;
@@ -65,7 +65,7 @@ public class Email {
     email.setFrom(new InternetAddress(from));
     email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
     email.setSubject(subject);
-    email.setText(bodyText);
+    email.setContent(bodyText, "text/html");
     return email;
   }
 
@@ -112,7 +112,7 @@ public class Email {
     email.setSubject(subject);
 
     MimeBodyPart mimeBodyPart = new MimeBodyPart();
-    mimeBodyPart.setContent(bodyText, "text/plain");
+    mimeBodyPart.setContent(bodyText, "text/html");
 
     Multipart multipart = new MimeMultipart();
     multipart.addBodyPart(mimeBodyPart);
