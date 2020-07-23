@@ -46,14 +46,14 @@
         <form action="/comment" method="POST">
           <h3><b>Feedback:</b></h3>
           <select name="type" id="comment-type">
-              <option value="format">Format</option>
-              <option value="content">Content</option>
-              <option value="suggestion">Suggestion</option>
-            </select>
+            <option value="format">Format</option>
+            <option value="content">Content</option>
+            <option value="suggestion">Suggestion</option>
+          </select>
           <textarea name="text" id="text" placeholder="Your comment.."></textarea>
           <br/>
           <input type="submit" onclick='getComments()'/>
-          </form>
+        </form>
       </div>
       <ul id="comments-container"></ul>
     </div>
