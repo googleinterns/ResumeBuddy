@@ -27,7 +27,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-/** Tests for matching algorithm */
+/** Tests for Match Servlet */
 @RunWith(JUnit4.class)
 public class MatchServletTest {
 
