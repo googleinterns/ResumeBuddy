@@ -3,10 +3,10 @@ function onLoad() {
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-      if (user.matchID != '') { 
+      if (user.matchID != '') {
         console.log(user.matchID);
         getMatch(user.matchID);
-        getComments(); 
+        getComments();
       }
       else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
     });
@@ -17,9 +17,9 @@ async function getMatch(matchID) {
   fetch('/review-page?matchId=' + matchID)
     .then(response => response.json())
     .then((match) => {
-        populateReviewer(match.reviewer);
-        populateReviewee(match.reviewee);
-      }) 
+      populateReviewer(match.reviewer);
+      populateReviewee(match.reviewee);
+    })
 }
 
 /** Add information about reviewer in HTML DOM */
@@ -30,7 +30,7 @@ async function populateReviewer(reviewerEmail) {
       document.getElementById("reviewer-name").innerHTML = reviewer.firstName + ' ' + reviewer.lastName;
       document.getElementById("reviewer-education").innerHTML = reviewer.degree;
       document.getElementById("reviewer-school").innerHTML = reviewer.school;
-      document.getElementById("reviewer-career").innerHTML = reviewer.career;      
+      document.getElementById("reviewer-career").innerHTML = reviewer.career;
     });
 }
 
@@ -122,9 +122,9 @@ function createListElement(date, type, text, id, author) {
 /**
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
- const previewConfig={
-  "showLeftHandPanel":true,
-  "showPageControls":false,
+const previewConfig = {
+  "showLeftHandPanel": true,
+  "showPageControls": false,
   "showDownloadPDF": false,
   "showAnnotationTools": false,
   "showPrintPDF": false,
@@ -144,9 +144,10 @@ async function getRevieweeResume() {
         },
         metaData: {
           fileName: "revieweeResume.pdf"
-        }},
-    previewConfig);
-});
+        }
+      },
+        previewConfig);
+    });
 }
 
 /*

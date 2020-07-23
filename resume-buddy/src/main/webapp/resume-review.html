@@ -15,30 +15,30 @@
     </div>
 
     <!-- TODO: Add style to the information list -->
-    <div id="match"> 
-      <div id="reviewer-info"> 
+    <div id="match">
+      <div id="reviewer-info">
         <h4>Reviewer</h4>
-		    Name: <p id="reviewer-name"></p>
-		    Education: <p id="reviewer-education"></p>
-		    School: <p id="reviewer-school"></p>
-		    Company:<p id="reviewer-company"></p>
-		    Field of work:<p id="reviewer-career"></p>
+        Name: <p id="reviewer-name"></p>
+        Education: <p id="reviewer-education"></p>
+        School: <p id="reviewer-school"></p>
+        Company:<p id="reviewer-company"></p>
+        Field of work:<p id="reviewer-career"></p>
       </div>
       <div id="reviewee-info">
-		    <h4>Reviewee</h4>
-			  Name: <p id="reviewee-name"></p>
-			  Education: <p id="reviewee-school-year"></p>
-				School: <p id="reviewee-school"></p>
-				Desired field of work: <p id="reviewee-career"></p>
-	    </div>
+        <h4>Reviewee</h4>
+        Name: <p id="reviewee-name"></p>
+        Education: <p id="reviewee-school-year"></p>
+        School: <p id="reviewee-school"></p>
+        Desired field of work: <p id="reviewee-career"></p>
+      </div>
     </div>
 
     <div id="adobe-dc-view"></div>
     <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
     <script type="text/javascript">
       document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
-          getRevieweeResume();
-            });
+            getRevieweeResume();
+              });
     </script>
     <p id="match-info">Loading...</p>
     <div id="comments">
@@ -46,14 +46,14 @@
         <form action="/comment" method="POST">
           <h3><b>Feedback:</b></h3>
           <select name="type" id="comment-type">
-            <option value="format">Format</option>
-            <option value="content">Content</option>
-            <option value="suggestion">Suggestion</option>
-          </select>
+              <option value="format">Format</option>
+              <option value="content">Content</option>
+              <option value="suggestion">Suggestion</option>
+            </select>
           <textarea name="text" id="text" placeholder="Your comment.."></textarea>
           <br/>
           <input type="submit" onclick='getComments()'/>
-        </form>
+          </form>
       </div>
       <ul id="comments-container"></ul>
     </div>
