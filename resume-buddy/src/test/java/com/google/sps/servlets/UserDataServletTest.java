@@ -79,7 +79,7 @@ public class UserDataServletTest {
   @Test
   public void testNewUser() throws ServletException, IOException {
     helper.setEnvEmail(NEW_USER_EMAIL).setEnvAuthDomain("gmail.com").setEnvIsLoggedIn(true);
-    JsonObject response = getLoginServletResponse();
+    JsonObject response = getServletResponse();
 
     Object fname = response.get("firstName");
     Object lname = response.get("lastName");
@@ -102,7 +102,7 @@ public class UserDataServletTest {
   @Test
   public void testOldUser() throws ServletException, IOException {
     helper.setEnvEmail(OLD_USER_EMAIL).setEnvAuthDomain("google.com").setEnvIsLoggedIn(true);
-    JsonObject response = getLoginServletResponse();
+    JsonObject response = getServletResponse();
 
     String fname = response.get("firstName").getAsString();
     String lname = response.get("lastName").getAsString();

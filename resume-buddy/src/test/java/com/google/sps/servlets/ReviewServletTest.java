@@ -67,7 +67,7 @@ public class ReviewServletTest {
     helper.tearDown();
   }
 
-  /** Tests getting reviewer and reviewee emails using matchId from ReviewServlet*/
+  /** Tests getting reviewer and reviewee emails using matchId from ReviewServlet */
   @Test
   public void testGettingMatchUsersUsingId() throws ServletException, IOException {
     when(request.getParameter("matchId")).thenReturn(ID);
