@@ -27,10 +27,10 @@ async function populateReviewer(reviewerEmail) {
   fetch('/user-data?email=' + reviewerEmail)
     .then(response => response.json())
     .then(reviewer => {
-      document.getElementById("reviewer-name").innerHTML = reviewer.firstName + ' ' + reviewer.lastName;
-      document.getElementById("reviewer-education").innerHTML = reviewer.degree;
-      document.getElementById("reviewer-school").innerHTML = reviewer.school;
-      document.getElementById("reviewer-career").innerHTML = reviewer.career;
+      document.getElementById("reviewer-name").innerHTML += reviewer.firstName + ' ' + reviewer.lastName;
+      document.getElementById("reviewer-education").innerHTML += reviewer.degree;
+      document.getElementById("reviewer-school").innerHTML += reviewer.school;
+      document.getElementById("reviewer-career").innerHTML += reviewer.career;
     });
 }
 
@@ -39,10 +39,10 @@ async function populateReviewee(revieweeEmail) {
   fetch('/user-data?email=' + revieweeEmail)
     .then(response => response.json())
     .then(reviewee => {
-      document.getElementById("reviewee-name").innerHTML = reviewee.firstName + ' ' + reviewee.lastName;
-      document.getElementById("reviewee-school-year").innerHTML = reviewee.schoolYear;
-      document.getElementById("reviewee-school").innerHTML = reviewee.school;
-      document.getElementById("reviewee-career").innerHTML = reviewee.career;
+      document.getElementById("reviewee-name").innerHTML += reviewee.firstName + ' ' + reviewee.lastName;
+      document.getElementById("reviewee-school-year").innerHTML += reviewee.schoolYear;
+      document.getElementById("reviewee-school").innerHTML += reviewee.school;
+      document.getElementById("reviewee-career").innerHTML += reviewee.career;
     });
 }
 
