@@ -17,6 +17,7 @@ async function getMatch(matchID) {
   fetch('/review-page?matchId=' + matchID)
     .then(response => response.json())
     .then((match) => {
+      document.getElementById("match").style.display = 'block';
       populateReviewer(match.reviewer);
       populateReviewee(match.reviewee);
     })

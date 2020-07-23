@@ -95,3 +95,7 @@ input[type=submit] {
 .delete-button {
   float: right;
 }
+
+#match {
+  display: none;
+}
