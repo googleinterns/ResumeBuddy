@@ -39,7 +39,6 @@ function getComments() {
             date.getFullYear(), comment.type, comment.text,
             comment.id, comment.author));
       })
-
     });
 }
 
@@ -93,9 +92,9 @@ function createListElement(date, type, text, id, author) {
 /**
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
- const previewConfig={
-  'showLeftHandPanel':true,
-  'showPageControls':true,
+const previewConfig = {
+  'showLeftHandPanel': true,
+  'showPageControls': true,
   'showDownloadPDF': false,
   'showAnnotationTools': true,
   'showPrintPDF': false,
@@ -119,14 +118,15 @@ async function getRevieweeResume() {
         metaData: {
           fileName: resumeFileName + 'Resume.pdf',
           id: pdfId
-        }},
-    previewConfig);
-});
+        }
+      },
+        previewConfig);
+    });
 }
 
- /*
-  * Sends POST request to /review-done which updates status
-  */
+/*
+ * Sends POST request to /review-done which updates status
+ */
 function reviewIsDone() {
   fetch('/review-done', {
     method: 'POST',
