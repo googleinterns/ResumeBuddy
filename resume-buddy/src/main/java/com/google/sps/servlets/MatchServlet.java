@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/match")
 public class MatchServlet extends HttpServlet {
   
-  /** Called every 12 hours which activates matching algorithm */
+  /** Needs to be called periodically to activate matching algorithm */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
