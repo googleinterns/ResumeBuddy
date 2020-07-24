@@ -23,7 +23,7 @@ function getComments() {
     .then((comments) => {
       const commentListElement = document
         .getElementById('comments-container');
- 
+
       commentListElement.innerHTML = '';
       comments.forEach((comment) => {
         let date = new Date(comment.date);
@@ -33,7 +33,7 @@ function getComments() {
             date.getFullYear(), comment.type, comment.text,
             comment.id, comment.author));
       })
- 
+
     });
 }
 
@@ -45,7 +45,7 @@ function deleteComments(id) {
   fetch('/delete-comment?' + queryStr, {
     method: 'POST',
   });
- 
+
   if (!id) {
     document.getElementById('comments-container').innerHTML = '';
   } else {

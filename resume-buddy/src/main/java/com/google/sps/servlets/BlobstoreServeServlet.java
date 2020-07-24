@@ -46,7 +46,6 @@ public class BlobstoreServeServlet extends HttpServlet {
       matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = reviewerResults.asSingleEntity().getProperty("reviewee").toString();
       showAnnoTool = true;
-
     } else {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = revieweeResults.asSingleEntity().getProperty("reviewee").toString();
