@@ -7,7 +7,7 @@ function onLoad() {
       else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
     });
 }
- 
+
 /**
  * Fetches comments from the servers and adds them to the DOM.
  */
@@ -36,7 +36,7 @@ function getComments() {
  
     });
 }
- 
+
 /**
  * Fetches delete-comments to delete comment using comment id
  */
@@ -51,40 +51,40 @@ function deleteComments(id) {
   } else {
     location.reload();
   }
- 
+
 }
- 
+
 /** 
  * Creates an <li> element containing date, comment type and text
  */
 function createListElement(date, type, text, id, author) {
   const liElement = document.createElement('li');
   const containerDiv = document.createElement('div');
- 
+
   containerDiv.className = 'comment-container';
   const typeText = document.createElement('b');
   typeText.innerText = type + ":  ";
   liElement.appendChild(typeText);
- 
+
   const textNode = document.createTextNode(text + " ");
   liElement.appendChild(textNode);
- 
+
   const signatureNode = document.createElement("div");
   signatureNode.innerHTML = "<i>" + author + " " + date + "</i>";
   liElement.appendChild(signatureNode);
- 
+
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '&#10005;';
   deleteButton.className = "delete-button";
   deleteButton.onclick = function() {
     deleteComments(id);
   }
- 
+
   liElement.appendChild(deleteButton);
- 
+
   return liElement;
 }
- 
+
  //Adobe Preview configurations for getRevieweeResume function
  const previewConfig={
   'showLeftHandPanel':true,
@@ -119,7 +119,7 @@ async function getRevieweeResume() {
     previewConfig, {'showAnnotationTools': showAnnoTools});
 });
 }
- 
+
  /*
   * Sends POST request to /review-done which updates status
   */
@@ -128,4 +128,3 @@ function reviewIsDone() {
     method: 'POST',
   });
 }
-
