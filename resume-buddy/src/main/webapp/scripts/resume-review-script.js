@@ -1,5 +1,11 @@
 /** Run functions when page is loaded */
 function onLoad() {
+  fetch('/login?redirect=/resume-review.html').then(response => response.json()).then((login) => {
+    if (!login.status) {
+      window.location.href = login.login_url;
+    }
+  });
+
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
@@ -51,7 +57,6 @@ function deleteComments(id) {
   } else {
     location.reload();
   }
-
 }
 
 /** 
