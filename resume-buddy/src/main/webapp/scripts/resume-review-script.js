@@ -89,27 +89,31 @@ function createListElement(date, type, text, id, author) {
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
  const previewConfig={
-  "showLeftHandPanel":true,
-  "showPageControls":false,
-  "showDownloadPDF": false,
-  "showAnnotationTools": false,
-  "showPrintPDF": false,
-  "embedMode": "IN_LINE"
+  'showLeftHandPanel':true,
+  'showPageControls':true,
+  'showDownloadPDF': false,
+  'showAnnotationTools': true,
+  'showPrintPDF': false,
+  'enableAnnotationsAPI': true,
+  'includePDFAnnotations': true
 }
 
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
+      const pdfId = response.headers.get('blobKeyString');
+      const resumeFileName = response.headers.get('newResumeFileName');
       var adobeDCView = new AdobeDC.View({
-        clientId: "",
-        divId: "adobe-dc-view"
+        clientId: '',
+        divId: 'adobe-dc-view'
       });
       adobeDCView.previewFile({
         content: {
           promise: response.arrayBuffer()
         },
         metaData: {
-          fileName: "revieweeResume.pdf"
+          fileName: resumeFileName + 'Resume.pdf',
+          id: pdfId
         }},
     previewConfig);
 });
