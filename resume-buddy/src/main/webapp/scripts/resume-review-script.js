@@ -31,7 +31,7 @@ function getComments() {
           createListElement(
             date.getMonth() + '/' + date.getDate() + '/' +
             date.getFullYear(), comment.type, comment.text,
-            comment.id));
+            comment.id, comment.author));
       })
 
     });
@@ -57,7 +57,7 @@ function deleteComments(id) {
 /** 
  * Creates an <li> element containing date, comment type and text
  */
-function createListElement(date, type, text, id) {
+function createListElement(date, type, text, id, author) {
   const liElement = document.createElement('li');
   const containerDiv = document.createElement('div');
 
@@ -68,6 +68,10 @@ function createListElement(date, type, text, id) {
 
   const textNode = document.createTextNode(text + " ");
   liElement.appendChild(textNode);
+
+  const signatureNode = document.createElement("div");
+  signatureNode.innerHTML = "<i>" + author + " " + date + "</i>";
+  liElement.appendChild(signatureNode);
 
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '&#10005;';
@@ -85,27 +89,31 @@ function createListElement(date, type, text, id) {
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
  const previewConfig={
-  "showLeftHandPanel":true,
-  "showPageControls":false,
-  "showDownloadPDF": false,
-  "showAnnotationTools": false,
-  "showPrintPDF": false,
-  "embedMode": "IN_LINE"
+  'showLeftHandPanel':true,
+  'showPageControls':true,
+  'showDownloadPDF': false,
+  'showAnnotationTools': true,
+  'showPrintPDF': false,
+  'enableAnnotationsAPI': true,
+  'includePDFAnnotations': true
 }
 
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
+      const pdfId = response.headers.get('blobKeyString');
+      const resumeFileName = response.headers.get('newResumeFileName');
       var adobeDCView = new AdobeDC.View({
-        clientId: "",
-        divId: "adobe-dc-view"
+        clientId: '',
+        divId: 'adobe-dc-view'
       });
       adobeDCView.previewFile({
         content: {
           promise: response.arrayBuffer()
         },
         metaData: {
-          fileName: "revieweeResume.pdf"
+          fileName: resumeFileName + 'Resume.pdf',
+          id: pdfId
         }},
     previewConfig);
 });
