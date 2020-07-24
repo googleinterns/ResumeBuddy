@@ -20,9 +20,8 @@
         <input type="text" name="lname" id="lname" required><br>
         <h3 class="heading">Education</h3>
         <label>School:</label><br>
-        <select name="school" id="school" required>
-          <option value="">Choose one</option>
-        </select>
+        <input type="text" list="schoolDataList" name="school" required>
+        <datalist id="schoolDataList"></datalist>
         <br>
         <label>Other:</label><br>
         <input type="text" name="other-school"><br><br>
@@ -42,9 +41,8 @@
         <input type="text" name="other-year"><br><br>
         <h3 class="heading">Reviewer Preferences</h3>
         <label>Field of Work:</label><br>
-        <select name="career" id="career" required>
-          <option value="">Choose one</option>
-        </select>
+        <input type="text" list="careerDataList" name="career" required>
+        <datalist id="careerDataList"></datalist>
         <br>
         <label>Other:</label><br>
         <input type="text" name="other-career"><br><br>

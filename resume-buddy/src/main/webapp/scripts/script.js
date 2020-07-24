@@ -34,32 +34,32 @@ function startForm() {
   populateFormWithKnownData();
 }
 
-/** Gets university names from json file and populates options for school */
+/** Gets university names from json file and populates options for school datalist */
 function populateUnis() {
-  const schoolSelect = document.getElementById("school");
-  fetch("universities.json")
+  const schoolList = document.getElementById('schoolDataList');
+  fetch('universities.json')
     .then(response => response.json())
     .then(unis => {
       unis.forEach((uni) => {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.text = uni.institution;
         option.value = uni.institution;
-        schoolSelect.appendChild(option);
+        schoolList.appendChild(option);
       })
     });
 }
 
-/** Gets career field names from json file and populates options for career */
+/** Gets career field names from json file and populates options for career datalist */
 function populateCareers() {
-  const careerSelect = document.getElementById("career");
-  fetch("careers.json")
+  const careerList = document.getElementById('careerDataList');
+  fetch('careers.json')
     .then(response => response.json())
     .then(careers => {
       careers.forEach((career) => {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.text = career.name;
         option.value = career.name;
-        careerSelect.appendChild(option);
+        careerList.appendChild(option);
       })
     });
 }

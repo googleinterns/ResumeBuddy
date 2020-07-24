@@ -26,37 +26,38 @@ public class UserDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
 
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail();
-
-      Query query = new Query("User");
-      Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
-      query.setFilter(userFilter);
-
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      PreparedQuery results = datastore.prepare(query);
-
-      Entity userEntity = results.asSingleEntity();
-      String fname = (String) userEntity.getProperty("first-name");
-      String lname = (String) userEntity.getProperty("last-name");
-      String school = (String) userEntity.getProperty("school");
-      String career = (String) userEntity.getProperty("career");
-      String degree = (String) userEntity.getProperty("degree");
-      String matchID = (String) userEntity.getProperty("matchID");
-      if (degree == null || degree.equals("")) {
-        degree = "other";
-      }
-      String schoolYear = (String) userEntity.getProperty("school-year");
-      if (schoolYear == null || schoolYear.equals("")) {
-        schoolYear = "other";
-      }
-      User user = new User(fname, lname, email, school, career, degree, schoolYear, matchID);
-
-      Gson gson = new Gson();
-      response.setContentType("application/json");
-      String json = gson.toJson(user);
-      response.getWriter().println(json);
+    String email = request.getParameter("email");
+    if (email == null && userService.isUserLoggedIn()) {
+      email = userService.getCurrentUser().getEmail();
     }
+
+    Query query = new Query("User");
+    Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
+    query.setFilter(userFilter);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    Entity userEntity = results.asSingleEntity();
+    String fname = (String) userEntity.getProperty("first-name");
+    String lname = (String) userEntity.getProperty("last-name");
+    String school = (String) userEntity.getProperty("school");
+    String career = (String) userEntity.getProperty("career");
+    String degree = (String) userEntity.getProperty("degree");
+    String matchID = (String) userEntity.getProperty("matchID");
+    if (degree == null || degree.equals("")) {
+      degree = "other";
+    }
+    String schoolYear = (String) userEntity.getProperty("school-year");
+    if (schoolYear == null || schoolYear.equals("")) {
+      schoolYear = "other";
+    }
+    User user = new User(fname, lname, email, school, career, degree, schoolYear, matchID);
+
+    Gson gson = new Gson();
+    response.setContentType("application/json");
+    String json = gson.toJson(user);
+    response.getWriter().println(json);
   }
 
   @Override

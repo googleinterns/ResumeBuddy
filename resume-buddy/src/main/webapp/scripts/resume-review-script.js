@@ -3,8 +3,46 @@ function onLoad() {
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-      if (user.matchID != '') { getComments(); }
+      if (user.matchID != '') {
+        getMatch(user.matchID);
+        getComments();
+      }
       else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
+    });
+}
+
+/** Gets reviewer and reviewee using matchID */
+async function getMatch(matchID) {
+  fetch('/review-page?matchId=' + matchID)
+    .then(response => response.json())
+    .then((match) => {
+      document.getElementById("match").style.display = 'block';
+      populateReviewer(match.reviewer);
+      populateReviewee(match.reviewee);
+    })
+}
+
+/** Add information about reviewer in HTML DOM */
+async function populateReviewer(reviewerEmail) {
+  fetch('/user-data?email=' + reviewerEmail)
+    .then(response => response.json())
+    .then(reviewer => {
+      document.getElementById("reviewer-name").innerText += reviewer.firstName + ' ' + reviewer.lastName;
+      document.getElementById("reviewer-education").innerText += reviewer.degree;
+      document.getElementById("reviewer-school").innerText += reviewer.school;
+      document.getElementById("reviewer-career").innerText += reviewer.career;
+    });
+}
+
+/** Add information about reviewee in HTML DOM */
+async function populateReviewee(revieweeEmail) {
+  fetch('/user-data?email=' + revieweeEmail)
+    .then(response => response.json())
+    .then(reviewee => {
+      document.getElementById("reviewee-name").innerText += reviewee.firstName + ' ' + reviewee.lastName;
+      document.getElementById("reviewee-school-year").innerText += reviewee.schoolYear;
+      document.getElementById("reviewee-school").innerText += reviewee.school;
+      document.getElementById("reviewee-career").innerText += reviewee.career;
     });
 }
 
@@ -12,10 +50,6 @@ function onLoad() {
  * Fetches comments from the servers and adds them to the DOM.
  */
 function getComments() {
-  /* TODO: Add information about the match to match-info
-   * (match's name, background/career etc.) 
-   * https://github.com/googleinterns/ResumeBuddy/issues/73
-   */
   document.getElementById('match-info').style.display = "none";
   document.getElementById('comments').style.display = "block";
   fetch('/comment').
@@ -88,9 +122,10 @@ function createListElement(date, type, text, id, author) {
 /**
  * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
  */
- const previewConfig={
-  'showLeftHandPanel':true,
-  'showPageControls':true,
+
+ const previewConfig = {
+  'showLeftHandPanel': true,
+  'showPageControls': true,
   'showDownloadPDF': false,
   'showAnnotationTools': true,
   'showPrintPDF': false,
@@ -116,14 +151,12 @@ async function getRevieweeResume() {
           id: pdfId
         }},
     previewConfig);
-});
+  });
 }
 
- /*
-  * Sends POST request to /review-done which updates status
-  */
+/** Sends POST request to /review-done which updates status */
 function reviewIsDone() {
-  fetch('/review-done', {
+  fetch('/review-page', {
     method: 'POST',
   });
 }

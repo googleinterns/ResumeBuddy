@@ -79,7 +79,7 @@ public class UserDataServletTest {
   @Test
   public void testNewUser() throws ServletException, IOException {
     helper.setEnvEmail(NEW_USER_EMAIL).setEnvAuthDomain("gmail.com").setEnvIsLoggedIn(true);
-    JsonObject response = getLoginServletResponse();
+    JsonObject response = getServletResponse();
 
     Object fname = response.get("firstName");
     Object lname = response.get("lastName");
@@ -100,9 +100,32 @@ public class UserDataServletTest {
 
   /** test user who has filled out some form and we know more information */
   @Test
-  public void test() throws ServletException, IOException {
+  public void testOldUser() throws ServletException, IOException {
     helper.setEnvEmail(OLD_USER_EMAIL).setEnvAuthDomain("google.com").setEnvIsLoggedIn(true);
-    JsonObject response = getLoginServletResponse();
+    JsonObject response = getServletResponse();
+
+    String fname = response.get("firstName").getAsString();
+    String lname = response.get("lastName").getAsString();
+    String email = response.get("email").getAsString();
+    String school = response.get("school").getAsString();
+    String career = response.get("career").getAsString();
+    Degree degree = Degree.valueOf(response.get("degree").getAsString());
+    SchoolYear schoolYear = SchoolYear.valueOf(response.get("schoolYear").getAsString());
+
+    Assert.assertTrue(fname.equals("Ani"));
+    Assert.assertTrue(lname.equals("Machaidze"));
+    Assert.assertTrue(email.equals("animach@google.com"));
+    Assert.assertTrue(school.equals("University of Pennsylvania"));
+    Assert.assertTrue(career.equals("Software Engineer"));
+    Assert.assertTrue(degree.equals(Degree.BACHELOR));
+    Assert.assertTrue(schoolYear.equals(SchoolYear.OTHER));
+  }
+
+  /** test getting user information given their emal */
+  @Test
+  public void testRequestWithEmailParameter() throws ServletException, IOException {
+    when(request.getParameter("email")).thenReturn(OLD_USER_EMAIL);
+    JsonObject response = getServletResponse();
 
     String fname = response.get("firstName").getAsString();
     String lname = response.get("lastName").getAsString();
@@ -122,7 +145,7 @@ public class UserDataServletTest {
   }
 
   /** Sets up mock returns and gets response json object */
-  private JsonObject getLoginServletResponse() throws ServletException, IOException {
+  private JsonObject getServletResponse() throws ServletException, IOException {
     StringWriter stringWriter = new StringWriter();
     PrintWriter printWriter = new PrintWriter(stringWriter);
     when(response.getWriter()).thenReturn(printWriter);
