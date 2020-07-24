@@ -49,9 +49,6 @@ function populateUnis() {
     });
 }
 
-
-
-
 /** Gets career field names from json file and populates options for career */
 function populateCareers() {
   const careerSelect = document.getElementById("career");
