@@ -36,18 +36,21 @@ function startForm() {
 
 /** Gets university names from json file and populates options for school */
 function populateUnis() {
-  const schoolSelect = document.getElementById("school");
-  fetch("universities.json")
+  const schoolSelect = document.getElementById('schoolSelect');
+  fetch('universities.json')
     .then(response => response.json())
     .then(unis => {
       unis.forEach((uni) => {
-        let option = document.createElement("option");
+        let option = document.createElement('option');
         option.text = uni.institution;
         option.value = uni.institution;
         schoolSelect.appendChild(option);
       })
     });
 }
+
+
+
 
 /** Gets career field names from json file and populates options for career */
 function populateCareers() {
