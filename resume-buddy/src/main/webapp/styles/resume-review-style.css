@@ -2,13 +2,14 @@ body {
   margin: auto;
   max-width: 1250px;
   font-family: Impact, Charcoal, sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 70px;
   line-height: 1.6;
 }
 
 .page-title {
   color: #42a5f5;
+  font-size: 18px;
 }
 
 #comments {
@@ -93,4 +94,8 @@ input[type=submit] {
 
 .delete-button {
   float: right;
+}
+
+#match {
+  display: none;
 }
