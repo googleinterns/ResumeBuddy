@@ -56,7 +56,7 @@ public class ReviewServlet extends HttpServlet {
 
     // Currently, we assume that reviewer only has one reviewee
     Entity entity = results.asSingleEntity();
-    entity.setProperty("status", ReviewStatus.DONE.toString());
+    entity.setProperty("status", ReviewStatus.REVIEW_DONE.toString());
     String revieweeEmail = (String) entity.getProperty("reviewee");
 
     Email.sendEmail(

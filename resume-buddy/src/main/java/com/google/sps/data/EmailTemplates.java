@@ -41,4 +41,19 @@ public final class EmailTemplates {
           + ""
           + "<p>- ResumeBuddy Team"
           + "</body>";
+
+  public static final String REVIEW_REMINDER_SUBJECT_LINE =
+      "ResumeBuddy - Please review the resume";
+
+  public static final String REVIEW_REMINDER_BODY =
+      "<body style=\"font-family:arial\">"
+          + ""
+          + "<img class=\"logo\" src=\"https://resume-buddy-step-2020.appspot.com/images/logo.png\" alt=\"ResumeBuddy Logo\" width=\"50\">"
+          + ""
+          + "<p>Hi, </p>"
+          + ""
+          + "<p>This is a reminder to review matched user's resume! Please log in to your <a href=\"https://resume-buddy-step-2020.appspot.com/\">account</a> to see more details and review the resume. <p>"
+          + ""
+          + "<p>- ResumeBuddy Team"
+          + "</body>";
 }
