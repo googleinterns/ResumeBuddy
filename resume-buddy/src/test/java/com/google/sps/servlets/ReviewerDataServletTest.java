@@ -5,20 +5,17 @@ import static org.mockito.Mockito.when;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalURLFetchServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.sps.data.Degree;
-import com.google.sps.data.NumYears;
-import com.google.sps.data.SchoolYear;
 import com.google.sps.servlets.ReviewerDataServlet;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +31,7 @@ import org.mockito.MockitoAnnotations;
 /** Tests for UserDataServlet */
 @RunWith(JUnit4.class)
 public class ReviewerDataServletTest {
-  private Entity reviewer;
+  private Entity newUser;
   @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
   private ReviewerDataServlet reviewerDataServlet;
@@ -50,8 +47,11 @@ public class ReviewerDataServletTest {
   public void setUp() {
     helper.setUp();
     MockitoAnnotations.initMocks(this);
-    reviewerDataServlet = new ReviewerDataServlet();
     datastore = DatastoreServiceFactory.getDatastoreService();
+    newUser = new Entity("User");
+    newUser.setProperty("email", "shreyabarua@google.com");
+    datastore.put(newUser);
+    reviewerDataServlet = new ReviewerDataServlet();
   }
 
   @After
@@ -62,41 +62,38 @@ public class ReviewerDataServletTest {
   /** test reviewer who has filled out sign up form with all their information */
   @Test
   public void test() throws ServletException, IOException {
-    helper.setEnvEmail("shreyabarua@google.com").setEnvAuthDomain("google.com").setEnvIsLoggedIn(true);
-    when(ServletHelpers.getParameter(request, "fname", "")()).thenReturn("Shreya");
-    when(ServletHelpers.getParameter(request, "lname", "")()).thenReturn("Barua");
-    when(ServletHelpers.getParameter(request, "email", "")()).thenReturn("shreyabarua2@gmail.com");
-    when(ServletHelpers.getParameter(request, "school", "")()).thenReturn("RPI");
-    when(ServletHelpers.getParameter(request, "company", "")()).thenReturn("Google");
-    when(ServletHelpers.getParameter(request, "career", "")()).thenReturn("Computer Software/Engineering");
-    when(ServletHelpers.getParameter(request, "degree", "")()).thenReturn("bachelor");
-    when(ServletHelpers.getParameter(request, "years-experience", "")()).thenReturn("less_than_5");
+    helper
+        .setEnvEmail("shreyabarua@google.com")
+        .setEnvAuthDomain("google.com")
+        .setEnvIsLoggedIn(true);
+    when(ServletHelpers.getParameter(request, "fname", "")).thenReturn("Shreya");
+    when(ServletHelpers.getParameter(request, "lname", "")).thenReturn("Barua");
+    when(ServletHelpers.getParameter(request, "email", "")).thenReturn("shreyabarua2@gmail.com");
+    when(ServletHelpers.getParameter(request, "school", "")).thenReturn("RPI");
+    when(ServletHelpers.getParameter(request, "company", "")).thenReturn("Google");
+    when(ServletHelpers.getParameter(request, "career", ""))
+        .thenReturn("Computer Software/Engineering");
+    when(ServletHelpers.getParameter(request, "degree", "")).thenReturn("bachelor");
+    when(ServletHelpers.getParameter(request, "years-experience", "")).thenReturn("less_than_5");
 
     reviewerDataServlet.doPost(request, response);
-    
 
+    // check the database
+    Query query = new Query("Reviewer");
+    Filter emailFilter =
+        new FilterPredicate("email", FilterOperator.EQUAL, "shreyabarua@google.com");
+    query.setFilter(emailFilter);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    Entity reviewerEntity = results.asSingleEntity();
 
-
-    
-    String fname = response.get("firstName").getAsString();
-    String lname = response.get("lastName").getAsString();
-    String email = response.get("email").getAsString();
-    String school = response.get("school").getAsString();
-    String career = response.get("career").getAsString();
-    String company = response.get("company").getAsString();
-    Degree degree = Degree.valueOf(response.get("degree").getAsString());
-    SchoolYear schoolYear = SchoolYear.valueOf(response.get("schoolYear").getAsString());
-    NumYears yearsExperience = NumYears.valueOf(response.get("years-experience").getAsString());
-
-    Assert.assertTrue(fname.equals("Shreya"));
-    Assert.assertTrue(lname.equals("Barua"));
-    Assert.assertTrue(email.equals("shreyabarua@google.com"));
-    Assert.assertTrue(school.equals("RPI"));
-    Assert.assertTrue(career.equals("Computer Software/Engineering"));
-    Assert.assertTrue(company.equals("Google"));
-    Assert.assertTrue(degree.equals(Degree.BACHELOR));
-    Assert.assertTrue(schoolYear.equals(SchoolYear.OTHER));
-    Assert.assertTrue(yearsExperience.equals(NumYears.LESS_THAN_5));
+    Assert.assertTrue(reviewerEntity.getProperty("first-name").equals("Shreya"));
+    Assert.assertTrue(reviewerEntity.getProperty("last-name").equals("Barua"));
+    Assert.assertTrue(reviewerEntity.getProperty("email").equals("shreyabarua@google.com"));
+    Assert.assertTrue(reviewerEntity.getProperty("school").equals("RPI"));
+    Assert.assertTrue(reviewerEntity.getProperty("career").equals("Computer Software/Engineering"));
+    Assert.assertTrue(reviewerEntity.getProperty("company").equals("Google"));
+    Assert.assertTrue(reviewerEntity.getProperty("degree").equals("bachelor"));
+    Assert.assertTrue(reviewerEntity.getProperty("years-experience").equals("less_than_5"));
   }
-
 }
