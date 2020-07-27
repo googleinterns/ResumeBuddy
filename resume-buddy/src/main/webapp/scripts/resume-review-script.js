@@ -87,12 +87,12 @@ function createListElement(date, type, text, id, author) {
 
  //Adobe Preview configurations for getRevieweeResume function
  const previewConfig={
-  'showLeftHandPanel':true,
-  'showPageControls':true,
-  'showDownloadPDF': false,
-  'showPrintPDF': false,
-  'enableAnnotationsAPI': true,
-  'includePDFAnnotations': true
+  showLeftHandPanel:true,
+  showPageControls:true,
+  showDownloadPDF: false,
+  showPrintPDF: false,
+  enableAnnotationsAPI: true,
+  includePDFAnnotations: true
 }
 
  /**
@@ -103,7 +103,8 @@ async function getRevieweeResume() {
     .then((response) => {
       const pdfId = response.headers.get('blobKeyString');
       const resumeFileName = response.headers.get('newResumeFileName');
-      const showAnnoTools = response.headers.get('annoToolBool');
+      const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
+      previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
         clientId: '',
         divId: 'adobe-dc-view'
@@ -116,7 +117,7 @@ async function getRevieweeResume() {
           fileName: resumeFileName + 'Resume.pdf',
           id: pdfId
         }},
-    previewConfig, {'showAnnotationTools': showAnnoTools});
+    previewConfig);
 });
 }
 
