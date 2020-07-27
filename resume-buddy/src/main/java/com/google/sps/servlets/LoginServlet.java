@@ -50,10 +50,10 @@ public class LoginServlet extends HttpServlet {
     }
     String redirectUrl = (String) request.getParameter("redirect");
     if (redirectUrl == null) {
-      redirectUrl = "/index.html";
+      redirectUrl = "index.html";
     }
     String jsonLogin;
-    String urlToRedirectToAfterUserLogsIn = redirectUrl;
+    String urlToRedirectToAfterUserLogsIn = "/" + redirectUrl;
     String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
     String urlToRedirectToAfterUserLogsOut = "/index.html";
     String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);

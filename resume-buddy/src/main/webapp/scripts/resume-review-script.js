@@ -1,11 +1,5 @@
 /** Run functions when page is loaded */
 function onLoad() {
-  fetch('/login?redirect=/resume-review.html').then(response => response.json()).then((login) => {
-    if (!login.status) {
-      window.location.href = login.login_url;
-    }
-  });
-
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
@@ -73,6 +67,7 @@ function getComments() {
             date.getFullYear(), comment.type, comment.text,
             comment.id, comment.author));
       })
+
     });
 }
 
@@ -90,6 +85,7 @@ function deleteComments(id) {
   } else {
     location.reload();
   }
+
 }
 
 /** 
@@ -154,10 +150,9 @@ async function getRevieweeResume() {
         metaData: {
           fileName: resumeFileName + 'Resume.pdf',
           id: pdfId
-        }
-      },
-        previewConfig);
-    });
+        }},
+    previewConfig);
+  });
 }
 
 /** Sends POST request to /review-done which updates status */
