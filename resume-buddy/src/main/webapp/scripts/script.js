@@ -28,12 +28,6 @@ function login() {
 
 /** Class function when form page loads */
 function startForm() {
-  fetch('/login?redirect=' + page).then(response => response.json()).then((login) => {
-    if (!login.status) {
-      window.location.href = login.login_url;
-    }
-  });
-
   blobUpload();
   populateUnis();
   populateCareers();
@@ -80,6 +74,17 @@ function populateFormWithKnownData() {
         document.getElementById("lname").value = user.lastName;
       }
     });
+}
+
+function openForm(page) {
+  fetch('/login?redirect=' + page).then(response => response.json()).then((login) => {
+    if (login.status) {
+      window.location.href = page;
+    }
+    else {
+      window.location.href = login.login_url;
+    }
+  });
 }
 
 function successMessage() {
