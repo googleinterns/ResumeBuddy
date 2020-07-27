@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that calls matching algorithm */
 @WebServlet("/match")
 public class MatchServlet extends HttpServlet {
-
+  
+  /** Needs to be called periodically to activate matching algorithm */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
@@ -27,7 +28,6 @@ public class MatchServlet extends HttpServlet {
     response.sendRedirect("/index.html");
   }
 
-  /** Called every 12 hours which activates matching algorithm */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {}
 }
