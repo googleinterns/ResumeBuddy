@@ -31,12 +31,12 @@ public class Match {
   private static final int EXPERIENCE_POINTS = 1;
   private static final int DEGREE_POINTS = 1;
   private static final int MAX_DAYS_TO_WAIT_UNTIL_MATCH = 3;
+  private static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   /** Retrieves list of entities for specific query kind from the Datastore */
   public static List<Entity> getNotMatchedUsers(String queryKind) {
     List<Entity> entityList;
     Query query = new Query(queryKind);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
 
@@ -53,8 +53,6 @@ public class Match {
     // List that hold matchpoint with the possible pair of matched people
     List<Pair<Integer, Pair<Entity, Entity>>> rankedMatches =
         new ArrayList<Pair<Integer, Pair<Entity, Entity>>>();
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // For every reviewee-reviewer pair, count their match point
     for (Entity reviewee : reviewees) {
@@ -142,35 +140,8 @@ public class Match {
       matchedReviewees.add(revieweeEmail);
       matchedReviewers.add(reviewerEmail);
 
-      // Put new Entity 'Match' in db with matched peoples' emails and review status
-      Entity matchEntity = new Entity("Match");
-      matchEntity.setProperty("reviewee", revieweeEmail);
-      matchEntity.setProperty("reviewer", reviewerEmail);
-      matchEntity.setProperty("status", ReviewStatus.IN_PROCESS.toString());
-      String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
-      matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
-      UUID id = UUID.randomUUID();
-      while (ServletHelpers.collides(id, "Match")) {
-        id = UUID.randomUUID();
-      }
-      matchEntity.setProperty("uuid", id.toString());
-      datastore.put(matchEntity);
-
-      // Sending emails to reviewee and reviewer
-      Email.sendEmail(
-          revieweeEmail,
-          EmailTemplates.MATCH_SUBJECT_LINE_REVIEWEE,
-          EmailTemplates.MATCH_BODY_REVIEWEE,
-          null);
-      Email.sendEmail(
-          reviewerEmail,
-          EmailTemplates.MATCH_SUBJECT_LINE_REVIEWER,
-          EmailTemplates.MATCH_BODY_REVIEWER,
-          null);
-
-      // update reviewer and reviewee User db to also contain the match ID
-      updateUserMatchID(id, revieweeEmail);
-      updateUserMatchID(id, reviewerEmail);
+      createAMatch(revieweeEmail, reviewerEmail, reviewee);
+      sendEmailsToMatchedUsers(revieweeEmail, reviewerEmail);
 
       // Delete reviewers and reviewees from Datastore once matched
       datastore.delete(reviewer.getKey());
@@ -178,9 +149,43 @@ public class Match {
     }
   }
 
+  private static void createAMatch(String revieweeEmail, String reviewerEmail, Entity reviewee) {
+    // Put new Entity 'Match' in db with matched peoples' emails and review status
+    Entity matchEntity = new Entity("Match");
+    matchEntity.setProperty("reviewee", revieweeEmail);
+    matchEntity.setProperty("reviewer", reviewerEmail);
+    matchEntity.setProperty("status", ReviewStatus.IN_PROCESS.toString());
+    String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
+    matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
+    matchEntity.setProperty("matchDate", new Date());
+    UUID id = UUID.randomUUID();
+    while (ServletHelpers.collides(id, "Match")) {
+      id = UUID.randomUUID();
+    }
+    matchEntity.setProperty("uuid", id.toString());
+    datastore.put(matchEntity);
+
+    // update reviewer and reviewee User db to also contain the match ID
+    updateUserMatchID(id, revieweeEmail);
+    updateUserMatchID(id, reviewerEmail);
+  }
+
+  private static void sendEmailsToMatchedUsers(String revieweeEmail, String reviewerEmail) {
+    // Sending emails to reviewee and reviewer
+    Email.sendEmail(
+        revieweeEmail,
+        EmailTemplates.MATCH_SUBJECT_LINE_REVIEWEE,
+        EmailTemplates.MATCH_BODY_REVIEWEE,
+        null);
+    Email.sendEmail(
+        reviewerEmail,
+        EmailTemplates.MATCH_SUBJECT_LINE_REVIEWER,
+        EmailTemplates.MATCH_BODY_REVIEWER,
+        null);
+  }
+
   /* Update the matchID property of the User with the given email to contain the given id */
   public static void updateUserMatchID(UUID id, String email) {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User");
     Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     query.setFilter(emailFilter);
