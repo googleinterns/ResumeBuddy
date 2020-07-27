@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>User Feedback</title>
+    <link rel="stylesheet" href="styles/feedback.css">
+    <script src="scripts/script.js"></script>
+  </head>
+  <body>
+    <div id="feedback-form">
+      <form action="/feedback" method="POST" onsubmit=successMessage();>
+        <h1 id="form-title">User Feedback Form</h1>
+        <h3> Here at ResumeBuddy, we want to ensure that our users have the 
+          best possible experience. Let us know how we can improve our website! 
+        </h3>
+        <label> I am a: </label><br>
+        <select name="user-type" required>
+          <option value="">Choose one</option>
+          <option value="reviewer">Reviewer</option>
+          <option value="reviewee">Reviewee</option>
+        </select>
+        <textarea name="message" id="message" placeholder="Your feedback here..."></textarea>
+        <br>
+        <input type="submit"/>
+      </form>
+    </div>
+  </body>
+</html>
