@@ -123,24 +123,26 @@ function createListElement(date, type, text, id, author) {
   return liElement;
 }
 
-/**
- * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
- */
-const previewConfig = {
-  'showLeftHandPanel': true,
-  'showPageControls': true,
-  'showDownloadPDF': false,
-  'showAnnotationTools': true,
-  'showPrintPDF': false,
-  'enableAnnotationsAPI': true,
-  'includePDFAnnotations': true
+ //Adobe Preview configurations for getRevieweeResume function
+ const previewConfig = {
+  showLeftHandPanel: true,
+  showPageControls: true,
+  showDownloadPDF: false,
+  showPrintPDF: false,
+  enableAnnotationsAPI: true,
+  includePDFAnnotations: true
 }
 
+ /**
+ * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
+ */
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
       const pdfId = response.headers.get('blobKeyString');
       const resumeFileName = response.headers.get('newResumeFileName');
+      const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
+      previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
         clientId: '',
         divId: 'adobe-dc-view'

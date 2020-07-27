@@ -29,6 +29,9 @@ public class BlobstoreServeServlet extends HttpServlet {
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
     String email = userService.getCurrentUser().getEmail();
 
+    // Disables the showAnnotationTools config for reviewees to avoid stale file errors
+    Boolean showAnnoTool = false;
+
     Query revieweeQuery = new Query("Match");
     Query reviewerQuery = new Query("Match");
     Filter revieweeFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
@@ -37,21 +40,23 @@ public class BlobstoreServeServlet extends HttpServlet {
     reviewerQuery.setFilter(reviewerFilter);
     PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
     PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
-    String matchBlobKeyString = "";
-    String newResumeFileName = "";
+    String matchBlobKeyString, newResumeFileName, showAnnoToolString = "";
 
     if (revieweeResults.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
       matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = reviewerResults.asSingleEntity().getProperty("reviewee").toString();
+      showAnnoTool = true;
     } else {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = revieweeResults.asSingleEntity().getProperty("reviewee").toString();
     }
 
     BlobKey matchBlobKey = new BlobKey(matchBlobKeyString);
+    showAnnoToolString = String.valueOf(showAnnoTool);
     // Sets the blob key string as the response header so it can be set as the unquie pdf ID
     response.addHeader("blobKeyString", matchBlobKeyString);
     response.addHeader("newResumeFileName", newResumeFileName);
+    response.addHeader("annoToolBool", showAnnoToolString);
     blobstoreService.serve(matchBlobKey, response);
   }
 }
