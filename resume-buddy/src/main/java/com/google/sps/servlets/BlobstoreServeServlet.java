@@ -40,13 +40,19 @@ public class BlobstoreServeServlet extends HttpServlet {
     reviewerQuery.setFilter(reviewerFilter);
     PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
     PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
-    String matchBlobKeyString, newResumeFileName, showAnnoToolString = "";
+    String matchBlobKeyString = "";
+    String newResumeFileName = "";
+    String showAnnoToolString = "";
+    int revieweeCount = revieweeResults.countEntities(FetchOptions.Builder.withDefaults());
+    int reviewerCount = reviewerResults.countEntities(FetchOptions.Builder.withDefaults());
 
-    if (revieweeResults.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
+    if (revieweeCount == 0 && reviewerCount == 0) {
+      return;
+    } else if (reviewerCount > 0) {
       matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = reviewerResults.asSingleEntity().getProperty("reviewee").toString();
       showAnnoTool = true;
-    } else {
+    } else if (revieweeCount > 0) {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = revieweeResults.asSingleEntity().getProperty("reviewee").toString();
     }
