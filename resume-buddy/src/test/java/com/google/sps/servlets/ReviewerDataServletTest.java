@@ -28,7 +28,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-/** Tests for UserDataServlet */
+/** Tests for ReviewerDataServlet */
 @RunWith(JUnit4.class)
 public class ReviewerDataServletTest {
   private Entity newUser;
