@@ -95,5 +95,20 @@ public class ReviewerDataServletTest {
     Assert.assertTrue(reviewerEntity.getProperty("company").equals("Google"));
     Assert.assertTrue(reviewerEntity.getProperty("degree").equals("bachelor"));
     Assert.assertTrue(reviewerEntity.getProperty("years-experience").equals("less_than_5"));
+
+    query = new Query("User");
+    emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, "shreyabarua@google.com");
+    query.setFilter(emailFilter);
+    results = datastore.prepare(query);
+    newUser = results.asSingleEntity();
+
+    // check if the corresponding user entity has been updated as well
+    Assert.assertTrue(newUser.getProperty("first-name").equals("Shreya"));
+    Assert.assertTrue(newUser.getProperty("last-name").equals("Barua"));
+    Assert.assertTrue(newUser.getProperty("email").equals("shreyabarua@google.com"));
+    Assert.assertTrue(newUser.getProperty("school").equals("RPI"));
+    Assert.assertTrue(newUser.getProperty("career").equals("Computer Software/Engineering"));
+    Assert.assertTrue(newUser.getProperty("degree").equals("bachelor"));
+    Assert.assertTrue(newUser.getProperty("isReviewer").equals(true));
   }
 }
