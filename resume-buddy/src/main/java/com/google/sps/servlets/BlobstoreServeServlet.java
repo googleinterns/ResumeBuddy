@@ -46,11 +46,13 @@ public class BlobstoreServeServlet extends HttpServlet {
     int revieweeCount = revieweeResults.countEntities(FetchOptions.Builder.withDefaults());
     int reviewerCount = reviewerResults.countEntities(FetchOptions.Builder.withDefaults());
 
-    if (revieweeCount == 0 && reviewerCount > 0) {
+    if (revieweeCount == 0 && reviewerCount == 0) {
+      return;
+    } else if (reviewerCount > 0) {
       matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = reviewerResults.asSingleEntity().getProperty("reviewee").toString();
       showAnnoTool = true;
-    } else if (revieweeCount > 0 && revieweeCount == 0) {
+    } else if (revieweeCount > 0) {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       newResumeFileName = revieweeResults.asSingleEntity().getProperty("reviewee").toString();
     }
