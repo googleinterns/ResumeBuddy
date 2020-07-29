@@ -43,7 +43,7 @@ public class ReviewServlet extends HttpServlet {
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     String reviewerEmail = userService.getCurrentUser().getEmail();
 
@@ -57,6 +57,7 @@ public class ReviewServlet extends HttpServlet {
     // Currently, we assume that reviewer only has one reviewee
     Entity entity = results.asSingleEntity();
     entity.setProperty("status", ReviewStatus.DONE.toString());
+    datastore.put(entity);
     String revieweeEmail = (String) entity.getProperty("reviewee");
 
     Email.sendEmail(

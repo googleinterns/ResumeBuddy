@@ -119,19 +119,19 @@ function createListElement(date, type, text, id, author) {
   return liElement;
 }
 
- //Adobe Preview configurations for getRevieweeResume function
- const previewConfig={
-  showLeftHandPanel:true,
-  showPageControls:true,
+//Adobe Preview configurations for getRevieweeResume function
+const previewConfig = {
+  showLeftHandPanel: true,
+  showPageControls: true,
   showDownloadPDF: false,
   showPrintPDF: false,
   enableAnnotationsAPI: true,
   includePDFAnnotations: true
 }
 
- /**
- * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
- */
+/**
+* Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
+*/
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
@@ -158,6 +158,8 @@ async function getRevieweeResume() {
 /** Sends POST request to /review-done which updates status */
 function reviewIsDone() {
   fetch('/review-page', {
-    method: 'POST',
+    method: 'PUT'
   });
+
+  window.location.href = '/index.html';
 }
