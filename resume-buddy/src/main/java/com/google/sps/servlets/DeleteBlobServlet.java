@@ -22,5 +22,10 @@ public class DeleteBlobServlet extends HttpServlet {
 
     BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
     isBlobDeleted = blobInfoFactory.loadBlobInfo(blobKey) == null;
+
+    if (isBlobDeleted) {
+      response.setStatus(200); // 200: OK - The request is OK
+    } else {
+      response.setStatus(400); // 400: Bad Request - The request cannot be fufilled
   }
 }
