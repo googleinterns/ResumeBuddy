@@ -26,7 +26,7 @@ public class DeleteBlobServlet extends HttpServlet {
     if (isBlobDeleted) {
       response.setStatus(200); // 200: OK - The request is OK
     } else {
-      response.setStatus(400); // 400: Bad Request - The request cannot be fufilled
+      response.setStatus(400); // 400: Bad Request - The request cannot be fulfilled
     }
   }
 }
