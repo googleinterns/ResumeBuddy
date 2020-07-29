@@ -166,7 +166,6 @@ function reviewIsDone() {
   fetch('/review-page', {
     method: 'PUT'
   });
-
   window.location.href = '/index.html';
 }
 
@@ -175,6 +174,5 @@ function feedbackIsRead() {
   fetch('/delete-data', {
     method: 'GET'
   });
-
   window.location.href = '/index.html';
 }

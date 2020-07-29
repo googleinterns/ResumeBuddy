@@ -7,6 +7,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -15,6 +16,8 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,8 +41,31 @@ public class DeleteDataServlet extends HttpServlet {
 
     Entity entity = results.asSingleEntity();
     String resumeBlobKey = (String) entity.getProperty("resumeBlobKey");
+    String matchID = (String) entity.getProperty("matchID");
     int status = deleteBlob(resumeBlobKey);
+
+    // Delete Match entity
     datastore.delete(entity.getKey());
+
+    // Delete matchID from user entities
+    query = new Query("User");
+    Filter matchIDFiler = new FilterPredicate("matchID", FilterOperator.EQUAL, matchID);
+    query.setFilter(matchIDFiler);
+    PreparedQuery usersResult = datastore.prepare(query);
+    for (Entity user : usersResult.asIterable()) {
+      user.setProperty("matchID", "");
+      datastore.put(user);
+    }
+
+    // Delete all comments related to the reviewee-reviewer match
+    query = new Query("Review-comments");
+    query.setFilter(matchIDFiler);
+    PreparedQuery commentsResult = datastore.prepare(query);
+    List<Key> commentKeys = new ArrayList<>();
+    for (Entity commentEntity : results.asIterable()) {
+      commentKeys.add(commentEntity.getKey());
+    }
+    datastore.delete(commentKeys);
 
     response.setStatus(status);
     response.sendRedirect("/index.html");
