@@ -50,6 +50,4 @@ public class ReminderServlet extends HttpServlet {
           null);
     }
   }
-
-  private void sendReminderEmail(String email) {}
 }
