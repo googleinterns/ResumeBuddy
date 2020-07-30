@@ -16,11 +16,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+
 @WebServlet("/blobstore-serve")
 public class BlobstoreServeServlet extends HttpServlet {
   private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
- 
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Gets the logged in user's email, finds the PDF blob from the Match datastore and serves it
@@ -28,10 +28,10 @@ public class BlobstoreServeServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(Integer.MAX_VALUE);
     String email = userService.getCurrentUser().getEmail();
- 
+
     // Disables the showAnnotationTools config for reviewees to avoid stale file errors
     Boolean showAnnoTool = false;
- 
+
     Query revieweeQuery = new Query("Match");
     Query reviewerQuery = new Query("Match");
     Filter revieweeFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, email);
@@ -45,7 +45,7 @@ public class BlobstoreServeServlet extends HttpServlet {
     String showAnnoToolString = "";
     int revieweeCount = revieweeResults.countEntities(FetchOptions.Builder.withDefaults());
     int reviewerCount = reviewerResults.countEntities(FetchOptions.Builder.withDefaults());
- 
+
     if (revieweeCount == 0 && reviewerCount == 0) {
       return;
     } else if (reviewerCount > 0) {
@@ -56,7 +56,7 @@ public class BlobstoreServeServlet extends HttpServlet {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
       resumeFileName = revieweeResults.asSingleEntity().getProperty("resumeFileName").toString();
     }
- 
+
     BlobKey matchBlobKey = new BlobKey(matchBlobKeyString);
     showAnnoToolString = String.valueOf(showAnnoTool);
     // Sets the blob key string as the response header so it can be set as the unquie pdf ID

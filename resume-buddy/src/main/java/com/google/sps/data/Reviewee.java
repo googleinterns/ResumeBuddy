@@ -1,7 +1,7 @@
 package com.google.sps.data;
- 
+
 public final class Reviewee {
- 
+
   private final String firstName;
   private final String lastName;
   private final String email;
@@ -12,7 +12,7 @@ public final class Reviewee {
   private final NumYears numYearsPref;
   private final String resumeBlobKey;
   private final String resumeFileName;
- 
+
   public Reviewee(
       String fname,
       String lname,

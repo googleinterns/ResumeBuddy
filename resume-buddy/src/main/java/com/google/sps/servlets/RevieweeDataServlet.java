@@ -1,5 +1,5 @@
 package com.google.sps.servlets;
- 
+
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -25,13 +25,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+
 /** Servlet that saves reviewer data from the form */
 @WebServlet("/reviewee-data")
 public class RevieweeDataServlet extends HttpServlet {
- 
+
   private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
- 
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
@@ -46,7 +46,7 @@ public class RevieweeDataServlet extends HttpServlet {
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
     String resumeBlobKey = getBlobstoreKey(request, response, "resume");
     String resumeFileName = fname + lname + "Resume";
- 
+
     Reviewee reviewee =
         new Reviewee(
             fname,
@@ -63,7 +63,7 @@ public class RevieweeDataServlet extends HttpServlet {
     if (year.equals("Other")) {
       year = ServletHelpers.getParameter(request, "other-year", "");
     }
- 
+
     Entity revieweeEntity = new Entity("Reviewee");
     revieweeEntity.setProperty("first-name", fname);
     revieweeEntity.setProperty("last-name", lname);
@@ -76,16 +76,16 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
     revieweeEntity.setProperty("resumeFileName", resumeFileName);
- 
+
     // Gets user entity from User db and updates fields
     Query query = new Query("User");
     Filter userFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     query.setFilter(userFilter);
- 
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
- 
+
     userEntity.setProperty("first-name", fname);
     userEntity.setProperty("last-name", lname);
     userEntity.setProperty("school-year", year);
@@ -93,29 +93,29 @@ public class RevieweeDataServlet extends HttpServlet {
     userEntity.setProperty("career", career);
     userEntity.setProperty("isReviewee", true);
     userEntity.setProperty("degree", "");
- 
+
     datastore.put(revieweeEntity);
     datastore.put(userEntity);
- 
+
     response.sendRedirect("/index.html");
   }
- 
+
   /** Returns a Blobkey that points to the blobstore of the uploaded pdf resume */
   private String getBlobstoreKey(
       HttpServletRequest request, HttpServletResponse response, String formInputElementName) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("resume");
- 
+
     BlobKey blobKey = blobKeys.get(0);
- 
+
     // User submitted form without selecting a file, so we can't get a URL.
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
       return null;
     }
- 
+
     return blobKey.getKeyString();
   }
 }
