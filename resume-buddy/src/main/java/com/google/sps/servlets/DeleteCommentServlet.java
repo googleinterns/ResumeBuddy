@@ -33,7 +33,7 @@ public class DeleteCommentServlet extends HttpServlet {
     Query query = new Query("Review-comments");
 
     if (author.equals(currentUser)) {
-      if (!id.equals("undefined")) {
+      if (!id.equals("undefined") && !id.isEmpty()) {
         Filter uuidPropertyFilter = new FilterPredicate("uuid", FilterOperator.EQUAL, id);
         query.setFilter(uuidPropertyFilter);
       }
@@ -42,9 +42,8 @@ public class DeleteCommentServlet extends HttpServlet {
 
       List<Key> keys = new ArrayList<>();
       for (Entity entity : results.asIterable()) {
-        keys.add(entity.getKey());
+        datastore.delete(entity.getKey());
       }
-      datastore.delete(keys);
     }
 
     response.setContentType("text/plain");

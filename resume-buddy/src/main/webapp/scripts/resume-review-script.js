@@ -57,7 +57,6 @@ function getComments() {
     .then((comments) => {
       const commentListElement = document
         .getElementById('comments-container');
- 
       commentListElement.innerHTML = '';
       comments.forEach((comment) => {
         let date = new Date(comment.date);
@@ -67,7 +66,6 @@ function getComments() {
             date.getFullYear(), comment.type, comment.text,
             comment.id, comment.author));
       })
- 
     });
 }
  
@@ -79,13 +77,11 @@ function deleteComments(id, author) {
   fetch('/delete-comment?' + queryStr, {
     method: 'POST',
   });
- 
   if (!id) {
     document.getElementById('comments-container').innerHTML = '';
   } else {
     location.reload();
   }
- 
 }
  
 /** 
@@ -94,28 +90,22 @@ function deleteComments(id, author) {
 function createListElement(date, type, text, id, author) {
   const liElement = document.createElement('li');
   const containerDiv = document.createElement('div');
- 
   containerDiv.className = 'comment-container';
   const typeText = document.createElement('b');
   typeText.innerText = type + ":  ";
   liElement.appendChild(typeText);
- 
   const textNode = document.createTextNode(text + " ");
   liElement.appendChild(textNode);
- 
   const signatureNode = document.createElement("div");
   signatureNode.innerHTML = "<i>" + author + " " + date + "</i>";
   liElement.appendChild(signatureNode);
- 
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '&#10005;';
   deleteButton.className = "delete-button";
   deleteButton.onclick = function() {
     deleteComments(id, author);
   }
- 
   liElement.appendChild(deleteButton);
- 
   return liElement;
 }
  
@@ -160,6 +150,5 @@ function reviewIsDone() {
   fetch('/review-page', {
     method: 'PUT'
   });
-
   window.location.href = '/index.html';
 }
