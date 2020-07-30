@@ -36,4 +36,3 @@ public final class Reviewee {
     this.resumeFileName = resumeFileName;
   }
 }
-
