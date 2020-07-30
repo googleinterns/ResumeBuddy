@@ -1,57 +1,69 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ResumeBuddy</title>
+    <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/forms.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap">
     <script src="scripts/script.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <link rel="shortcut icon" href="/images/logo.png">
   </head>
-
-  <body onload="startForm()">
-    <div>
-      <h1 id="title">Resume Reviewer Sign Up Form</h1>
-      <form id="reviewer-form" action="/reviewer-data" method="POST" onsubmit=successMessage();>
-        <h3 class="heading">Personal Info</h3>
-        <label>First name:</label><br>
-        <input type="text" name="fname" id="fname" required><br>
-        <label>Last name:</label><br>
-        <input type="text" name="lname" id="lname"required><br>
-        <h3 class="heading">Education</h3>
-        <label>Highest level of education:</label><br>
-        <select name="degree" id="degree" required>
-          <option value="">Choose one</option>
-          <option value="high_school">High school or equivalent</option>
-          <option value="associate">Associate degree</option>
-          <option value="bachelor">Bachelor's degree</option>
-          <option value="master">Master's degree</option>
-          <option value="doctorate">Doctorate</option>
-        </select>
-        <br><br>
-        <label>School:</label><br>
-        <input type="text" list="schoolDataList" name="school" required>
-        <datalist id="schoolDataList"></datalist>
-        <br>
-        <h3 class="heading">Career</h3>
-        <label>Field of Work:</label><br>
-        <input type="text" list="careerDataList" name="career" required>
-        <datalist id="careerDataList"></datalist>
-        <br>
-        <label>Company:</label><br>
-        <input type="text" name="company" required><br><br>
-        <label>Years of work experience:</label><br>
-        <select name="years-experience" required>
-          <option value="">Choose one</option>
-          <option value="less_than_5">less than 5</option>
-          <option value="greater_than_5">5 - 10</option>
-          <option value="greater_than_10">greater than 10</option>
-        </select>
-        <br><br>
-        <br>
-        <!-- once this is submitted, this user should be registered as a reviewer -->
-        <input type="submit" value="Submit">
-      </form>
+  <body class="space" onload="login(); startForm();">
+    <div id="nav-placeholder"></div>
+    <script>
+      $(function(){ $("#nav-placeholder").load("navbar.html"); });
+    </script>
+    <div class="w3-main" style="margin-left:250px">
+      <div class="container w3-blue w3-padding-32">
+        <h1 class="title">Give a Review <img class="logo" src="/images/logo.png" alt="ResumeBuddy Logo"></h1>
+      </div>
+      <div class="container w3-padding-32">
+        <form id="reviewer-form" action="/reviewer-data" method="POST" onsubmit=successMessage();>
+          <h3 class="heading">Personal Info</h3>
+          <label>First name:</label><br>
+          <input type="text" name="fname" id="fname" required><br>
+          <label>Last name:</label><br>
+          <input type="text" name="lname" id="lname"required><br>
+          <h3 class="heading">Education</h3>
+          <label>Highest level of education:</label><br>
+          <select name="degree" id="degree" required>
+            <option value="">Choose one</option>
+            <option value="high_school">High school or equivalent</option>
+            <option value="associate">Associate degree</option>
+            <option value="bachelor">Bachelor's degree</option>
+            <option value="master">Master's degree</option>
+            <option value="doctorate">Doctorate</option>
+          </select>
+          <br><br>
+          <label>School:</label><br>
+          <input type="text" list="schoolDataList" name="school" required>
+          <datalist id="schoolDataList"></datalist>
+          <br>
+          <h3 class="heading">Career</h3>
+          <label>Field of Work:</label><br>
+          <input type="text" list="careerDataList" name="career" required>
+          <datalist id="careerDataList"></datalist>
+          <br>
+          <label>Company:</label><br>
+          <input type="text" name="company" required><br><br>
+          <label>Years of work experience:</label><br>
+          <select name="years-experience" required>
+            <option value="">Choose one</option>
+            <option value="less_than_5">less than 5</option>
+            <option value="greater_than_5">5 - 10</option>
+            <option value="greater_than_10">greater than 10</option>
+          </select>
+          <br><br>
+          <br>
+          <!-- once this is submitted, this user should be registered as a reviewer -->
+          <input type="submit" value="Submit">
+        </form>
+      </div>
     </div>
   </body>
 </html>
