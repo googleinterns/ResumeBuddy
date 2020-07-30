@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that deletes Match data */
-@WebServlet("/delete-data")
-public class DeleteDataServlet extends HttpServlet {
+@WebServlet("/delete-match-data")
+public class DeleteMatchDataServlet extends HttpServlet {
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -47,8 +47,8 @@ public class DeleteDataServlet extends HttpServlet {
 
     // Deletes matchID from user entities
     query = new Query("User");
-    Filter matchIDFiler = new FilterPredicate("matchID", FilterOperator.EQUAL, matchID);
-    query.setFilter(matchIDFiler);
+    Filter matchIDFilter = new FilterPredicate("matchID", FilterOperator.EQUAL, matchID);
+    query.setFilter(matchIDFilter);
     PreparedQuery usersResult = datastore.prepare(query);
     for (Entity user : usersResult.asIterable()) {
       user.setProperty("matchID", "");
@@ -57,7 +57,7 @@ public class DeleteDataServlet extends HttpServlet {
 
     // Deletes all comments written on match's review page
     query = new Query("Review-comments");
-    query.setFilter(matchIDFiler);
+    query.setFilter(matchIDFilter);
     PreparedQuery commentsResult = datastore.prepare(query);
     List<Key> commentKeys = new ArrayList<>();
     for (Entity commentEntity : commentsResult.asIterable()) {
