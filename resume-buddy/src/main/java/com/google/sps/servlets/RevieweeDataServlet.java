@@ -50,14 +50,8 @@ public class RevieweeDataServlet extends HttpServlet {
         new Reviewee(
             fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
 
-    if (school.equals("Other")) {
-      school = ServletHelpers.getParameter(request, "other-school", "");
-    }
     if (year.equals("Other")) {
       year = ServletHelpers.getParameter(request, "other-year", "");
-    }
-    if (career.equals("Other")) {
-      career = ServletHelpers.getParameter(request, "other-career", "");
     }
 
     Entity revieweeEntity = new Entity("Reviewee");
