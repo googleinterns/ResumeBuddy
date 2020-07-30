@@ -28,26 +28,24 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteDataServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     String revieweeEmail = userService.getCurrentUser().getEmail();
 
     Query query = new Query("Match");
     Filter revieweeFilter = new FilterPredicate("reviewee", FilterOperator.EQUAL, revieweeEmail);
     query.setFilter(revieweeFilter);
-
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     Entity entity = results.asSingleEntity();
     String resumeBlobKey = (String) entity.getProperty("resumeBlobKey");
-    String matchID = (String) entity.getProperty("matchID");
-    int status = deleteBlob(resumeBlobKey);
+    String matchID = (String) entity.getProperty("uuid");
 
-    // Delete Match entity
+    // Deletes Match entity
     datastore.delete(entity.getKey());
 
-    // Delete matchID from user entities
+    // Deletes matchID from user entities
     query = new Query("User");
     Filter matchIDFiler = new FilterPredicate("matchID", FilterOperator.EQUAL, matchID);
     query.setFilter(matchIDFiler);
@@ -57,15 +55,18 @@ public class DeleteDataServlet extends HttpServlet {
       datastore.put(user);
     }
 
-    // Delete all comments related to the reviewee-reviewer match
+    // Deletes all comments written on match's review page
     query = new Query("Review-comments");
     query.setFilter(matchIDFiler);
     PreparedQuery commentsResult = datastore.prepare(query);
     List<Key> commentKeys = new ArrayList<>();
-    for (Entity commentEntity : results.asIterable()) {
+    for (Entity commentEntity : commentsResult.asIterable()) {
       commentKeys.add(commentEntity.getKey());
     }
     datastore.delete(commentKeys);
+
+    // Deletes blob
+    int status = deleteBlob(resumeBlobKey);
 
     response.setStatus(status);
     response.sendRedirect("/index.html");

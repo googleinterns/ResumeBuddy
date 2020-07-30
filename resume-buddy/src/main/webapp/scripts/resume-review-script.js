@@ -169,10 +169,10 @@ function reviewIsDone() {
   window.location.href = '/index.html';
 }
 
-/** Sends GET request to /delete-data which deletes match and blob data */
+/** Sends PUT request to /delete-data which deletes match and blob data */
 function feedbackIsRead() {
   fetch('/delete-data', {
-    method: 'GET'
+    method: 'PUT'
   });
   window.location.href = '/index.html';
 }
