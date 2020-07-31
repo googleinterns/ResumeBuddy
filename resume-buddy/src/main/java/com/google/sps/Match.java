@@ -148,7 +148,9 @@ public class Match {
       matchEntity.setProperty("reviewer", reviewerEmail);
       matchEntity.setProperty("status", ReviewStatus.IN_PROCESS.toString());
       String resumeBlobKey = (String) reviewee.getProperty("resumeBlobKey");
+      String resumeFileName = (String) reviewee.getProperty("resumeFileName");
       matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
+      matchEntity.setProperty("resumeFileName", resumeFileName);
       UUID id = UUID.randomUUID();
       while (ServletHelpers.collides(id, "Match")) {
         id = UUID.randomUUID();
