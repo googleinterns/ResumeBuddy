@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset="UTF-8">
-    <title>Resume Review</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ResumeBuddy</title>
+    <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/resume-review-style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap">
     <script src="scripts/resume-review-script.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <link rel="shortcut icon" href="/images/logo.png">
   </head>
+  <body class="space" onload="login(); onLoad();">
+    <div id="nav-placeholder"></div>
+    <script>
+      $(function(){ $("#nav-placeholder").load("navbar.html"); });
+    </script>
 
-  <body onload='onLoad()'>
+    <div class="w3-main" style="margin-left:250px">
 
-    <div class="page-title">
-      <h1>Resume Review</h1>
-    </div>
+      <div class="container w3-blue w3-padding-32">
+        <h1 class="title">Resume Review<img class="logo" src="/images/logo.png" alt="ResumeBuddy Logo"></h1>
+      </div>
 
+    <div class="container w3-padding-32">
     <!-- TODO: Add style to the information list -->
+    
     <div id="match">
       <div id="reviewer-info">
         <h4>Reviewer</h4>
@@ -41,6 +54,7 @@
           getRevieweeResume();
             });
     </script>
+
     <p id="match-info">Loading...</p>
     <div id="comments">
       <div id="comments-form">
@@ -58,6 +72,11 @@
       </div>
       <ul id="comments-container"></ul>
     </div>
+
     <button onclick="reviewIsDone()" id="done-button">I'm done reviewing</button>
+          
+    </div>
+    </div>
   </body>
+ 
 </html>

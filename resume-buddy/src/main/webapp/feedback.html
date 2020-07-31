@@ -2,28 +2,45 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>User Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ResumeBuddy</title>
+    <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/feedback.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@900&display=swap">
     <script src="scripts/script.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="shortcut icon" href="/images/logo.png">
   </head>
-  <body>
-    <div id="feedback-form">
-      <form action="/feedback" method="POST" onsubmit=successMessage();>
-        <h1 id="form-title">User Feedback Form</h1>
-        <h3> Here at ResumeBuddy, we want to ensure that our users have the 
-          best possible experience. Let us know how we can improve our website! 
-        </h3>
-        <label> I am a: </label><br>
-        <select name="user-type" required>
-          <option value="">Choose one</option>
-          <option value="reviewer">Reviewer</option>
-          <option value="reviewee">Reviewee</option>
-          <option value="general-user">General User</Option>
-        </select>
-        <textarea name="message" id="message" placeholder="Your feedback here..."></textarea>
-        <br>
-        <input type="submit"/>
-      </form>
+  <body class="space" onload="login();">
+    <div id="nav-placeholder"></div>
+    <script>
+      $(function(){ $("#nav-placeholder").load("navbar.html"); });
+    </script>
+    <div class="w3-main" style="margin-left:250px">
+      <div class="container w3-blue w3-padding-32">
+        <h1 class="title">Feedback Form<img class="logo" src="/images/logo.png" alt="ResumeBuddy Logo"></h1>
+      </div>
+      <div class="container w3-padding-32">
+        <div id="feedback-form">
+          <form action="/feedback" method="POST" onsubmit=successMessage();>
+            <h4> Here at ResumeBuddy, we want to ensure that our users have the 
+              best possible experience. Let us know how we can improve our website! 
+            </h4>
+            <label> I am a: </label><br>
+            <select name="user-type" required>
+              <option value="">Choose one</option>
+              <option value="reviewer">Reviewer</option>
+              <option value="reviewee">Reviewee</option>
+              <option value="general-user">General User</Option>
+            </select>
+            <textarea name="message" id="message" placeholder="Your feedback here..."></textarea>
+            <br>
+            <input type="submit"/>
+          </form>
+        </div>
+      </div>
     </div>
   </body>
 </html>
