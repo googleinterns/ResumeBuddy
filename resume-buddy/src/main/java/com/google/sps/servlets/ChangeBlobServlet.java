@@ -23,7 +23,7 @@ public class ChangeBlobServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String bolbKey = ServletHelpers.getBlobstoreKey(request, response, "resume");
+    String blobKey = ServletHelpers.getBlobstoreKey(request, response, "resume");
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
 
@@ -35,10 +35,10 @@ public class ChangeBlobServlet extends HttpServlet {
     Entity matchEntity = results.asSingleEntity();
     String oldBlobKey = (String) matchEntity.getProperty("resumeBlobKey");
     ServletHelpers.deleteBlob(oldBlobKey);
-    matchEntity.setProperty("resumeBlobKey", bolbKey);
+    matchEntity.setProperty("resumeBlobKey", blobKey);
     datastore.put(matchEntity);
 
     response.setContentType("text/html");
-    response.getWriter().println(bolbKey);
+    response.getWriter().println(blobKey);
   }
 }

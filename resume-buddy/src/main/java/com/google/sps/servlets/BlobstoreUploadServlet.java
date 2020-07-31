@@ -27,11 +27,4 @@ public class BlobstoreUploadServlet extends HttpServlet {
     response.setContentType("text/html");
     response.getWriter().println(uploadUrl);
   }
-
-  public static String getUploadUrl() {
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String uploadUrl = blobstoreService.createUploadUrl("/index.html");
-
-    return uploadUrl;
-  }
 }

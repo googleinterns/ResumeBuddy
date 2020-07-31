@@ -74,11 +74,7 @@ public class ServletHelpers {
     BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
     isBlobDeleted = blobInfoFactory.loadBlobInfo(blobKey) == null;
 
-    if (isBlobDeleted) {
-      return 200; // 200: OK - The request is OK
-    } else {
-      return 400; // 400: Bad Request - The request cannot be fulfilled
-    }
+    return isBlobDeleted ? 200 : 400;
   }
 }
 

@@ -130,6 +130,7 @@ const previewConfig = {
   includePDFAnnotations: true
 }
 
+/** Save button shown after annotation is added */
 const saveOptions = {
   showSaveButton: true
 }
@@ -173,16 +174,16 @@ async function getRevieweeResume() {
                 },
               },
             }),
-              reject({
-                code: AdobeDC.View.Enum.ApiResponseCode.FAIL,
-                data: {
-                  optional
-                },
-              });
+            reject({
+              code: AdobeDC.View.Enum.ApiResponseCode.FAIL,
+              data: {
+                optional
+              },
+            });
           });
         }, saveOptions
       );
-    });
+  });
 }
 
 /**
@@ -204,9 +205,9 @@ async function changePdf(content, fileName) {
         method: 'POST',
         body: formData
       })
-        .then(response => {
-          console.log(response);
-        })
+      .then(response => {
+        console.log(`Response from updating BlobStore entry is ${response}`);
+      })
     });
 }
 
