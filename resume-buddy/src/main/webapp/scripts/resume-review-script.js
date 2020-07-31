@@ -31,7 +31,7 @@ async function populateReviewer(reviewerEmail) {
       document.getElementById("reviewer-education").innerText += reviewer.degree;
       document.getElementById("reviewer-school").innerText += reviewer.school;
       document.getElementById("reviewer-career").innerText += reviewer.career;
-      if (reviewer.isCurrentUser === true) {
+      if (reviewer.isCurrentUser) {
         document.getElementById("review-done-button").style.display = 'block';
       }
     });
@@ -46,7 +46,7 @@ async function populateReviewee(revieweeEmail) {
       document.getElementById("reviewee-school-year").innerText += reviewee.schoolYear;
       document.getElementById("reviewee-school").innerText += reviewee.school;
       document.getElementById("reviewee-career").innerText += reviewee.career;
-      if (reviewee.isCurrentUser === true) {
+      if (reviewee.isCurrentUser) {
         document.getElementById("feedback-done-button").style.display = 'block';
       }
     });
@@ -169,9 +169,9 @@ function reviewIsDone() {
   window.location.href = '/index.html';
 }
 
-/** Sends PUT request to /delete-data which deletes match and blob data */
+/** Sends PUT request to /delete-match-data which deletes match and blob data */
 function feedbackIsRead() {
-  fetch('/delete-data', {
+  fetch('/delete-match-data', {
     method: 'PUT'
   });
   window.location.href = '/index.html';

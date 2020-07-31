@@ -22,15 +22,7 @@ public final class User {
       String degree,
       String year,
       String matchID) {
-    this.firstName = fname;
-    this.lastName = lname;
-    this.email = email;
-    this.degree = Degree.valueOf(degree.toUpperCase());
-    this.school = school;
-    this.career = career;
-    this.schoolYear = SchoolYear.valueOf(year.toUpperCase());
-    this.matchID = matchID;
-    this.isCurrentUser = false;
+    this(fname, lname, email, school, career, degree, year, matchID, false);
   }
 
   public User(
