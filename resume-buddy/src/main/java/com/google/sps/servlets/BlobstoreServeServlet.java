@@ -41,7 +41,7 @@ public class BlobstoreServeServlet extends HttpServlet {
     PreparedQuery reviewerResults = datastore.prepare(reviewerQuery);
     PreparedQuery revieweeResults = datastore.prepare(revieweeQuery);
     String matchBlobKeyString = "";
-    String newResumeFileName = "";
+    String resumeFileName = "";
     String showAnnoToolString = "";
     int revieweeCount = revieweeResults.countEntities(FetchOptions.Builder.withDefaults());
     int reviewerCount = reviewerResults.countEntities(FetchOptions.Builder.withDefaults());
@@ -50,18 +50,18 @@ public class BlobstoreServeServlet extends HttpServlet {
       return;
     } else if (reviewerCount > 0) {
       matchBlobKeyString = reviewerResults.asSingleEntity().getProperty("resumeBlobKey").toString();
-      newResumeFileName = reviewerResults.asSingleEntity().getProperty("reviewee").toString();
+      resumeFileName = reviewerResults.asSingleEntity().getProperty("resumeFileName").toString();
       showAnnoTool = true;
     } else if (revieweeCount > 0) {
       matchBlobKeyString = revieweeResults.asSingleEntity().getProperty("resumeBlobKey").toString();
-      newResumeFileName = revieweeResults.asSingleEntity().getProperty("reviewee").toString();
+      resumeFileName = revieweeResults.asSingleEntity().getProperty("resumeFileName").toString();
     }
 
     BlobKey matchBlobKey = new BlobKey(matchBlobKeyString);
     showAnnoToolString = String.valueOf(showAnnoTool);
     // Sets the blob key string as the response header so it can be set as the unquie pdf ID
     response.addHeader("blobKeyString", matchBlobKeyString);
-    response.addHeader("newResumeFileName", newResumeFileName);
+    response.addHeader("resumeFileName", resumeFileName);
     response.addHeader("annoToolBool", showAnnoToolString);
     blobstoreService.serve(matchBlobKey, response);
   }

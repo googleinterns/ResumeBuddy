@@ -132,7 +132,7 @@ async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
       const pdfId = response.headers.get('blobKeyString');
-      const resumeFileName = response.headers.get('newResumeFileName');
+      const resumeFileName = response.headers.get('resumeFileName');
       const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
       previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
@@ -144,7 +144,7 @@ async function getRevieweeResume() {
           promise: response.arrayBuffer()
         },
         metaData: {
-          fileName: resumeFileName + 'Resume.pdf',
+          fileName: resumeFileName,
           id: pdfId
         }
       },
