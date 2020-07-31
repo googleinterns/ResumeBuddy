@@ -3,7 +3,7 @@ input[type=text], select {
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid white;
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -23,16 +23,9 @@ input[type=submit]:hover {
   background-color: #008fe0;
 }
 
-div {
-  margin-right: auto;
-  margin-left: auto;
+#reviewee-form, #reviewer-form {
   border-radius: 5px;
   background-color: #f2f2f2;
-  width: 700px;
-}
-
-#reviewee-form,
-#reviewer-form {
   padding: 20px;
 }
 
@@ -43,13 +36,4 @@ label {
 .heading {
   color: #00a2ff;
   font-family: "Roboto", sans-serif;
-}
-
-#title {
-  text-align: center;
-  background: #00a2ff;
-  color: white;
-  padding: 30px;
-  font-size: 30px;
-  font-family: 'Noto Sans TC', sans-serif;
 }
