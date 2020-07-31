@@ -63,7 +63,6 @@ function getComments() {
     .then((comments) => {
       const commentListElement = document
         .getElementById('comments-container');
-
       commentListElement.innerHTML = '';
       comments.forEach((comment) => {
         let date = new Date(comment.date);
@@ -73,25 +72,22 @@ function getComments() {
             date.getFullYear(), comment.type, comment.text,
             comment.id, comment.author));
       })
-
     });
 }
 
 /**
  * Fetches delete-comments to delete comment using comment id
  */
-function deleteComments(id) {
-  const queryStr = 'id=' + id;
-  fetch('/delete-comment?' + queryStr, {
+function deleteComments(id, author) {
+  const queryStr = `id=${id}&author=${author}`;
+  fetch(`/delete-comment?${queryStr}`, {
     method: 'POST',
   });
-
   if (!id) {
     document.getElementById('comments-container').innerHTML = '';
   } else {
     location.reload();
   }
-
 }
 
 /** 
@@ -100,49 +96,41 @@ function deleteComments(id) {
 function createListElement(date, type, text, id, author) {
   const liElement = document.createElement('li');
   const containerDiv = document.createElement('div');
-
   containerDiv.className = 'comment-container';
   const typeText = document.createElement('b');
   typeText.innerText = type + ":  ";
   liElement.appendChild(typeText);
-
   const textNode = document.createTextNode(text + " ");
   liElement.appendChild(textNode);
-
   const signatureNode = document.createElement("div");
   signatureNode.innerHTML = "<i>" + author + " " + date + "</i>";
   liElement.appendChild(signatureNode);
-
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '&#10005;';
   deleteButton.className = "delete-button";
   deleteButton.onclick = function() {
-    deleteComments(id);
+    deleteComments(id, author);
   }
-
   liElement.appendChild(deleteButton);
-
   return liElement;
 }
 
 //Adobe Preview configurations for getRevieweeResume function
 const previewConfig = {
-  showLeftHandPanel: true,
-  showPageControls: true,
+  showLeftHandPanel:true,
+  showPageControls:true,
   showDownloadPDF: false,
   showPrintPDF: false,
   enableAnnotationsAPI: true,
   includePDFAnnotations: true
 }
 
-/**
-* Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
-*/
+/* Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View */
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
       const pdfId = response.headers.get('blobKeyString');
-      const resumeFileName = response.headers.get('newResumeFileName');
+      const resumeFileName = response.headers.get('resumeFileName');
       const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
       previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
@@ -154,7 +142,7 @@ async function getRevieweeResume() {
           promise: response.arrayBuffer()
         },
         metaData: {
-          fileName: resumeFileName + 'Resume.pdf',
+          fileName: resumeFileName,
           id: pdfId
         }},
     previewConfig);

@@ -7,9 +7,8 @@ body {
   line-height: 1.6;
 }
 
-.page-title {
-  color: #42a5f5;
-  font-size: 18px;
+#adobe-dc-view {
+  height: 700px;
 }
 
 #comments {
