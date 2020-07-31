@@ -45,11 +45,21 @@ public class RevieweeDataServlet extends HttpServlet {
     String degreePref = ServletHelpers.getParameter(request, "degree-preference", "");
     String numYearsPref = ServletHelpers.getParameter(request, "experience-preference", "");
     String resumeBlobKey = getBlobstoreKey(request, response, "resume");
+    String resumeFileName = fname + lname + "Resume";
 
     Reviewee reviewee =
         new Reviewee(
-            fname, lname, email, school, year, career, degreePref, numYearsPref, resumeBlobKey);
-
+            fname,
+            lname,
+            email,
+            school,
+            year,
+            career,
+            degreePref,
+            numYearsPref,
+            resumeBlobKey,
+            resumeFileName);
+ 
     if (year.equals("Other")) {
       year = ServletHelpers.getParameter(request, "other-year", "");
     }
@@ -65,6 +75,7 @@ public class RevieweeDataServlet extends HttpServlet {
     revieweeEntity.setProperty("preferred-experience", numYearsPref);
     revieweeEntity.setProperty("submit-date", new Date());
     revieweeEntity.setProperty("resumeBlobKey", resumeBlobKey);
+    revieweeEntity.setProperty("resumeFileName", resumeFileName);
 
     // Gets user entity from User db and updates fields
     Query query = new Query("User");

@@ -11,6 +11,7 @@ public final class Reviewee {
   private final Degree degreePref;
   private final NumYears numYearsPref;
   private final String resumeBlobKey;
+  private final String resumeFileName;
 
   public Reviewee(
       String fname,
@@ -21,7 +22,8 @@ public final class Reviewee {
       String career,
       String degreePref,
       String numYearsPref,
-      String resumeBlobKey) {
+      String resumeBlobKey,
+      String resumeFileName) {
     this.firstName = fname;
     this.lastName = lname;
     this.email = email;
@@ -31,5 +33,6 @@ public final class Reviewee {
     this.degreePref = Degree.valueOf(degreePref.toUpperCase());
     this.numYearsPref = NumYears.valueOf(numYearsPref.toUpperCase());
     this.resumeBlobKey = resumeBlobKey;
+    this.resumeFileName = resumeFileName;
   }
 }
