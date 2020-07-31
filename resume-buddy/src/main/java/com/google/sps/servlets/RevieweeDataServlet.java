@@ -29,9 +29,6 @@ public class RevieweeDataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    System.out.println("request ---- " + request.getMethod() + " " + request.getContentType());
-
     // Get the input from the form.
     String fname = ServletHelpers.getParameter(request, "fname", "");
     String lname = ServletHelpers.getParameter(request, "lname", "");
