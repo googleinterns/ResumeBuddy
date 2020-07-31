@@ -159,6 +159,7 @@ async function getRevieweeResume() {
       },
         previewConfig);
 
+      // saves annotated pdf in 'content' after 'save' is clicked
       adobeDCView.registerCallback(
         AdobeDC.View.Enum.CallbackType.SAVE_API,
         function(metaData, content, options) {
@@ -184,6 +185,9 @@ async function getRevieweeResume() {
     });
 }
 
+/**
+ * Gets new upload url and uploads blob
+ */
 async function changePdf(content, fileName) {
   var file = new Blob([content], {
     type: 'application/pdf'

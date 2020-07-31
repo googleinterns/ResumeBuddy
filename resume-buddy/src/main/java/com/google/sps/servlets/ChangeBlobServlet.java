@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that saves reviewer data from the form */
+/** Uploads new pdf blob and changes blobKey in the db */
 @WebServlet("/change-blob")
 public class ChangeBlobServlet extends HttpServlet {
 
