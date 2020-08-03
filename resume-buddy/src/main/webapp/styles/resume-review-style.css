@@ -8,7 +8,8 @@ body {
 }
 
 #adobe-dc-view {
-  height: 700px;
+  height: 1000px;
+  width:  100%;
 }
 
 #comments {
@@ -99,4 +100,14 @@ input[type=submit] {
 
 #match {
   display: none;
+}
+
+#reviewee-info {
+  float:left;
+  width:50%;
+}
+
+#reviewer-info {
+  float:right;
+  width:50%;
 }

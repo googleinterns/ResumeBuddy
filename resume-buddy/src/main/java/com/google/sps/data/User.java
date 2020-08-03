@@ -11,6 +11,7 @@ public final class User {
   private final Degree degree;
   private final SchoolYear schoolYear;
   private final String matchID;
+  private final String company;
   private final Boolean isCurrentUser;
 
   public User(
@@ -22,7 +23,7 @@ public final class User {
       String degree,
       String year,
       String matchID) {
-    this(fname, lname, email, school, career, degree, year, matchID, false);
+    this(fname, lname, email, school, career, degree, year, matchID, "", false);
   }
 
   public User(
@@ -34,6 +35,7 @@ public final class User {
       String degree,
       String year,
       String matchID,
+      String company,
       Boolean isCurrentUser) {
     this.firstName = fname;
     this.lastName = lname;
@@ -43,6 +45,7 @@ public final class User {
     this.career = career;
     this.schoolYear = SchoolYear.valueOf(year.toUpperCase());
     this.matchID = matchID;
+    this.company = company;
     this.isCurrentUser = isCurrentUser;
   }
 }

@@ -1,7 +1,5 @@
 package com.google.sps.servlets;
 
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -24,8 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that saves reviewer data from the form */
 @WebServlet("/reviewee-data")
 public class RevieweeDataServlet extends HttpServlet {
-
-  private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -54,7 +50,7 @@ public class RevieweeDataServlet extends HttpServlet {
             numYearsPref,
             resumeBlobKey,
             resumeFileName);
- 
+
     if (year.equals("Other")) {
       year = ServletHelpers.getParameter(request, "other-year", "");
     }

@@ -26,25 +26,27 @@
         <h1 class="title">Resume Review<img class="logo" src="/images/logo.png" alt="ResumeBuddy Logo"></h1>
       </div>
 
-    <div class="container w3-padding-32">
-    <!-- TODO: Add style to the information list -->
+    <div class="container w3-padding-32">    
+      <p id="match-info">Loading...</p>
+
+      <div id="match">
+        <div id="reviewer-info">
+          <h4><u>Reviewer</u></h4>
+          <p id="reviewer-name">Name: </p>
+          <p id="reviewer-education">Degree: </p>
+          <p id="reviewer-school">School: </p>
+          <p id="reviewer-company">Company: </p>
+          <p id="reviewer-career">Field of work: </p>
+        </div>
+        <div id="reviewee-info">
+          <h4><u>Reviewee</u></h4>
+          <p id="reviewee-name">Name: </p>
+          <p id="reviewee-school-year">Education: </p>
+          <p id="reviewee-school">School: </p>
+          <p id="reviewee-career">Field of work: </p>
+        </div>
+      </div>
     
-    <div id="match">
-      <div id="reviewer-info">
-        <h4>Reviewer</h4>
-        <p id="reviewer-name">Name: </p>
-        <p id="reviewer-education">Education: </p>
-        <p id="reviewer-school">School: </p>
-        <p id="reviewer-company">Company: </p>
-        <p id="reviewer-career">Field of work: </p>
-      </div>
-      <div id="reviewee-info">
-        <h4>Reviewee</h4>
-        <p id="reviewee-name">Name: </p>
-        <p id="reviewee-school-year">Education: </p>
-        <p id="reviewee-school">School: </p>
-        <p id="reviewee-career">Desired field of work: </p>
-      </div>
     </div>
 
     <div id="adobe-dc-view"></div>
@@ -55,7 +57,7 @@
             });
     </script>
 
-    <p id="match-info">Loading...</p>
+
     <div id="comments">
       <div id="comments-form">
         <form action="/comment" method="POST">
