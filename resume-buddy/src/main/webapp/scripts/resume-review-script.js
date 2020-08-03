@@ -113,7 +113,7 @@ function createListElement(date, type, text, id, author) {
 const previewConfig = {
   showLeftHandPanel:true,
   showPageControls:true,
-  showDownloadPDF: true,
+  showDownloadPDF: false,
   showPrintPDF: false,
   enableAnnotationsAPI: true,
   includePDFAnnotations: true
@@ -126,7 +126,7 @@ async function getRevieweeResume() {
       const pdfId = response.headers.get('blobKeyString');
       const resumeFileName = response.headers.get('resumeFileName');
       const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
-      previewConfig.showAnnotationTools = showAnnoTools ;
+      previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
         clientId: '',
         divId: 'adobe-dc-view'
