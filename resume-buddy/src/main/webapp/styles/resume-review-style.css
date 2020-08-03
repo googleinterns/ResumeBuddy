@@ -44,7 +44,8 @@ input[type=submit] {
   cursor: pointer;
 }
 
-#done-button {
+#review-done-button,
+#feedback-done-button {
   width: 30%;
   float: right;
   background-color: #fd6363;
@@ -54,6 +55,7 @@ input[type=submit] {
   border: 1px solid #fd6363;
   border-radius: 4px;
   cursor: pointer;
+  display: none;
 }
 
 #comment-type {
