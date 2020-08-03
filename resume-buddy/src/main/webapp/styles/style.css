@@ -35,3 +35,19 @@ body {
 #head {
   text-align: left;
 }
+
+.w3-animate-bottom{
+  position: relative;
+  animation-delay: animatebottom .7s
+}
+
+@keyframes animatebottom{
+  from{
+    bottom:-300px;
+    opacity:0
+  } 
+  to{
+    bottom:0;
+    opacity:1
+  }
+}
