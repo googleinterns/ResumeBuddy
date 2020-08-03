@@ -17,8 +17,12 @@ public class BlobstoreUploadServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String redirectUrl = (String) request.getParameter("redirect");
+    if (redirectUrl == null) {
+      redirectUrl = "/reviewee-data";
+    }
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String uploadUrl = blobstoreService.createUploadUrl("/reviewee-data");
+    String uploadUrl = blobstoreService.createUploadUrl(redirectUrl);
 
     response.setContentType("text/html");
     response.getWriter().println(uploadUrl);

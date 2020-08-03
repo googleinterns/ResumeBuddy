@@ -6,8 +6,9 @@ function onLoad() {
       if (user.matchID != '') {
         getMatch(user.matchID);
         getComments();
+      } else {
+        document.getElementById('match-info').innerText = "You have not been matched yet.";
       }
-      else { document.getElementById('match-info').innerText = "You have not been matched yet."; }
     });
 }
 
@@ -125,7 +126,14 @@ const previewConfig = {
   includePDFAnnotations: true
 }
 
-/* Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View */
+/** Save button shown after annotation is added */
+const saveOptions = {
+  showSaveButton: true
+}
+
+/**
+ * Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View
+ */
 async function getRevieweeResume() {
   fetch('/blobstore-serve')
     .then((response) => {
@@ -144,12 +152,62 @@ async function getRevieweeResume() {
         metaData: {
           fileName: resumeFileName,
           id: pdfId
-        }},
-    previewConfig);
+        }
+      },
+        previewConfig);
+
+      // saves annotated pdf in 'content' after 'save' is clicked
+      adobeDCView.registerCallback(
+        AdobeDC.View.Enum.CallbackType.SAVE_API,
+        function(metaData, content, options) {
+          changePdf(content, resumeFileName + 'Resume.pdf');
+          return new Promise((resolve, reject) => {
+            resolve({
+              code: AdobeDC.View.Enum.ApiResponseCode.SUCCESS,
+              data: {
+                metaData: {
+                  fileName: resumeFileName + 'Resume.pdf'
+                },
+              },
+            }),
+            reject({
+              code: AdobeDC.View.Enum.ApiResponseCode.FAIL,
+              data: {
+                optional
+              },
+            });
+          });
+        }, saveOptions
+      );
   });
 }
 
-/** Sends PUT request to /review-done which updates status */
+/**
+ * Gets new upload url and uploads blob
+ */
+async function changePdf(content, fileName) {
+  var file = new Blob([content], {
+    type: 'application/pdf'
+  });
+  var formData = new FormData();
+  formData.append('resume', file, fileName);
+
+  fetch('/blobstore-upload?redirect=/change-blob')
+    .then((response) => {
+      return response.text();
+    }).
+    then(uploadUrl => {
+      fetch(uploadUrl, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        console.log(`Response from updating BlobStore entry is ${response}`);
+      })
+    });
+}
+
+/** Sends POST request to /review-done which updates status */
 function reviewIsDone() {
   fetch('/review-page', {
     method: 'PUT'
