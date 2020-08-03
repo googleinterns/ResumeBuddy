@@ -18,8 +18,8 @@ async function getMatch(matchID) {
     .then(response => response.json())
     .then((match) => {
       document.getElementById("match").style.display = 'block';
-        populateReviewer(match.reviewer);
-        populateReviewee(match.reviewee);
+      populateReviewer(match.reviewer);
+      populateReviewee(match.reviewee);
     })
 }
 

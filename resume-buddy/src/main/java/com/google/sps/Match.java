@@ -159,7 +159,6 @@ public class Match {
     String resumeFileName = (String) reviewee.getProperty("resumeFileName");
     matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
     matchEntity.setProperty("resumeFileName", resumeFileName);
-    matchEntity.setProperty("resumeBlobKey", resumeBlobKey);
     matchEntity.setProperty("matchDate", new Date());
     UUID id = UUID.randomUUID();
     while (ServletHelpers.collides(id, "Match")) {
