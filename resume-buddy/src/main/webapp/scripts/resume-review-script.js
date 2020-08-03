@@ -116,7 +116,8 @@ const previewConfig = {
   showDownloadPDF: false,
   showPrintPDF: false,
   enableAnnotationsAPI: true,
-  includePDFAnnotations: true
+  includePDFAnnotations: true,
+  showAnnotationTools: true
 }
 
 /* Fetches the blobstore-serve to sends its response as an array buffer to the Adobe DC View */
@@ -125,8 +126,6 @@ async function getRevieweeResume() {
     .then((response) => {
       const pdfId = response.headers.get('blobKeyString');
       const resumeFileName = response.headers.get('resumeFileName');
-      const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
-      previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
         clientId: '',
         divId: 'adobe-dc-view'
