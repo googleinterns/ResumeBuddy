@@ -27,8 +27,13 @@ public class UserDataServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     String email = request.getParameter("email");
+    boolean isCurrentUser = false;
     if (email == null && userService.isUserLoggedIn()) {
       email = userService.getCurrentUser().getEmail();
+    }
+
+    if (userService.isUserLoggedIn() && userService.getCurrentUser().getEmail().equals(email)) {
+      isCurrentUser = true;
     }
 
     Query query = new Query("User");
@@ -52,7 +57,8 @@ public class UserDataServlet extends HttpServlet {
     if (schoolYear == null || schoolYear.equals("")) {
       schoolYear = "other";
     }
-    User user = new User(fname, lname, email, school, career, degree, schoolYear, matchID);
+    User user =
+        new User(fname, lname, email, school, career, degree, schoolYear, matchID, isCurrentUser);
 
     Gson gson = new Gson();
     response.setContentType("application/json");
