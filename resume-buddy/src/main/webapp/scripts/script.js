@@ -69,8 +69,7 @@ function populateFormWithKnownData() {
   fetch('/user-data')
     .then(response => response.json())
     .then(user => {
-      console.log(user.firstName + ' ' + user.lastName);
-      if (typeof user.firstName !== 'undefined' && typeof user.lastName != null) {
+      if (typeof user.firstName !== 'undefined' && typeof user.lastName !== 'undefined') {
         document.getElementById("fname").value = user.firstName;
         document.getElementById("lname").value = user.lastName;
       }
