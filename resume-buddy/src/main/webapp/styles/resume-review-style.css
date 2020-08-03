@@ -100,3 +100,13 @@ input[type=submit] {
 #match {
   display: none;
 }
+
+#reviewee-info {
+  float:left;
+  width:50%;
+}
+
+#reviewer-info {
+  float:right;
+  width:50%;
+}
