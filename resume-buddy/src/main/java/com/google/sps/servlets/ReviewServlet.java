@@ -64,7 +64,7 @@ public class ReviewServlet extends HttpServlet {
     Entity entity = results.asSingleEntity();
     entity.setProperty("status", ReviewStatus.REVIEW_DONE.toString());
     datastore.put(entity);
-    String resumeFileName = (String) entity.getProperty("resumeFileName");
+    String resumeFileName = (String) entity.getProperty("resumeFileName") + ".pdf";
     String revieweeEmail = (String) entity.getProperty("reviewee");
     String matchBlobKeyString = (String) entity.getProperty("resumeBlobKey");
 

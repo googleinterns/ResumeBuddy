@@ -29,8 +29,9 @@ async function populateReviewer(reviewerEmail) {
     .then(response => response.json())
     .then(reviewer => {
       document.getElementById("reviewer-name").innerText += reviewer.firstName + ' ' + reviewer.lastName;
-      document.getElementById("reviewer-education").innerText += reviewer.degree;
+      document.getElementById("reviewer-education").innerText += reviewer.degree.toLowerCase();
       document.getElementById("reviewer-school").innerText += reviewer.school;
+      document.getElementById("reviewer-company").innerText += reviewer.company;
       document.getElementById("reviewer-career").innerText += reviewer.career;
       if (reviewer.isCurrentUser) {
         document.getElementById("review-done-button").style.display = 'block';
@@ -44,7 +45,7 @@ async function populateReviewee(revieweeEmail) {
     .then(response => response.json())
     .then(reviewee => {
       document.getElementById("reviewee-name").innerText += reviewee.firstName + ' ' + reviewee.lastName;
-      document.getElementById("reviewee-school-year").innerText += reviewee.schoolYear;
+      document.getElementById("reviewee-school-year").innerText += reviewee.schoolYear.toLowerCase();
       document.getElementById("reviewee-school").innerText += reviewee.school;
       document.getElementById("reviewee-career").innerText += reviewee.career;
       if (reviewee.isCurrentUser) {
