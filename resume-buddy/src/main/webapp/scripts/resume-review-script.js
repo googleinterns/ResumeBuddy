@@ -123,7 +123,8 @@ const previewConfig = {
   showDownloadPDF: false,
   showPrintPDF: false,
   enableAnnotationsAPI: true,
-  includePDFAnnotations: true
+  includePDFAnnotations: true,
+  showAnnotationTools: true
 }
 
 /** Save button shown after annotation is added */
@@ -139,8 +140,6 @@ async function getRevieweeResume() {
     .then((response) => {
       const pdfId = response.headers.get('blobKeyString');
       const resumeFileName = response.headers.get('resumeFileName');
-      const showAnnoTools = (response.headers.get('annoToolBool') === 'true');
-      previewConfig.showAnnotationTools = showAnnoTools;
       var adobeDCView = new AdobeDC.View({
         clientId: '',
         divId: 'adobe-dc-view'
